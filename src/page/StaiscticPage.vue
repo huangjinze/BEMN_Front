@@ -1,24 +1,23 @@
-<<template>
- <el-container>
-  <el-header>Header</el-header>
-  <el-container>
-    <el-aside width="200px"><navi/></el-aside>
-    <el-main>
-        <div class="guider">
-        </div>
-        <charts class="testchart" id="1" :targetOptions="targetOptions" :typeOptions="typeOptions" @ValueChange="ValueChange"></charts>
-    </el-main>
-  </el-container>
-</el-container>
+
+<template>
+  <BasePage>
+    <div slot="header">header</div>
+    <div slot="aside"><navi></navi></div>
+    <div slot="main">
+      <charts class="testchart" id="1" :targetOptions="targetOptions" :typeOptions="typeOptions" @ValueChange="ValueChange"></charts>
+    </div>
+  </BasePage>
 </template>
+
 
 <<script>
 
 import charts from '../components/echart/charts.vue'
 import navi from '../components/layout/navi'
+import BasePage from '../components/BasePage'
 
 export default {
-  components: {charts, navi},
+  components: {charts, navi, BasePage},
   name: 'StaiscticPage',
   data () {
     return {

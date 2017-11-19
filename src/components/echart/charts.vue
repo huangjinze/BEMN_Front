@@ -120,7 +120,7 @@
 </script>
 <style scoped>
   #chart_container {
-    height: 800px;
+    height: 500px;
   }
 </style>
 
