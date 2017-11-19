@@ -1,7 +1,7 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-import navi from '@/components/layout/navi'
 import StaiscticPage from '@/page/StaiscticPage'
+import HomePage from '@/page/HomePage'
 
 Vue.use(Router)
 
@@ -9,18 +9,13 @@ export default new Router({
   routes: [
     {
       path: '/',
-      name: 'navi',
-      component: navi
+      name: 'home',
+      component: HomePage
     },
     {
       path: '/staisctic',
-      name: 'home',
+      name: 'staisctic',
       component: StaiscticPage
-    },
-    {
-      path: '/home1',
-      name: 'home1',
-      component: {}
     }
   ]
 

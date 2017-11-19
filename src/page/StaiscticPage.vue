@@ -2,7 +2,7 @@
  <el-container>
   <el-header>Header</el-header>
   <el-container>
-    <el-aside width="200px">{{this.$data.formValue}}</el-aside>
+    <el-aside width="200px"><navi/></el-aside>
     <el-main>
         <div class="guider">
         </div>
@@ -15,9 +15,10 @@
 <<script>
 
 import charts from '../components/echart/charts.vue'
+import navi from '../components/layout/navi'
 
 export default {
-  components: {charts},
+  components: {charts, navi},
   name: 'StaiscticPage',
   data () {
     return {
