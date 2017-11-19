@@ -1,15 +1,11 @@
 <template>
-  <div class="hello">
-    <el-tag type="info">{{msg}}</el-tag>
-  </div>
+
 </template>
 
 <script>
+  import staiscticPage from './page/StaiscticPage.vue'
   export default {
-    name: 'HelloWorld',
-    data () {
-      return {msg: 'hello'
-      }
-    }
+    name: 'app',
+    components: {staiscticPage}
   }
 </script>
