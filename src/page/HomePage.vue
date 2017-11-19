@@ -1,20 +1,17 @@
 <<template>
-  <el-container>
-    <el-header>Header</el-header>
-    <el-container>
-      <el-aside width="200px"><navi/></el-aside>
-      <el-main>
-      <h1>Hello BEMN</h1>
-      </el-main>
-    </el-container>
-  </el-container>
+<BasePage>
+  <div slot="header">header</div>
+  <div slot="aside"><navi></navi></div>
+  <div slot="main">Hello!!BEMN</div>
+</BasePage>
 </template>
 
 <<script>
   import navi from '../components/layout/navi'
+  import BasePage from '../components/BasePage'
 
   export default {
-    components: {navi}
+    components: {navi, BasePage}
   }
 </script>
 
