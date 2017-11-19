@@ -2,18 +2,17 @@
 <template>
   <div id="app">
     <el-row class="tac">
-  <el-col :span="12">
     <el-menu
       default-active="2"
       class="el-menu-vertical-demo"
       @open="handleOpen"
       @close="handleClose">
+      <router-link :to="'/'">
       <el-menu-item index="1">
-        
         <i class="el-icon-location"></i>
         <span slot="title">综合信息</span>
       </el-menu-item>
-
+      </router-link>
       <el-submenu index="2">
         <template slot="title">
         <i class="el-icon-document"></i>
@@ -60,7 +59,6 @@
         </el-submenu>
       </el-submenu>
     </el-menu>
-  </el-col>
 </el-row>
   </div>
 </template>
