@@ -1,3 +1,6 @@
+/*
+
+*/
 <template>
   <div :class="className" :id="id">
     <div class="header">
@@ -57,7 +60,14 @@
 
   export default {
     name: 'charts',
-    props: ['className', 'id', 'targetOptions', 'typeOptions'],
+    props: {
+      className: String,
+      id: String,
+      targetOptions: {type: Array, default: []}, // 目标选项
+      typeOptions: {type: Array, default: []}, // 类型选项
+      xAxis: {type: Object, default: []},     // echart xAxis 对象
+      yAxis: {type: Object, default: []},     // echart yAxis 对象
+      series: {type: Array, default: []}},   // echart series 列表
     mounted: function () {
       console.log(echarts)
       this.myChart = echarts.init(document.getElementById('chart_container'))
@@ -68,7 +78,7 @@
         chartMeta: {
           tittle: {}
         },
-        series: [],
+        myChart: {},
         headerForm: {
           selectedTarget: ' ',
           selectedType: ' ',
@@ -86,8 +96,23 @@
         }
       }
     },
+    watch: {
+      xAxis: function (value) {
+        console.log('xAxis Change', value)
+        this.updateData()
+      },
+      yAxis: function () {
+        console.log('yAxis Change')
+        this.updateData()
+      },
+      series: function (value) {
+        console.log('series Change', value)
+        this.updateData()
+      }
+    },
     methods: {
       initData () {
+        /* 此方法用来初始化echart */
 //        const colors = ['#d14a61', '#5793f3', '#675bba', '#13CE66']
         const option = {
           title: {
@@ -95,21 +120,24 @@
           },
           tooltip: {},
           legend: {
-            data: ['销量']
           },
           xAxis: {
-            data: ['衬衫', '羊毛衫', '雪纺衫', '裤子', '高跟鞋', '袜子']
           },
           yAxis: {},
-          series: [{
-            name: '销量',
-            type: 'bar',
-            data: [5, 20, 36, 10, 10, 20]
-          }]
+          series: []
         }
-        console.log('Option:', option)
         this.myChart.setOption(option)
-        console.log(this.myChart)
+      },
+      updateData () {
+        /* 检测到props变化调用此方法 */
+        const option = {
+          xAxis: this.$props.xAxis,
+          yAxis: this.$props.yAxis,
+          series: this.$props.series
+        }
+        console.log('updata', option)
+        this.myChart.setOption(option, true)
+        console.log('updata finsh', this.myChart)
       },
       onClick (value) {
         console.log('echart Form:', this.$data.headerForm)
