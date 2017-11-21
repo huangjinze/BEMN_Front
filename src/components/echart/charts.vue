@@ -67,7 +67,8 @@
       typeOptions: {type: Array, default: []}, // 类型选项
       xAxis: {type: Object, default: []},     // echart xAxis 对象
       yAxis: {type: Object, default: []},     // echart yAxis 对象
-      series: {type: Array, default: []}},   // echart series 列表
+      series: {type: Array, default: []},
+      ValueChange: {type: Function}},   // echart series 列表
     mounted: function () {
       console.log(echarts)
       this.myChart = echarts.init(document.getElementById('chart_container'))
