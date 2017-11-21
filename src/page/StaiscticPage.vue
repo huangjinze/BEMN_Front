@@ -20,6 +20,7 @@ import charts from '../components/echart/charts.vue'
 import navi from '../components/layout/navi'
 import BasePage from '../components/BasePage'
 import chartForm from '../components/echart/chartForm'
+import {getVTFData} from '../model/data'
 
 export default {
   components: {charts, navi, BasePage, chartForm},
@@ -240,12 +241,15 @@ export default {
   methods: {
     onClick: function () {
       console.log('Button Click')
-      Object.assign(this.chartMetaData, {xAxis: {data: ['衬衫', '羊毛衫', '雪纺衫', '裤子', '高跟鞋', '袜子']},
-        series: [{
-          name: '销量',
-          type: 'bar',
-          data: [100, 30, 323, 112, 20, 50]
-        }]})
+      let data = {xAxis: {data: []}, series: [{name: 'co2_flux', type: 'bar', data: []}]}
+      getVTFData().then(function (resp) {
+        console.log('net', resp)
+        resp.data.map(function (item) {
+          data.xAxis.data.push(item.date_time)
+          data.series.data.push(item.co2_flux)
+        })
+        Object.assign(this.chartMetaData, data)
+      })
     }
   }
 }
