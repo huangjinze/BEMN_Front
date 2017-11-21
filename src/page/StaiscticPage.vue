@@ -4,8 +4,11 @@
     <div slot="header">header</div>
     <div slot="aside"><navi></navi></div>
     <div slot="main">
-      <charts class="testchart" id="1" :targetOptions="targetOptions" :typeOptions="typeOptions"
-              @ValueChange="ValueChange" :xAxis="chartMetaData.xAxis" :yAxis="chartMetaData.yAxis"
+      <chartForm
+        :targetOptions="targetOptions"
+        v-model="formValue"
+        @Click="onClick"></chartForm>
+      <charts class="testchart" id="1"  :xAxis="chartMetaData.xAxis" :yAxis="chartMetaData.yAxis"
       :series="chartMetaData.series"></charts>
     </div>
   </BasePage>
@@ -16,9 +19,10 @@
 import charts from '../components/echart/charts.vue'
 import navi from '../components/layout/navi'
 import BasePage from '../components/BasePage'
+import chartForm from '../components/echart/chartForm'
 
 export default {
-  components: {charts, navi, BasePage},
+  components: {charts, navi, BasePage, chartForm},
   name: 'StaiscticPage',
   data () {
     return {
@@ -217,9 +221,6 @@ export default {
           label: '组件交互文档'
         }]
       }],
-      typeOptions: [
-        {value: 'a', label: 'a'},
-        {value: 'b', label: 'b'}],
       formValue: {},
       chartMetaData: {
         xAxis: {},
@@ -237,18 +238,16 @@ export default {
       }]})
   },
   methods: {
-    ValueChange (value) {
-      this.$data.formValue = value
-      console.log('on su')
-      Object.assign(this.chartMetaData, {
+    onClick: function () {
+      console.log('Button Click')
+      Object.assign(this.chartMetaData, {xAxis: {data: ['衬衫', '羊毛衫', '雪纺衫', '裤子', '高跟鞋', '袜子']},
         series: [{
           name: '销量',
           type: 'bar',
-          data: [20, 2, 23, 5, 15, 24]
+          data: [100, 30, 323, 112, 20, 50]
         }]})
     }
   }
-
 }
 </script>
 
