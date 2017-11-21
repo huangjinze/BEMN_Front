@@ -7,14 +7,12 @@
       <p>
         <span>
           选择指标:
-          <el-select v-model="headerForm.selectedTarget" placeholder="请选择">
-            <el-option
-              v-for="item in targetOptions"
-              :key="item.value"
-              :label="item.label"
-              :value="item.value">
-            </el-option>
-          </el-select>
+            <el-cascader
+              v-model="headerForm.selectedTarget"
+              placeholder="搜索"
+              :options="targetOptions"
+              filterable
+            ></el-cascader>
         </span>
         <span>
           类型:
@@ -81,7 +79,7 @@
         },
         myChart: {},
         headerForm: {
-          selectedTarget: ' ',
+          selectedTarget: [],
           selectedType: ' ',
           startTime: ' ',
           endTime: ' '
