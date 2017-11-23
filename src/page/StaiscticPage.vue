@@ -19,7 +19,7 @@
 import charts from '../components/echart/charts.vue'
 import navi from '../components/layout/navi'
 import BasePage from '../components/BasePage'
-import chartForm from '../components/echart/chartForm'
+import chartForm from '../components/echart/vtfChartForm'
 import {getVTFData} from '../model/data'
 
 export default {
@@ -242,12 +242,14 @@ export default {
     onClick: function () {
       console.log('Button Click')
       let data = {xAxis: {data: []}, series: [{name: 'co2_flux', type: 'bar', data: []}]}
-      getVTFData().then(function (resp) {
+      getVTFData().then(resp => {
         console.log('net', resp)
-        resp.data.map(function (item) {
+        console.log(data)
+        resp.data.data.map(item => {
           data.xAxis.data.push(item.date_time)
-          data.series.data.push(item.co2_flux)
+          data.series[0].data.push(item.co2_flux)
         })
+        console.log(data)
         Object.assign(this.chartMetaData, data)
       })
     }
