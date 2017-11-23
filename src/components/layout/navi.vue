@@ -21,7 +21,7 @@
         <el-submenu index="2-1">
           <template slot="title">水土保持领域</template>
           <el-menu-item-group>
-          <router-link :to="'/staisctic'">
+          <router-link :to="'/vtf/staisctic'">
           <el-menu-item index="2-1-1">数据展示</el-menu-item>
           </router-link>
           <router-link :to="'/home1'">
@@ -37,9 +37,11 @@
         <span>统计分析</span>
         </template>
         <el-submenu index="3-1">
-          <template slot="title">水土保持领域</template>
+          <template slot="title">森林领域</template>
           <el-menu-item-group>
-          <el-menu-item index="3-1-1">数据展示</el-menu-item>
+            <router-link :to="'/tif/staisctic'">
+              <el-menu-item index="2-1-1">数据展示</el-menu-item>
+            </router-link>
           <el-menu-item index="3-1-2">数据导入导出</el-menu-item>
           </el-menu-item-group>
         </el-submenu>
