@@ -153,7 +153,7 @@
         },
         myChart: {},
         form: {
-          way: '',
+          way: 'average',
           selectedTarget: [],
           selectedType: 'a',
           granularity: 'day'
