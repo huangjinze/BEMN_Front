@@ -16,15 +16,15 @@
 
 <script>
 
-import charts from '../components/echart/charts.vue'
-import navi from '../components/layout/navi'
-import BasePage from '../components/BasePage'
-import chartForm from '../components/echart/vtfChartForm'
-import {getVTFData} from '../model/data'
+import charts from '../../components/echart/charts.vue'
+import navi from '../../components/layout/navi'
+import BasePage from '../../components/BasePage'
+import chartForm from '../../components/echart/vtfChartForm'
+import {getVTFData} from '../../model/data'
 
 export default {
   components: {charts, navi, BasePage, chartForm},
-  name: 'StaiscticPage',
+  name: 'vtfStaiscticPage',
   data () {
     return {
       targetOptions: [{
