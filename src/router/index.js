@@ -1,6 +1,7 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-import StaiscticPage from '@/page/StaiscticPage'
+import vtfStaiscticPage from '@/page/Static/vtfStaiscticPage.vue'
+import tifStaiscticPage from '@/page/Static/tifStaiscticPage.vue'
 import HomePage from '@/page/HomePage'
 
 Vue.use(Router)
@@ -13,9 +14,14 @@ export default new Router({
       component: HomePage
     },
     {
-      path: '/staisctic',
+      path: '/vtf/staisctic',
       name: 'staisctic',
-      component: StaiscticPage
+      component: vtfStaiscticPage
+    },
+    {
+      path: '/tif/staisctic',
+      name: 'staisctic',
+      component: tifStaiscticPage
     }
   ]
 
