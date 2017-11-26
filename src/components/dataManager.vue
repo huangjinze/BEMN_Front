@@ -56,21 +56,21 @@
     data () {
       return {
         tableData3: [{
-          age: '9614',
-          origin: '1937',
-          ave_height: '22.3',
-          ave_DBH: '77.3',
-          ave_density: '37830.1',
-          Acomposition: '红松林',
-          breed: '8909',
-          propagation: '126936',
-          coverage: '0.4',
-          area: '0.96',
-          pm_height: '1.4',
-          gm_height: '0.5',
-          cb_height: '0.1',
-          cover: '85.1',
-          date: '2014-02-04'
+          age: '9614', // 年龄
+          origin: '1937', // 起源
+          ave_height: '22.3', // 平均树高（m）
+          ave_DBH: '77.3', // 胸径（cm）
+          ave_density: '37830.1', // 密度（株／hm2）
+          Acomposition: '红松林', // 树种组成
+          breed: '8909', // 动植物种类
+          propagation: '126936', // 动植物数量
+          coverage: '0.4', // 郁闭度
+          area: '0.96', // 主林层的叶面积指数
+          pm_height: '1.4', // 林下植被（亚乔木）平均高度
+          gm_height: '0.5', // 灌木
+          cb_height: '0.1', // 草本
+          cover: '85.1', // 总盖度（%）
+          date: '2014-02-04' // 调查时间
         }, {
           age: '9614',
           origin: '1937',
