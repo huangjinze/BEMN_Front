@@ -10,7 +10,7 @@
 </template>
 
 
-<<script>
+<script>
 
 import charts from '../components/echart/charts.vue'
 import navi from '../components/layout/navi'

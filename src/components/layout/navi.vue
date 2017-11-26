@@ -24,7 +24,7 @@
           <router-link :to="'/staisctic'">
           <el-menu-item index="2-1-1">数据展示</el-menu-item>
           </router-link>
-          <router-link :to="'/home1'">
+          <router-link :to="'/import'">
           <el-menu-item index="2-1-2">数据导入导出</el-menu-item>
           </router-link>
           </el-menu-item-group>

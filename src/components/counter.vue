@@ -3,16 +3,16 @@
 </template>
 
 <script>
-    export default {
-        data() {
-            return {
-                num1: 2016
-            };
-        },
-        methods: {
-            handleChange(value) {
-                console.log(value);
-            }
-        }
-    };
+  export default {
+    data () {
+      return {
+        num1: 2016
+      }
+    },
+    methods: {
+      handleChange (value) {
+        console.log(value)
+      }
+    }
+  }
 </script>

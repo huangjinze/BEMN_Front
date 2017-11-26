@@ -6,7 +6,7 @@
 </BasePage>
 </template>
 
-<<script>
+<script>
   import navi from '../components/layout/navi'
   import BasePage from '../components/BasePage'
 
