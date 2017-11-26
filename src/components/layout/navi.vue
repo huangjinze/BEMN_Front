@@ -7,7 +7,7 @@
       class="el-menu-vertical-demo"
       @open="handleOpen"
       @close="handleClose">
-      <router-link :to="'/'">
+      <router-link :gitto="'/'">
       <el-menu-item index="1">
         <i class="el-icon-location"></i>
         <span slot="title">综合信息</span>
