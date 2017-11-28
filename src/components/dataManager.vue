@@ -2,12 +2,12 @@
   <div id="dataManager">
     <el-button @click="onClick" class="export" icon="el-icon-download">导出</el-button>
     <el-tabs type="border-card">
-      <el-tab-pane label="森林群落结构">
+      <el-tab-pane v-for="nav in navs" :key="nav.value" :label="nav.label">
         <!-- 页内内容开始 -->
-        <el-table ref="multipleTable" :data="tableData3" stripe tooltip-effect="dark" style="width: 100%" @selection-change="handleSelectionChange">
-          <el-table-column type="selection" width="50">
+        <el-table ref="multipleTable" :data="nav.tableData" stripe tooltip-effect="dark" style="width: 100%" @selection-change="handleSelectionChange">
+          <el-table-column type="selection" width="50" v-if="nav.mcols">
           </el-table-column>
-          <template v-for="item in cols">
+          <template v-for="item in nav.mcols">
             <el-table-column v-bind:key="item.value" :prop="item.prop" v-bind:label="item.label">
             </el-table-column>
           </template>
@@ -18,15 +18,6 @@
         </el-table>
         <!-- 页内内容结束 -->
       </el-tab-pane>
-      <el-tab-pane label="森林群落乔木层生物量和林木生长量及养分">
-        配置管理
-      </el-tab-pane>
-      <el-tab-pane label="森林凋落物量">角色管理
-
-      </el-tab-pane>
-      <el-tab-pane label="群落的天然更新">定时任务补偿
-
-      </el-tab-pane>
     </el-tabs>
     
   </div>
@@ -35,8 +26,7 @@
   export default {
     props: {
       dataExport: Function,
-      tableData3: {type: Array, default: []},
-      cols: {type: Array, default: []}
+      navs: {type: Array, default: []}
     },
     methods: {
       toggleSelection (rows) {
