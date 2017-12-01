@@ -25,6 +25,7 @@
       console.log(echarts)
       this.myChart = echarts.init(document.getElementById('chart_container'))
       this.initData()
+      window.addEventListener('resize', this.windowResize)
     },
     data () {
       return {
@@ -76,6 +77,9 @@
         console.log('updata', option)
         this.myChart.setOption(option, true)
         console.log('updata finsh', this.myChart)
+      },
+      windowResize () {
+        this.myChart.resize()
       }
     }
   }
