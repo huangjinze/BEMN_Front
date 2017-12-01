@@ -4,13 +4,13 @@
 <template>
   <el-form v-model="form">
     <el-form-item>
-      用户名:<el-input v-model="form.name">用户名</el-input>
+      用户名:<el-input v-model="form.email">用户名</el-input>
     </el-form-item>
     <el-form-item>
       密码:<el-input v-model="form.password">密码</el-input>
     </el-form-item>
     <el-form-item>
-      验证码:<img :src="CodeUrl" @click="onRefresh"><el-input v-model="form.verifyCode">验证码</el-input>
+      验证码:<img :src="CodeUrl" @click="onRefresh"><el-input v-model="form.captcha">验证码</el-input>
     </el-form-item>
     <el-form-item>
       <el-button type="primary" v-on:click="onClick" >登陆</el-button>
@@ -33,9 +33,9 @@
     data () {
       return {
         form: {
-          name: '',
+          email: '',
           password: '',
-          verifyCode: ''
+          captcha: ''
         }
       }
     },
