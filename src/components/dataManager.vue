@@ -76,5 +76,4 @@
     position: absolute;
     right: 28px;
     z-index: 1;
-  }
-</style>
+  }</style>
