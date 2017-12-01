@@ -3,7 +3,7 @@ import Router from 'vue-router'
 import vtfStaiscticPage from '@/page/Static/vtfStaiscticPage.vue'
 import tifStaiscticPage from '@/page/Static/tifStaiscticPage.vue'
 import HomePage from '@/page/HomePage'
-import dataManager from '@/page/dataPage'
+import dataManager from '@/page/DataPage'
 import LoginPage from '@/page/User/LoginPage'
 
 Vue.use(Router)
