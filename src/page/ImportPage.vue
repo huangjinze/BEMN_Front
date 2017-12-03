@@ -4,7 +4,7 @@
     <div slot="header">header</div>
     <div slot="aside"><navi></navi></div>
     <div slot="main" align="center">
-      <dataImport @Clicka="onClicka" @Clickb="onClickb" @Clickc="onClickc" @Clickd="onClickd" @Clicke="onClicke"></dataImport>
+      <dataImport @ClicktableData="onClickDataTable" @ClickvalueData="onClickMonthTable" @ClicktableMonth="onClickDataValue" @ClickvalueMonth="onClickMonthValue" @ClickYear="onClickyear"></dataImport>
     </div>
   </BasePage>
 </template>
@@ -24,19 +24,19 @@
       }
     },
     methods: {
-      onClicka (ShowDataT1) {
-        alert(ShowDataT1)
+      onClickDataTable (DataTable) {
+        alert(DataTable)
       },
-      onClickb (ShowDataT2) {
-        alert(ShowDataT2)
+      onClickMonthTable (MonthTable) {
+        alert(MonthTable)
       },
-      onClickc (ShowDataV1) {
-        alert(ShowDataV1)
+      onClickDataValue (DataValue) {
+        alert(DataValue)
       },
-      onClickd (ShowDataV2) {
-        alert(ShowDataV2)
+      onClickMonthValue (MonthValue) {
+        alert(MonthValue)
       },
-      onClicke (year) {
+      onClickyear (year) {
         alert(year)
       },
     }

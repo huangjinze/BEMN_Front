@@ -17,41 +17,41 @@
                     <td width="100px"><h2>展示</h2></td>
                     <td ><h3>开始日</h3></td>
                     <td ><el-date-picker
-                            v-model="showdate1"
+                            v-model="StartDate"
                             type="date"
                             placeholder="选择日期">
                     </el-date-picker></td>
                     <td ><h3>结束日</h3></td>
                     <td ><el-date-picker
-                            v-model="showdate2"
+                            v-model="EndDate"
                             type="date"
                             placeholder="选择日期">
                     </el-date-picker></td>
-                    <td><el-button type="primary" round v-on:click="Intable1">导出表格</el-button></td>
-                    <td><el-button type="primary" plain v-on:click="Invalue1">导出统计值</el-button></td>
+                    <td><el-button type="primary" round v-on:click="OuttableDate">导出表格</el-button></td>
+                    <td><el-button type="primary" plain v-on:click="OutvalueDate">导出统计值</el-button></td>
                 </tr>
                 <tr style="height: 150px">
                     <td><h2>对比</h2></td>
                     <td><h3>开始月</h3></td>
-                    <td><el-select v-model="comparemonth1" placeholder="请选择">
+                    <td><el-select v-model="StartMonth" placeholder="请选择">
                         <el-option
-                                v-for="item in options"
+                                v-for="item in optionsMonth"
                                 :key="item.value"
                                 :label="item.label"
                                 :value="item.value">
                         </el-option>
                     </el-select></td>
                     <td><h3>结束月</h3></td>
-                    <td><el-select v-model="comparemonth2" placeholder="请选择">
+                    <td><el-select v-model="EndMonth" placeholder="请选择">
                         <el-option
-                                v-for="item in options"
+                                v-for="item in optionsMonth"
                                 :key="item.value"
                                 :label="item.label"
                                 :value="item.value">
                         </el-option>
                     </el-select></td>
-                    <td><el-button type="primary" round v-on:click="Intable2">导出表格</el-button></td>
-                    <td><el-button type="primary" plain v-on:click="Invalue2">导出统计值</el-button></td>
+                    <td><el-button type="primary" round v-on:click="OuttableMonth">导出表格</el-button></td>
+                    <td><el-button type="primary" plain v-on:click="OutvalueMonth">导出统计值</el-button></td>
                 </tr>
                 <tr style="height: 150px">
                     <td><h2>导入</h2></td>
@@ -69,7 +69,7 @@
                             :file-list="fileList">
                         <el-button size="small" type="primary">选择文件</el-button>
                     </el-upload></td>
-                    <td><el-button type="primary" plain v-on:click="Outdata">导入原始数据</el-button></td>
+                    <td><el-button type="primary" plain v-on:click="Indata">导入原始数据</el-button></td>
                 </tr>
             </table>
     </div>
@@ -80,9 +80,9 @@
       return {
         restaurants: [],
         state: '',
-        showdate1: '',
-        showdate2: '',
-        options: [{
+        StartDate: '',
+        EndDate: '',
+        optionsMonth: [{
           value: '1',
           label: '1'
         }, {
@@ -119,8 +119,8 @@
           value: '12',
           label: '12'
         }],
-        comparemonth1: '',
-        comparemonth2: '',
+        StartMonth: '',
+        EndMonth: '',
         year: 2012,
         fileList: []
       }
@@ -157,32 +157,32 @@
       handleExceed (files, fileList) {
         this.$message.warning(`当前限制选择 1 个文件，本次选择了 ${files.length} 个文件，共选择了 ${files.length + fileList.length} 个文件`)
       },
-      Intable1 () {
-        var ShowDataT1 = new Array(2)
-        ShowDataT1.push(this.showdate1)
-        ShowDataT1.push(this.showdate2)
-        this.$emit('Clicka', ShowDataT1)
+      OuttableDate () {
+        var DataTable = new Array(2)
+        DataTable.push(this.StartDate)
+        DataTable.push(this.EndDate)
+        this.$emit('ClicktableData', DataTable)
       },
-      Intable2 () {
-        var ShowDataT2 = new Array(2)
-        ShowDataT2.push(this.comparemonth1)
-        ShowDataT2.push(this.comparemonth2)
-        this.$emit('Clickb', ShowDataT2)
+      OuttableMonth () {
+        var MonthTable = new Array(2)
+        MonthTable.push(this.StartMonth)
+        MonthTable.push(this.EndMonth)
+        this.$emit('ClickvalueData', MonthTable)
       },
-      Invalue1 () {
-        var ShowDataV1 = new Array(2)
-        ShowDataV1.push(this.showdate1)
-        ShowDataV1.push(this.showdate2)
-        this.$emit('Clickc', ShowDataV1)
+      OutvalueDate () {
+        var DataValue = new Array(2)
+        DataValue.push(this.StartDate)
+        DataValue.push(this.EndDate)
+        this.$emit('ClicktableMonth', DataValue)
       },
-      Invalue2 () {
-        var ShowDataV2 = new Array(2)
-        ShowDataV2.push(this.comparemonth1)
-        ShowDataV2.push(this.comparemonth2)
-        this.$emit('Clickd', ShowDataV2)
+      OutvalueMonth () {
+        var MonthValue = new Array(2)
+        MonthValue.push(this.StartMonth)
+        MonthValue.push(this.EndMonth)
+        this.$emit('ClickvalueMonth', MonthValue)
       },
-      Outdata () {
-        this.$emit('Clicke', this.year)
+      Indata () {
+        this.$emit('ClickYear', this.year)
       }
     },
     mounted () {
