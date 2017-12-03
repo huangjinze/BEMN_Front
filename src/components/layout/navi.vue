@@ -25,6 +25,17 @@
                 <el-menu-item index="/dataManager">数据导入导出</el-menu-item>
             </el-menu-item-group>
           </el-submenu>
+          <el-submenu index="2-2">
+            <template slot="title">森林领域</template>
+            <el-menu-item-group>
+              <router-link :to="'/vtf/forestAreaAll'">
+                <el-menu-item index="2-2-1">全部</el-menu-item>
+              </router-link>
+              <router-link :to="'/vtf/water'">
+                <el-menu-item index="2-2-2">水文</el-menu-item>
+              </router-link>
+            </el-menu-item-group>
+          </el-submenu>
         </el-submenu>
 
         <el-submenu index="3">

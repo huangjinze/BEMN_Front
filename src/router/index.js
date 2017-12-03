@@ -5,7 +5,8 @@ import tifStaiscticPage from '@/page/Static/tifStaiscticPage.vue'
 import HomePage from '@/page/HomePage'
 import dataManager from '@/page/DataPage'
 import LoginPage from '@/page/User/LoginPage'
-
+import vftForestAreaAllPage from '@/page/Static/vftForestAreaAllPage.vue'
+import waterPage from '@/page/Static/waterPage.vue'
 Vue.use(Router)
 
 export default new Router({
@@ -34,6 +35,16 @@ export default new Router({
       path: '/login',
       name: 'login',
       component: LoginPage
+    },
+    {
+      path: '/vtf/forestAreaAll',
+      name: 'forestAreaAll',
+      component: vftForestAreaAllPage
+    },
+    {
+      path: '/vtf/water',
+      name: 'water',
+      component: waterPage
     }
   ]
 
