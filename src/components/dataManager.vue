@@ -49,7 +49,6 @@
 </script>
 
 <style scoped>
-  @import url("//unpkg.com/element-ui@2.0.5/lib/theme-chalk/index.css");
   .handle-box {
     margin-bottom: 20px;
   }

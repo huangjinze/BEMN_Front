@@ -6,7 +6,6 @@
     </div>
     <div slot="main">
       <dataManager :navs="navs" @Click="dataExport">
-
       </dataManager>
     </div>
   </BasePage>
