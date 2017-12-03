@@ -4,7 +4,7 @@
     <div slot="header">header</div>
     <div slot="aside"><navi></navi></div>
     <div slot="main" align="center">
-      <dataImport></dataImport>
+      <dataImport @Clicka="onClick"></dataImport>
     </div>
   </BasePage>
 </template>
@@ -24,7 +24,9 @@
       }
     },
     methods: {
-
+      onClick (showdate1) {
+        alert(showdate1)
+      }
     }
   }
 </script>

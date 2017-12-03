@@ -3,6 +3,7 @@ import Router from 'vue-router'
 import vtfStaiscticPage from '@/page/Static/vtfStaiscticPage.vue'
 import tifStaiscticPage from '@/page/Static/tifStaiscticPage.vue'
 import HomePage from '@/page/HomePage'
+import dataImport from '@/page/Importpag'
 
 Vue.use(Router)
 
@@ -22,6 +23,11 @@ export default new Router({
       path: '/tif/staisctic',
       name: 'staisctic',
       component: tifStaiscticPage
+    },
+    {
+      path: '/vtf/Importpage',
+      name: 'importpage',
+      component: dataImport
     }
   ]
 
