@@ -3,7 +3,8 @@ import Router from 'vue-router'
 import vtfStaiscticPage from '@/page/Static/vtfStaiscticPage.vue'
 import tifStaiscticPage from '@/page/Static/tifStaiscticPage.vue'
 import HomePage from '@/page/HomePage'
-import dataImport from '@/page/Importpag'
+import dataManager from '@/page/DataPage'
+import LoginPage from '@/page/User/LoginPage'
 
 Vue.use(Router)
 
@@ -25,9 +26,14 @@ export default new Router({
       component: tifStaiscticPage
     },
     {
-      path: '/vtf/Importpage',
-      name: 'importpage',
-      component: dataImport
+      path: '/dataManager',
+      name: 'dataManager',
+      component: dataManager
+    },
+    {
+      path: '/login',
+      name: 'login',
+      component: LoginPage
     }
   ]
 
