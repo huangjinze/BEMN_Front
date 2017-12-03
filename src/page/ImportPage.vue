@@ -4,7 +4,7 @@
     <div slot="header">header</div>
     <div slot="aside"><navi></navi></div>
     <div slot="main" align="center">
-      <dataImport @Clicka="onClick"></dataImport>
+      <dataImport @Clicka="onClicka" @Clickb="onClickb" @Clickc="onClickc" @Clickd="onClickd" @Clicke="onClicke"></dataImport>
     </div>
   </BasePage>
 </template>
@@ -24,9 +24,21 @@
       }
     },
     methods: {
-      onClick (showdate1) {
-        alert(showdate1)
-      }
+      onClicka (ShowDataT1) {
+        alert(ShowDataT1)
+      },
+      onClickb (ShowDataT2) {
+        alert(ShowDataT2)
+      },
+      onClickc (ShowDataV1) {
+        alert(ShowDataV1)
+      },
+      onClickd (ShowDataV2) {
+        alert(ShowDataV2)
+      },
+      onClicke (year) {
+        alert(year)
+      },
     }
   }
 </script>

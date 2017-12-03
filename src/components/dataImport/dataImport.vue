@@ -83,40 +83,40 @@
         showdate1: '',
         showdate2: '',
         options: [{
-          value: '选项1',
+          value: '1',
           label: '1'
         }, {
-          value: '选项2',
+          value: '2',
           label: '2'
         }, {
-          value: '选项3',
+          value: '3',
           label: '3'
         }, {
-          value: '选项4',
+          value: '4',
           label: '4'
         }, {
-          value: '选项5',
+          value: '5',
           label: '5'
         }, {
-          value: '选项5',
+          value: '6',
           label: '6'
         }, {
-          value: '选项5',
+          value: '7',
           label: '7'
         }, {
-          value: '选项5',
+          value: '8',
           label: '8'
         }, {
-          value: '选项5',
+          value: '9',
           label: '9'
         }, {
-          value: '选项5',
+          value: '10',
           label: '10'
         }, {
-          value: '选项5',
+          value: '11',
           label: '11'
         }, {
-          value: '选项5',
+          value: '12',
           label: '12'
         }],
         comparemonth1: '',
@@ -158,24 +158,31 @@
         this.$message.warning(`当前限制选择 1 个文件，本次选择了 ${files.length} 个文件，共选择了 ${files.length + fileList.length} 个文件`)
       },
       Intable1 () {
-        alert(12)
-        this.$emit('Clicka', this.showdate1)
-        this.$emit('Click', this.showdate2)
+        var ShowDataT1 = new Array(2)
+        ShowDataT1.push(this.showdate1)
+        ShowDataT1.push(this.showdate2)
+        this.$emit('Clicka', ShowDataT1)
       },
       Intable2 () {
-        this.$emit('Click', this.showdate1)
-        this.$emit('Click', this.showdate2)
+        var ShowDataT2 = new Array(2)
+        ShowDataT2.push(this.comparemonth1)
+        ShowDataT2.push(this.comparemonth2)
+        this.$emit('Clickb', ShowDataT2)
       },
       Invalue1 () {
-        this.$emit('Click', this.comparemonth1)
-        this.$emit('Click', this.comparemonth2)
+        var ShowDataV1 = new Array(2)
+        ShowDataV1.push(this.showdate1)
+        ShowDataV1.push(this.showdate2)
+        this.$emit('Clickc', ShowDataV1)
       },
       Invalue2 () {
-        this.$emit('Click', this.comparemonth1)
-        this.$emit('Click', this.comparemonth2)
+        var ShowDataV2 = new Array(2)
+        ShowDataV2.push(this.comparemonth1)
+        ShowDataV2.push(this.comparemonth2)
+        this.$emit('Clickd', ShowDataV2)
       },
       Outdata () {
-        this.$emit('Click', this.year)
+        this.$emit('Clicke', this.year)
       }
     },
     mounted () {

@@ -22,7 +22,7 @@
             <template slot="title">水土保持领域</template>
             <el-menu-item-group>
                 <el-menu-item index="/vtf/staisctic">数据展示</el-menu-item>
-                <el-menu-item index="/dataManager">数据导入导出</el-menu-item>
+                <el-menu-item index="/vtf/Importpage">数据导入导出</el-menu-item>
             </el-menu-item-group>
           </el-submenu>
         </el-submenu>
