@@ -1,16 +1,14 @@
 <!--数据导出页面的具体内容-->
 <template>
     <div class="main">
-            <el-col :span="12">
+            <el-col :span="24">
                 <div class="sub-title"></div>
-                <el-autocomplete
-                        class="inline-input"
-                        v-model="state"
-                        :fetch-suggestions="querySearch"
-                        placeholder="请输入内容"
-                        :trigger-on-focus="false"
-                        @select="handleSelect"
-                ></el-autocomplete>
+                <el-cascader
+                        v-model="selectedTarget"
+                        placeholder="搜索"
+                        :options="targetOptions"
+                        filterable>
+                </el-cascader>
             </el-col>
             <table>
                 <tr style="height: 150px">
@@ -60,16 +58,16 @@
                     <td><h3>文件</h3></td>
                     <td><el-upload
                             class="upload-demo"
-                            action="https://jsonplaceholder.typicode.com/posts/"
+                            :action=upLoadUrl
                             :on-preview="handlePreview"
                             :on-remove="handleRemove"
                             multiple
                             :limit="1"
                             :on-exceed="handleExceed"
                             :file-list="fileList">
-                        <el-button size="small" type="primary">选择文件</el-button>
+                        <el-button size="small" type="primary" v-on:click="ChooseFile">选择文件</el-button>
                     </el-upload></td>
-                    <td><el-button type="primary" plain v-on:click="Indata">导入原始数据</el-button></td>
+                    <td><el-button type="primary" plain v-on:click="InOridata">导入原始数据</el-button></td>
                 </tr>
             </table>
     </div>
@@ -78,7 +76,7 @@
   export default {
     data () {
       return {
-        restaurants: [],
+        selectedTarget: [],
         state: '',
         StartDate: '',
         EndDate: '',
@@ -125,10 +123,14 @@
         fileList: []
       }
     },
+    props: {
+      upLoadUrl: String,
+      targetOptions: {type: Array, default: []}
+    },
     methods: {
       querySearch (queryString, cb) {
-        var restaurants = this.restaurants
-        var results = queryString ? restaurants.filter(this.createFilter(queryString)) : restaurants
+        var canshuu = this.canshu
+        var results = queryString ? canshuu.filter(this.createFilter(queryString)) : canshuu
         // 调用 callback 返回建议列表的数据
         cb(results)
       },
@@ -181,12 +183,12 @@
         MonthValue.push(this.EndMonth)
         this.$emit('ClickvalueMonth', MonthValue)
       },
-      Indata () {
-        this.$emit('ClickYear', this.year)
+      InOridata () {
+        this.$emit('ClickOridata', this.year)
+      },
+      ChooseFile () {
+        this.$emit('ClickChooseFile', this.fileList)
       }
-    },
-    mounted () {
-      this.restaurants = this.loadAll()
     }
   }
 </script>
