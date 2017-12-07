@@ -27,7 +27,7 @@
 </script>
 <style scoped>
   @import url("//unpkg.com/element-ui@2.0.5/lib/theme-chalk/index.css");
-  /*@import "../assets/font/font-awesome-4.7.0/css/font-awesome.min.css";*/
+  @import "../assets/font/font-awesome-4.7.0/css/font-awesome.min.css";
   .el-header{
     background-color: #6484b3;
     height: 75px!important;
