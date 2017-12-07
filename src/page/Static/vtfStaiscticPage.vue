@@ -53,7 +53,7 @@ export default {
     }
   },
   mounted: function () {
-    getVFTIndex({station_name: '盐池_1', 'classification_name': '气象'}).then(resp => {
+    getVFTIndex({station: '盐池_1', classification: '气象', domain: '水土保持'}).then(resp => {
       console.log('get_vft_index', resp)
       let data = resp.data.data[0]
       for (let k in data) {
@@ -64,6 +64,8 @@ export default {
         this.targetOptions.push({'label': k, 'value': k, 'children': child})
       }
       console.log('get_vft_index_finish', this.targetOptions)
+    }).catch(resp => {
+      this.$alert('网络差', '失败', {confirmButtonText: 'ok'})
     })
   },
   methods: {
@@ -72,13 +74,19 @@ export default {
       this.loading = true
       let data = {xAxis: {data: []}, series: [{name: 'co2_flux', type: 'bar', data: []}]}
       getVTFData({'index': this.formValue.index[1],
-        'domin': '水文',
-        'start_time': this.formValue.start_time,
-        'end_time': this.formValue.end_time,
-        'time_interval': this.formValue.time_interval,
-        'model': this.formValue.model}).then(resp => {
+        domin: '水土保持',
+        station: '盐池_1',
+        classification: '气象',
+        start_time: this.formValue.start_time,
+        end_time: this.formValue.end_time,
+        time_interval: this.formValue.time_interval,
+        model: this.formValue.model}).then(resp => {
           console.log('net', resp)
           console.log(data)
+          if (resp.data.status !== 'success') {
+            this.$alert(resp.data.reason, '失败', {confirmButtonText: 'ok'})
+            return
+          }
           let series = resp.data.data[0]
           for (let k in series) {
             data.xAxis.data.push(k)
@@ -88,6 +96,11 @@ export default {
           console.log('net finish', resp.data.data)
           this.chartMetaData = Object.assign(this.chartMetaData, data)
           this.loading = false
+        }).catch(resp => {
+          this.$alert('网络错误', '失败', {confirmButtonText: 'ok'}).then(aciton => {
+            this.loading = false
+            console.log(aciton)
+          })
         })
     }
   }
