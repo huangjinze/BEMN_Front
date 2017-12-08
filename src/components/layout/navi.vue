@@ -97,16 +97,16 @@
     </div>
 </template>
 <script>
-    export default {
-        methods: {
-            handleOpen (key, keyPath) {
-                console.log(key, keyPath)
-            },
-            handleClose (key, keyPath) {
-                console.log(key, keyPath)
-            }
-        }
-    }
+//    export default {
+//        methods: {
+//            handleOpen (key, keyPath) {
+//                console.log(key, keyPath)
+//            },
+//            handleClose (key, keyPath) {
+//                console.log(key, keyPath)
+//            }
+//        }
+//    }
 </script>
 <style scoped>
     .router-link-active,.el-menu-item,a{
