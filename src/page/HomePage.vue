@@ -2,48 +2,48 @@
 <BasePage>
   <div slot="header">header</div>
   <div slot="aside"><navi></navi></div>
-  <div slot="main">
+  <div slot="main" class="main">
     <el-row class="left">
       <h2 class="">森林领域</h2>
       <el-col class="linear_gra " :span="6">
         <div class="word">气象</div>
-        <div class="data" >条</div>
+        <div class="data" >{{ Meteorology }}条</div>
       </el-col>
       <el-col class="linear_gra " :span="6" :offset="6">
         <div class="word">测流堰信息</div>
-        <div class="data" >条</div>
+        <div class="data" >{{ flow }}条</div>
       </el-col>
       <el-col class="linear_gra " :span="6" :offset="6">
         <div class="word">生态站</div>
-        <div class="data" >个站点</div>
+        <div class="data" >{{stationNum}}个站点</div>
       </el-col>
       <el-col class="linear_gra linear_gra2 col-lg-3" :span="6">
         <div class="word">水文</div>
-        <div class="data" >条</div>
+        <div class="data" >{{hydrology}}条</div>
       </el-col>
       <el-col class="linear_gra linear_gra2 col-lg-3 col-lg-offset-1"  :span="6" :offset="6">
         <div class="word">森林健康</div>
-        <div class="data" >条</div>
+        <div class="data" >{{forestry}}条</div>
       </el-col>
       <el-col class="linear_gra linear_gra2 col-lg-3 col-lg-offset-1" :span="6" :offset="6">
         <div class="word">径流场信息</div>
-        <div class="data" >条</div>
+        <div class="data" >{{catchment}}条</div>
       </el-col>
       <el-col class="linear_gra col-lg-3" :span="6">
         <div class="word">设备信息</div>
-        <div class="data" >条</div>
+        <div class="data" >{{device}}条</div>
       </el-col>
       <el-col class="linear_gra col-lg-3 col-lg-offset-1" :span="6" :offset="6">
         <div class="word">样地信息</div>
-        <div class="data" >条</div>
+        <div class="data" >{{sample_areas}}条</div>
       </el-col>
       <el-col class="linear_gra col-lg-3 col-lg-offset-1" :span="6" :offset="6">
         <div class="word">生物</div>
-        <div class="data" >条</div>
+        <div class="data" >{{biology}}条</div>
       </el-col>
       <el-col class="linear_gra linear_gra2 col-lg-3" :span="6">
         <div class="word">土壤</div>
-        <div class="data" >条</div>
+        <div class="data" >{{soil}}条</div>
       </el-col>
     </el-row>
     <el-row class="left">
@@ -61,11 +61,28 @@
   import navi from '../components/layout/navi'
   import BasePage from '../components/BasePage'
   export default {
-    components: {navi, BasePage}
+    components: {navi, BasePage},
+    data () {
+      return {
+        Meteorology: '2406',
+        flow: '111',
+        stationNum: '111',
+        hydrology: '111',
+        forestry: '111',
+        catchment: '111',
+        device: '111',
+        sample_areas: '111',
+        biology: '111',
+        soil: '111'
+      }
+    }
   }
 </script>
 
 <style scoped>
+  .main{
+    background: url("../assets/pattern.png") repeat;
+  }
   .left h2{
     font-family: 'Microsoft YaHei';
     color:#8e8e8e;

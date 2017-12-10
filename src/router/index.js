@@ -6,7 +6,7 @@ import HomePage from '@/page/HomePage'
 import dataManager from '@/page/DataPage'
 import LoginPage from '@/page/User/LoginPage'
 import vftForestAreaAllPage from '@/page/Static/vftForestAreaAllPage.vue'
-import waterPage from '@/page/Static/waterPage.vue'
+import forestDominPage from '@/page/Static/forestDominPage.vue'
 Vue.use(Router)
 
 export default new Router({
@@ -44,7 +44,7 @@ export default new Router({
     {
       path: '/vtf/water',
       name: 'water',
-      component: waterPage
+      component: forestDominPage
     }
   ]
 
