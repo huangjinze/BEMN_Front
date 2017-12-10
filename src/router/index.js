@@ -6,6 +6,8 @@ import HomePage from '@/page/HomePage'
 import dataManager from '@/page/DataPage'
 import LoginPage from '@/page/User/LoginPage'
 import Article from '@/page/News/ArticlePage'
+import ImportPage from '@/page/ImportPage.vue'
+
 Vue.use(Router)
 
 export default new Router({
@@ -29,6 +31,11 @@ export default new Router({
       path: '/dataManager',
       name: 'dataManager',
       component: dataManager
+    },
+    {
+      path: '/vtf/Importpage',
+      name: 'vtfImportpage',
+      component: ImportPage
     },
     {
       path: '/login',
