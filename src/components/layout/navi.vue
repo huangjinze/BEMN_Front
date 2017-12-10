@@ -1,6 +1,6 @@
 
 <template>
-  <div id="app">
+  <div id="navi">
     <el-row class="tac">
       <el-menu default-active="2"
                class="el-menu-vertical-demo"
