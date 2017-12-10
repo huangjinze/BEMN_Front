@@ -2,7 +2,7 @@
 <BasePage>
   <div slot="header">header</div>
   <div slot="aside"><navi></navi></div>
-  <div slot="main">x
+  <div slot="main">
     <dataManager :cols="mcols" :tableData3="mtableData3" @Click="dataExport">
 
     </dataManager>
