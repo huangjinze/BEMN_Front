@@ -28,7 +28,7 @@
 
       </el-tab-pane>
     </el-tabs>
-    
+
   </div>
 </template>
 <script>
@@ -76,4 +76,4 @@
     position: absolute;
     right: 28px;
     z-index: 1;
-  }</style>
+  } </style>
