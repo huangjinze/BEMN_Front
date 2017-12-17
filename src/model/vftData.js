@@ -2,3 +2,5 @@
 import axios from 'axios'
 
 export const getVFTCounts = () => { return axios.get('http://127.0.0.1/vftCountsShow') }
+export const getStation = () => { return axios.get('http://127.0.0.1/station/vft/getStation') }
+export const getClass = params => { return axios.get('http://127.0.0.1/station/vft/getClass', {'params': params}) }

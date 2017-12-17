@@ -4,7 +4,7 @@
         <div slot="header">header</div>
         <div slot="aside"><navi></navi></div>
         <div slot="main">
-            <headGuider :initTopPartTags="topPartTags" :initTopSiteTags="topSiteTags" :partTags="partTags" :siteTags="siteTags" @ClickPart="parentPartListen" @ClickSite="parentSiteListen"></headGuider>
+            <headGuider :initTopPartTags="stationName" :initTopSiteTags="className" :partTags="stations" :siteTags="classes" @ClickPart="parentStationListen" @ClickSite="parentClassListen"></headGuider>
             <indexChoice :indices="index" :col_name="colName" :tableData="tableData"></indexChoice>
         </div>
     </BasePage>
@@ -14,34 +14,21 @@ import navi from '../../components/layout/navi'
 import BasePage from '../../components/BasePage'
 import headGuider from '../../components/headGuider'
 import indexChoice from '../../components/indexChoice'
+import {getStation, getClass} from '../../model/vftData'
+import {getVFTIndex} from '../../model/data'
 export default {
   components: {navi, BasePage, headGuider, indexChoice},
   data () {
     return {
-      topPartTags: [
-        '东北地区'
+      stationName: [
+        '奥林匹克'
       ],
-      topSiteTags: [
-        '山西太行山森林生态系统国家定位观测研究站'
+      className: [
+        '通量'
       ],
-      partTags: [
-         {text: '东北地区', id: '1'},
-         {text: '华北地区', id: '2'},
-         {text: '西北地区', id: '3'},
-         {text: '华东地区', id: '4'}
-      ],
-      siteTags: [
-         {text: '山西太行山森林生态系统国家定位观测研究站', id: '1'},
-         {text: '山东黄河三角洲森林生态系统国家定位观测研究站', id: '2'},
-         {text: '山西太岳山森林生态系统国家定位观测研究站', id: '3'},
-         {text: '陕西黄龙山森林生态系统国家定位观测研究站', id: '4'}
-      ],
-      index: [
-         {text: '森林枯落物', id: '1'},
-         {text: '土壤物理性质', id: '2'},
-         {text: '土壤化学性质', id: '3'},
-         {text: '水质', id: '4'}
-      ],
+      stations: [],
+      classes: [],
+      index: [],
       colName: [
          {text: '样地编号', id: '1', prop: 'id'},
          {text: '森林枯落物厚度', id: '2', prop: 'thickness'},
@@ -51,15 +38,45 @@ export default {
          {id: 'LS-Y- 854', thickness: '2.77', searchTime: '2014-03-20'},
          {id: 'LS-Y- 855', thickness: '3.59', searchTime: '2014-03-20'},
          {id: 'LS-Y- 856', thickness: '2.77', searchTime: '2014-03-20'}
-      ]
+      ],
+      activeNames: []
     }
   },
+  mounted: function () {
+    getStation().then(resp => {
+      console.log(resp)
+      let data = resp.data
+      for (var i = 0; i < data.length; i++) {
+        this.stations.push({ text: data[i], id: i + 1 })
+      }
+    })
+  },
   methods: {
-    parentPartListen (id) {
-
+    parentStationListen (id) {
+      let temp = this.stations.find(function (value, index, stations) { return value.id === id })
+      getClass({station: temp.text}).then(resp => {
+        console.log(resp)
+        let data = resp.data
+        for (var i = 0; i < data.length; i++) {
+          this.classes.push({ text: data[i], id: i + 1 })
+        }
+      })
     },
-    parentSiteListen (id) {
-
+    parentClassListen (stationName, id) {
+      console.log(stationName)
+      let temp = this.classes.find(function (value, index, classes) { return value.id === id })
+      getVFTIndex({station: stationName, classification: temp.text, domain: '水土保持'}).then(resp => {
+        console.log(resp)
+        let data = resp.data.data[0]
+        let i = 0
+        for (let k in data) {
+          this.index.push({ text: k, id: i + 1 })
+          i++
+        }
+        console.log(data)
+      }).catch(resp => {
+        this.$alert('网络差', '失败', {confirmButtonText: 'ok'})
+      })
     }
   }
 }

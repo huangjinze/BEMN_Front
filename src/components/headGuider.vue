@@ -49,12 +49,9 @@ export default {
   },
   data () {
     return {
-      topPartTags: [
-
-      ],
-      topSiteTags: [
-
-      ]
+      topPartTags: [],
+      topSiteTags: [],
+      activeName: ['1', '2']
     }
   },
   props: {
@@ -74,6 +71,10 @@ export default {
       type: Array,
       required: true
     },
+    activePanel: {
+      type: Array,
+      required: true
+    },
     ClickPart: Function
   },
   mounted: function () {
@@ -85,6 +86,8 @@ export default {
   methods: {
     handlePartClose (tag) {
       this.topPartTags.splice(this.topPartTags.indexOf(tag), 1)
+      this.topSiteTags.pop()
+      this.siteTags.splice(0, this.siteTags.length)
     },
     handleSiteClose (tag) {
       this.topSiteTags.splice(this.topSiteTags.indexOf(tag), 1)
@@ -93,13 +96,15 @@ export default {
     //    this.dynamicTags.splice(this.dynamicTags.indexOf(tag), 1);
       this.topPartTags.pop()
       this.topPartTags.push({ text: text })
+      this.topSiteTags.pop()
+      this.siteTags.splice(0, this.siteTags.length)
       this.$emit('ClickPart', id)
     },
     selectSite (text, id) {
           //    this.dynamicTags.splice(this.dynamicTags.indexOf(tag), 1);
       this.topSiteTags.pop()
       this.topSiteTags.push({ text: text })
-      this.$emit('ClickSite', id)
+      this.$emit('ClickSite', this.topPartTags[0].text, id)
     }
   },
   name: 'headGuider'
