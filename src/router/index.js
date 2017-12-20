@@ -9,6 +9,8 @@ import tifForestAreaAllPage from '@/page/Static/tifForestAreaAllPage.vue'
 import forestDominPage from '@/page/Static/forestDominPage.vue'
 import ImportPage from '@/page/ImportPage.vue'
 import vftDataShowPage from '@/page/Static/vftDataShowPage.vue'
+import Index from '@/page/Index.vue'
+
 Vue.use(Router)
 
 export default new Router({
@@ -57,6 +59,12 @@ export default new Router({
       path: '/vft/dataShow',
       name: 'dataShow',
       component: vftDataShowPage
+    },
+    {
+      path: '/index',
+      name: 'index',
+      component: Index
     }
   ]
+
 })
