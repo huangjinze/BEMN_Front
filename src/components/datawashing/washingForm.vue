@@ -1,0 +1,70 @@
+<template>
+<el-form>
+
+  <el-form-item>
+    <el-select v-model="form.station">
+      <el-option
+        v-for="item in stations"
+        :key="item.label"
+        :label="item.label"
+        :value="item.value">
+      </el-option>
+    </el-select>
+  </el-form-item>
+
+  <el-form-item>
+    <el-select v-model="form.classification">
+      <el-option
+        v-for="item in classifications"
+        :key="item.label"
+        :label="item.label"
+        :value="item.value">
+      </el-option>
+    </el-select>
+  </el-form-item>
+
+  <el-form-item>
+    <el-date-picker
+      v-model="form.year"
+      align="right"
+      type="year"
+      placeholder="选择年">
+    </el-date-picker>
+  </el-form-item>
+
+  <el-form-item>
+    <el-upload
+      class="upload-demo"
+      action=""
+      :file-list="form.filelist">
+      <el-button size="small" type="primary">点击上传</el-button>
+    </el-upload>
+  </el-form-item>
+
+</el-form>
+</template>
+
+<script>
+  export default {
+    components: {},
+    name: 'washingForm',
+    data () {
+      return {
+        form: {
+          station: '',
+          year: '',
+          classification: '',
+          filelist: []
+        }
+      }
+    },
+    props: {
+      stations: {type: Array, default: () => { return [{label: '八达岭', value: '八达岭'}, {label: '奥林匹克', value: '奥林匹克'}] }},
+      classifications: {type: Array, default: () => { return [{label: '谈通量', value: '谈通量'}, {label: '水量', value: '水量'}] }}
+    }
+  }
+</script>
+
+<style scoped>
+
+</style>
