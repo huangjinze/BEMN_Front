@@ -7,6 +7,7 @@ import dataManager from '@/page/DataPage'
 import LoginPage from '@/page/User/LoginPage'
 import ImportPage from '@/page/ImportPage.vue'
 import Index from '@/page/Index.vue'
+import DataWashingPage from '@/page/DataWashingPage.vue'
 
 Vue.use(Router)
 
@@ -46,6 +47,11 @@ export default new Router({
       path: '/index',
       name: 'index',
       component: Index
+    },
+    {
+      path: '/washing',
+      name: 'DataWashingPage',
+      component: DataWashingPage
     }
   ]
 
