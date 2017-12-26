@@ -36,7 +36,8 @@
     <el-upload
       class="upload-demo"
       action=""
-      :file-list="form.filelist">
+      :file-list="filelist"
+      @on-change="onFileChange">
       <el-button size="small" type="primary">点击上传</el-button>
     </el-upload>
   </el-form-item>
@@ -53,14 +54,26 @@
         form: {
           station: '',
           year: '',
-          classification: '',
-          filelist: []
-        }
+          classification: ''
+        },
+        filelist: []
       }
     },
     props: {
       stations: {type: Array, default: () => { return [{label: '八达岭', value: '八达岭'}, {label: '奥林匹克', value: '奥林匹克'}] }},
-      classifications: {type: Array, default: () => { return [{label: '谈通量', value: '谈通量'}, {label: '水量', value: '水量'}] }}
+      classifications: {type: Array,
+        default: () => {
+          return [{label: '碳通量', value: 'co2'},
+          {label: '水', value: 'water'},
+          {label: '气象', value: 'weather'},
+          {label: '能量', value: 'energy'}]
+        }
+      }
+    },
+    methods: {
+      onFileChange (file, fileList) {
+        console.log(fileList)
+      }
     }
   }
 </script>

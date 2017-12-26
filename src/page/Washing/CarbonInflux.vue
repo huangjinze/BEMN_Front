@@ -26,6 +26,9 @@
     <div v-if="step === 3">
       <charts class="testchart" id="1"  :xAxis="chartMetaData.xAxis" :yAxis="chartMetaData.yAxis"
               :series="chartMetaData.series"></charts>
+      请输入u*值：<el-input-number  v-model="u" :step="0.1"></el-input-number>
+      <el-button @click="onUValueDraw" type="primary">确认</el-button>
+
     </div>
 
     <div v-if="step === 4">
@@ -42,8 +45,8 @@
 
     <div class="bottom-op">
       <el-button-group>
-        <el-button type="primary" @click="onPreClick">pre</el-button>
-        <el-button type="primary" @click="onNextClick">next</el-button>
+        <el-button type="primary" @click="onPreClick" :disabled="preDisable">pre</el-button>
+        <el-button type="primary" @click="onNextClick" :disabled="nextDisable">next</el-button>
       </el-button-group>
     </div>
   </div>
@@ -55,9 +58,13 @@
   import navi from '../../components/layout/navi'
   import washingForm from '../../components/datawashing/washingForm'
   import charts from '../../components/echart/charts'
+  import ElButton from 'element-ui/packages/button/src/button'
+  import ElInputNumber from 'element-ui/packages/input-number/src/input-number'
 
   export default {
     components: {
+      ElInputNumber,
+      ElButton,
       rangeCheck,
       BasePage,
       navi,
@@ -67,6 +74,8 @@
     data () {
       return {
         step: 0,
+        preDisable: true,
+        nextDisable: false,
         loading: false,
         form: {
           z: 4,
@@ -80,16 +89,29 @@
     methods: {
       onNextClick () {
         this.loading = true
+
         this.step = this.step + 1
+        if (this.step >= 4) {
+          this.nextDisable = true
+        }
+        this.preDisable = false
+
         this.loading = false
       },
       onPreClick () {
         this.loading = true
+
         this.step = this.step - 1
-        if (this.step < 0) {
-          this.step = 0
+        this.preDisable = false
+        if (this.step <= 0) {
+          this.preDisable = true
         }
+        this.nextDisable = false
+
         this.loading = false
+      },
+      onUValueDraw () {
+        console.log('draw')
       }
     }
   }
