@@ -3,12 +3,29 @@
     <div slot="header">header</div>
     <div slot="aside"><navi></navi></div>
     <div slot="main" >
-      <div class="top "><washingForm></washingForm></div>
+      <div class="top "><washingForm :form="form"></washingForm></div>
 
 
       <div class="content-form" >
-        <CarbonInflux>
-        </CarbonInflux>
+
+        <div  v-if="form.classification == 'co2'">
+          <CarbonInflux>
+          </CarbonInflux>
+        </div>
+
+        <div  v-if="form.classification == 'water'">
+        <Water>
+        </Water>
+        </div>
+
+        <div  v-if="form.classification == 'weather'">
+          <Weather></Weather>
+        </div>
+
+        <div  v-if="form.classification == 'energy'">
+          <Energy></Energy>
+        </div>
+
       </div>
 
 
@@ -24,6 +41,9 @@
   import washingForm from '../../components/datawashing/washingForm'
   import charts from '../../components/echart/charts'
   import CarbonInflux from './CarbonInflux'
+  import Water from './Water'
+  import Weather from './Weather'
+  import Energy from './Energy'
 
   export default {
     components: {
@@ -32,11 +52,18 @@
       navi,
       washingForm,
       charts,
-      CarbonInflux},
+      CarbonInflux,
+      Water,
+      Weather,
+      Energy},
     name: 'DataWashingPage',
     data () {
       return {
-
+        form: {
+          classification: 'co2',
+          year: '',
+          station: ''
+        }
       }
     },
     methods: {

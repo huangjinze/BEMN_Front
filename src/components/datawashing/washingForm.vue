@@ -1,5 +1,5 @@
 <template>
-<el-form>
+<el-form v-model="form" @click="onFormChange">
 
   <el-form-item>
     <el-select v-model="form.station">
@@ -51,11 +51,6 @@
     name: 'washingForm',
     data () {
       return {
-        form: {
-          station: '',
-          year: '',
-          classification: ''
-        },
         filelist: []
       }
     },
@@ -68,11 +63,15 @@
           {label: '气象', value: 'weather'},
           {label: '能量', value: 'energy'}]
         }
-      }
+      },
+      form: Object
     },
     methods: {
       onFileChange (file, fileList) {
         console.log(fileList)
+      },
+      onFormChange () {
+        this.$emit('input', this.form)
       }
     }
   }
