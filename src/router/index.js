@@ -7,7 +7,7 @@ import dataManager from '@/page/DataPage'
 import LoginPage from '@/page/User/LoginPage'
 import ImportPage from '@/page/ImportPage.vue'
 import Index from '@/page/Index.vue'
-import DataWashingPage from '@/page/DataWashingPage.vue'
+import DataWashingPage from '@/page/Washing/DataWashingPage.vue'
 
 Vue.use(Router)
 
@@ -20,12 +20,12 @@ export default new Router({
     },
     {
       path: '/vtf/staisctic',
-      name: 'staisctic',
+      name: 'vtfstaisctic',
       component: vtfStaiscticPage
     },
     {
       path: '/tif/staisctic',
-      name: 'staisctic',
+      name: 'tifstaisctic',
       component: tifStaiscticPage
     },
     {
