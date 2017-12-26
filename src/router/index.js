@@ -5,7 +5,10 @@ import tifStaiscticPage from '@/page/Static/tifStaiscticPage.vue'
 import HomePage from '@/page/HomePage'
 import dataManager from '@/page/DataPage'
 import LoginPage from '@/page/User/LoginPage'
+import tifForestAreaAllPage from '@/page/Static/tifForestAreaAllPage.vue'
+import forestDominPage from '@/page/Static/forestDominPage.vue'
 import ImportPage from '@/page/ImportPage.vue'
+import vftDataShowPage from '@/page/Static/vftDataShowPage.vue'
 import Index from '@/page/Index.vue'
 import DataWashingPage from '@/page/Washing/DataWashingPage.vue'
 
@@ -42,6 +45,21 @@ export default new Router({
       path: '/login',
       name: 'login',
       component: LoginPage
+    },
+    {
+      path: '/tif/forestAreaAll',
+      name: 'forestAreaAll',
+      component: tifForestAreaAllPage
+    },
+    {
+      path: '/tif/water',
+      name: 'water',
+      component: forestDominPage
+    },
+    {
+      path: '/vft/dataShow',
+      name: 'dataShow',
+      component: vftDataShowPage
     },
     {
       path: '/index',
