@@ -24,10 +24,16 @@
     </div>
 
     <div v-if="step === 3">
-      <charts class="testchart" id="1"  :xAxis="chartMetaData.xAxis" :yAxis="chartMetaData.yAxis"
+
+      <charts class="testchart" id="chart_1"  :xAxis="chartMetaData.xAxis" :yAxis="chartMetaData.yAxis"
               :series="chartMetaData.series"></charts>
-      请输入u*值：<el-input-number  v-model="u" :step="0.1"></el-input-number>
+      请输入u*值：<el-input-number  v-model="form.u" :step="0.1"></el-input-number>
       <el-button @click="onUValueDraw" type="primary">确认</el-button>
+
+      <div v-if="adjustChartShow">
+        <charts class="chartAdjust" id="chart_2"  :xAxis="chartMetaDataUAdjust.xAxis" :yAxis="chartMetaDataUAdjust.yAxis"
+                :series="chartMetaDataUAdjust.series"></charts>
+      </div>
 
     </div>
 
@@ -83,7 +89,9 @@
           u: 4
         },
         interpolationOptions: [{label: '内插', value: '内插'}, {label: '外插', value: '外插'}],
-        chartMetaData: {xAxis: {}, yAxis: {}, series: []}
+        chartMetaData: {xAxis: {}, yAxis: {}, series: []},
+        chartMetaDataUAdjust: {xAxis: {}, yAxis: {}, series: []},
+        adjustChartShow: false
       }
     },
     methods: {
@@ -112,6 +120,7 @@
       },
       onUValueDraw () {
         console.log('draw')
+        this.adjustChartShow = true
       }
     }
   }
