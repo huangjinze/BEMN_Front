@@ -4,6 +4,7 @@ import vtfStaiscticPage from '@/page/Static/vtfStaiscticPage.vue'
 import tifStaiscticPage from '@/page/Static/tifStaiscticPage.vue'
 import HomePage from '@/page/HomePage'
 import dataManager from '@/page/DataPage'
+import vtfList from '@/page/VtfListPage'
 import LoginPage from '@/page/User/LoginPage'
 import Article from '@/page/News/ArticlePage'
 import ImportPage from '@/page/ImportPage.vue'
@@ -31,6 +32,11 @@ export default new Router({
       path: '/dataManager',
       name: 'dataManager',
       component: dataManager
+    },
+    {
+      path: '/vtf/list',
+      name: 'vtflist',
+      component: vtfList
     },
     {
       path: '/vtf/Importpage',
