@@ -7,7 +7,11 @@ import dataManager from '@/page/DataPage'
 import vtfList from '@/page/VtfListPage'
 import LoginPage from '@/page/User/LoginPage'
 import Article from '@/page/News/ArticlePage'
+import tifForestAreaAllPage from '@/page/Static/tifForestAreaAllPage.vue'
+import forestDominPage from '@/page/Static/forestDominPage.vue'
 import ImportPage from '@/page/ImportPage.vue'
+import vftDataShowPage from '@/page/Static/vftDataShowPage.vue'
+import Index from '@/page/Index.vue'
 
 Vue.use(Router)
 
@@ -52,6 +56,26 @@ export default new Router({
       path: '/article',
       name: 'article',
       component: Article
+    },
+    {
+      path: '/tif/forestAreaAll',
+      name: 'forestAreaAll',
+      component: tifForestAreaAllPage
+    },
+    {
+      path: '/tif/water',
+      name: 'water',
+      component: forestDominPage
+    },
+    {
+      path: '/vft/dataShow',
+      name: 'dataShow',
+      component: vftDataShowPage
+    },
+    {
+      path: '/index',
+      name: 'index',
+      component: Index
     }
   ]
 
