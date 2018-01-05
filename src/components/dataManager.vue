@@ -24,7 +24,7 @@
         <!-- 页内内容结束 -->
       </el-tab-pane>
     </el-tabs>
-    
+
   </div>
 </template>
 <script>
