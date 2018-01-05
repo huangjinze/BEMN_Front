@@ -12,6 +12,7 @@ import forestDominPage from '@/page/Static/forestDominPage.vue'
 import ImportPage from '@/page/ImportPage.vue'
 import vftDataShowPage from '@/page/Static/vftDataShowPage.vue'
 import Index from '@/page/Index.vue'
+import DataWashingPage from '@/page/Washing/DataWashingPage.vue'
 
 Vue.use(Router)
 
@@ -24,12 +25,12 @@ export default new Router({
     },
     {
       path: '/vtf/staisctic',
-      name: 'staisctic',
+      name: 'vtfstaisctic',
       component: vtfStaiscticPage
     },
     {
       path: '/tif/staisctic',
-      name: 'staisctic',
+      name: 'tifstaisctic',
       component: tifStaiscticPage
     },
     {
@@ -76,6 +77,11 @@ export default new Router({
       path: '/index',
       name: 'index',
       component: Index
+    },
+    {
+      path: '/washing',
+      name: 'DataWashingPage',
+      component: DataWashingPage
     }
   ]
 
