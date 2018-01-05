@@ -2,6 +2,6 @@
 import axios from 'axios'
 import { host } from './data'
 
-export const getVFTCounts = () => { return axios.get(host + '/vftCountsShow') }
-export const getStation = () => { return axios.get(host + '/station/vft/getStation') }
+export const getVFTCounts = () => { return axios.get(host + '/station/vft/countsShow') }
+export const getStation = params => { return axios.get(host + '/station/vft/getStation', {'params': params}) }
 export const getClass = params => { return axios.get(host + '/station/vft/getClass', {'params': params}) }
