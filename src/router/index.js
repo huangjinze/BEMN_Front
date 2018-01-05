@@ -4,7 +4,9 @@ import vtfStaiscticPage from '@/page/Static/vtfStaiscticPage.vue'
 import tifStaiscticPage from '@/page/Static/tifStaiscticPage.vue'
 import HomePage from '@/page/HomePage'
 import dataManager from '@/page/DataPage'
+import vtfList from '@/page/VtfListPage'
 import LoginPage from '@/page/User/LoginPage'
+import Article from '@/page/News/ArticlePage'
 import tifForestAreaAllPage from '@/page/Static/tifForestAreaAllPage.vue'
 import forestDominPage from '@/page/Static/forestDominPage.vue'
 import ImportPage from '@/page/ImportPage.vue'
@@ -37,6 +39,11 @@ export default new Router({
       component: dataManager
     },
     {
+      path: '/vtf/list',
+      name: 'vtflist',
+      component: vtfList
+    },
+    {
       path: '/vtf/Importpage',
       name: 'vtfImportpage',
       component: ImportPage
@@ -45,6 +52,11 @@ export default new Router({
       path: '/login',
       name: 'login',
       component: LoginPage
+    },
+    {
+      path: '/article',
+      name: 'article',
+      component: Article
     },
     {
       path: '/tif/forestAreaAll',
