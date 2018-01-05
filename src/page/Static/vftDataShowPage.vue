@@ -43,9 +43,9 @@ export default {
     }
   },
   mounted: function () {
-    getStation().then(resp => {
-      console.log(resp)
-      let data = resp.data
+    getStation({domain: '水土保持'}).then(resp => {
+      let data = resp.data.data
+      console.log(data)
       for (var i = 0; i < data.length; i++) {
         this.stations.push({ text: data[i], id: i + 1 })
       }
@@ -54,9 +54,10 @@ export default {
   methods: {
     parentStationListen (id) {
       let temp = this.stations.find(function (value, index, stations) { return value.id === id })
-      getClass({station: temp.text}).then(resp => {
-        console.log(resp)
-        let data = resp.data
+      getClass({domain: '水土保持', station: temp.text}).then(resp => {
+      //  console.log(resp)
+        let data = resp.data.data
+        console.log(resp.data)
         for (var i = 0; i < data.length; i++) {
           this.classes.push({ text: data[i], id: i + 1 })
         }
@@ -66,9 +67,10 @@ export default {
       console.log(stationName)
       let temp = this.classes.find(function (value, index, classes) { return value.id === id })
       getVFTIndex({station: stationName, classification: temp.text, domain: '水土保持'}).then(resp => {
-        console.log(resp)
         let data = resp.data.data[0]
+        console.log(data)
         let i = 0
+        this.index.splice(0, this.index.length)
         for (let k in data) {
           this.index.push({ text: k, id: i + 1 })
           i++

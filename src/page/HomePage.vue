@@ -5,46 +5,7 @@
   <div slot="main" class="main">
     <el-row class="left">
       <h2 class="">森林领域</h2>
-      <el-col class="linear_gra " :span="6">
-        <div class="word">气象</div>
-        <div class="data" >{{ tifCounts[0].Meteorology }}条</div>
-      </el-col>
-      <el-col class="linear_gra " :span="6" :offset="6">
-        <div class="word">测流堰信息</div>
-        <div class="data" >{{ tifCounts[0].flow }}条</div>
-      </el-col>
-      <el-col class="linear_gra " :span="6" :offset="6">
-        <div class="word">生态站</div>
-        <div class="data" >{{tifCounts[0].stationNum}}个站点</div>
-      </el-col>
-      <el-col class="linear_gra linear_gra2 col-lg-3" :span="6">
-        <div class="word">水文</div>
-        <div class="data" >{{tifCounts[0].hydrology}}条</div>
-      </el-col>
-      <el-col class="linear_gra linear_gra2 col-lg-3 col-lg-offset-1"  :span="6" :offset="6">
-        <div class="word">森林健康</div>
-        <div class="data" >{{tifCounts[0].forestry}}条</div>
-      </el-col>
-      <el-col class="linear_gra linear_gra2 col-lg-3 col-lg-offset-1" :span="6" :offset="6">
-        <div class="word">径流场信息</div>
-        <div class="data" >{{tifCounts[0].catchment}}条</div>
-      </el-col>
-      <el-col class="linear_gra col-lg-3" :span="6">
-        <div class="word">设备信息</div>
-        <div class="data" >{{tifCounts[0].device}}条</div>
-      </el-col>
-      <el-col class="linear_gra col-lg-3 col-lg-offset-1" :span="6" :offset="6">
-        <div class="word">样地信息</div>
-        <div class="data" >{{tifCounts[0].sample_areas}}条</div>
-      </el-col>
-      <el-col class="linear_gra col-lg-3 col-lg-offset-1" :span="6" :offset="6">
-        <div class="word">生物</div>
-        <div class="data" >{{tifCounts[0].biology}}条</div>
-      </el-col>
-      <el-col class="linear_gra linear_gra2 col-lg-3" :span="6">
-        <div class="word">土壤</div>
-        <div class="data" >{{tifCounts[0].soil}}条</div>
-      </el-col>
+
     </el-row>
     <el-row class="left">
       <h2 class="">水土保持领域</h2>
@@ -62,7 +23,7 @@
 <script>
   import navi from '../components/layout/navi'
   import BasePage from '../components/BasePage'
-  import {getTIFCounts} from '../model/tifData'
+ // import {getTIFCounts} from '../model/tifData'
   import {getVFTCounts} from '../model/vftData'
   export default {
     components: {navi, BasePage},
@@ -73,28 +34,29 @@
       }
     },
     mounted: function () {
-      getTIFCounts().then(resp => {
-        let data = resp.data[0]
-        this.tifCounts.push({ 'hydrology': data['hydrology'],
-          'stationNum': data['stationNum'],
-          'device': data['device'],
-          'soil': data['soil'],
-          'biology': data['biology'],
-          'Meteorology': data['Meteorology'],
-          'sample_areas': data['sample_areas'],
-          'forestry': data['forestry'],
-          'catchment': data['catchment'],
-          'flow': data['flow']
-        })
-        console.log(this.tifCounts)
-      }).catch(resp => {
-        this.$alert('网络差', '失败', {confirmButtonText: 'ok'})
-      })
+//      getTIFCounts().then(resp => {
+//        let data = resp.data[0]
+//        this.tifCounts.push({ 'hydrology': data['hydrology'],
+//          'stationNum': data['stationNum'],
+//          'device': data['device'],
+//          'soil': data['soil'],
+//          'biology': data['biology'],
+//          'Meteorology': data['Meteorology'],
+//          'sample_areas': data['sample_areas'],
+//          'forestry': data['forestry'],
+//          'catchment': data['catchment'],
+//          'flow': data['flow']
+//        })
+//        console.log(this.tifCounts)
+//      }).catch(resp => {
+//        this.$alert('网络差', '失败', {confirmButtonText: 'ok'})
+//      })
       getVFTCounts().then(resp => {
-        let name = resp.data.vft_results[0]
-        let counts = resp.data.vft_results[1]
-        let num = resp.data.vft_count
-        for (var index = 0; index < num; index++) {
+        console.log(resp)
+        let name = resp.data.data[0][0]
+        let counts = resp.data.data[0][1]
+        console.log(counts)
+        for (var index = 0; index < name.length; index++) {
           this.vftResults.push({ name: name[index], counts: counts[index] })
         }
         console.log(this.vftResults)
