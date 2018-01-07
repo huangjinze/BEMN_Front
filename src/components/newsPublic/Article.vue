@@ -32,15 +32,35 @@
             </el-col>
         </el-row>
         <div id="edit" v-else>
-          <el-select v-model="value" placeholder="请选择">
-            <el-option
-              v-for="item in options"
-              :key="item.value"
-              :label="item.label"
-              :value="item.value">
-            </el-option>
-          </el-select>
-          <vue-editor v-model="content"></vue-editor>
+          <el-form :label-position="labelPosition" label-width="80px">
+            <el-row>
+              <el-col :span="8">
+                <el-form-item label="文章类型">
+                  <el-select v-model="write.value" placeholder="请选择">
+                    <el-option
+                      v-for="item in options"
+                      :key="item.value"
+                      :label="item.label"
+                      :value="item.value">
+                    </el-option>
+                  </el-select>
+                </el-form-item>
+              </el-col>
+              <el-col :span="16">
+                <el-form-item label="文章标题">
+                  <el-input v-model="write.title"></el-input>
+                </el-form-item>
+              </el-col>
+            </el-row>
+            <el-row>
+              <el-form-item>
+                <vue-editor v-model="content"></vue-editor>
+              </el-form-item>
+            </el-row>
+            <el-row>
+              <el-button style="float: right;" type="primary" @click="onSubmit">发布文章</el-button>
+            </el-row>
+          </el-form>
         </div>
     </div>
 </template>
@@ -53,7 +73,13 @@ export default {
   },
   data () {
     return {
-      flage: 'true'
+      labelPosition: 'top',
+      flage: 'true',
+      content: '',
+      write: {
+        title: '',
+        value: ''
+      }
     }
   },
   props: {
@@ -82,6 +108,9 @@ export default {
     },
     edit () {
       this.flage = 'flase'
+    },
+    onSubmit () {
+      this.$emit('Submit')
     }
   }
 }

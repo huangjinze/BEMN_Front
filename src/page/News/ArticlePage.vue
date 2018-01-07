@@ -5,7 +5,7 @@
       <navi></navi>
     </div>
     <div slot="main">
-      <articles :options="options" :leftItems="leftItems" :rightBnts="rightBnts" :news="news"></articles>
+      <articles :options="options" :leftItems="leftItems" :rightBnts="rightBnts" :news="news" @Submit="onSubmitW"></articles>
     </div>
   </BasePage>
 </template>
@@ -73,6 +73,9 @@
       }
     },
     methods: {
+      onSubmitW () {
+        console.log('提交文章')
+      }
     }
   }
 </script>
