@@ -5,7 +5,7 @@
       <navi></navi>
     </div>
     <div slot="main">
-      <articles :leftItems="leftItems" :rightBnts="rightBnts" :news="news"></articles>
+      <articles :options="options" :leftItems="leftItems" :rightBnts="rightBnts" :news="news"></articles>
     </div>
   </BasePage>
 </template>
@@ -22,6 +22,22 @@
     },
     data () {
       return {
+        options: [{
+          value: '1',
+          label: '财务信息'
+        }, {
+          value: '2',
+          label: '双皮奶'
+        }, {
+          value: '3',
+          label: '蚵仔煎'
+        }, {
+          value: '4',
+          label: '龙须面'
+        }, {
+          value: '5',
+          label: '北京烤鸭'
+        }],
         leftItems: [{
           label: '新闻编辑',
           linkto: '/#/article'
