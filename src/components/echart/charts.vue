@@ -2,8 +2,8 @@
 
 */
 <template>
-  <div :class="className" :id="id">
-    <div id="chart_container" >
+  <div>
+    <div :id="id" class="chart_container">
     </div>
   </div>
 </template>
@@ -16,14 +16,13 @@
     },
     name: 'charts',
     props: {
-      className: String,
-      id: String,
       xAxis: {type: Object, default: []},     // echart xAxis 对象
       yAxis: {type: Object, default: []},     // echart yAxis 对象
-      series: {type: Array, default: []}},
+      series: {type: Array, default: []},
+      id: String},
     mounted: function () {
       console.log(echarts)
-      this.myChart = echarts.init(document.getElementById('chart_container'))
+      this.myChart = echarts.init(document.getElementById(this.id))
       this.initData()
       window.addEventListener('resize', this.windowResize)
     },
@@ -85,7 +84,7 @@
   }
 </script>
 <style scoped>
-  #chart_container {
+  .chart_container {
     height: 500px;
   }
 </style>
