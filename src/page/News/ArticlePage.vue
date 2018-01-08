@@ -6,7 +6,7 @@
     </div>
     <div slot="main">
       <articles :options="options" :leftItems="leftItems" :rightBnts="rightBnts" :news="news"
-      @Submit="onSubmitW" @changeCategory="dataSource" @delete="deleteNews"></articles>
+      @Submit="onSubmitW" @changeCategory="dataSource" @delete="dltNews" @edit="editNews"></articles>
     </div>
   </BasePage>
 </template>
@@ -15,8 +15,7 @@
   import navi from '../../components/layout/navi'
   import BasePage from '../../components/BasePage'
   import articles from '../../components/newsPublic/Article'
-  import {getNewsTitle} from '../../model/articleDate'
-  import {deleteNews} from '../../model/articleDate'
+  import {getNewsTitle, deleteNews} from '../../model/articleDate'
   export default {
     mounted () {
       this.dataSource()
@@ -30,19 +29,16 @@
       return {
         options: [{
           value: '1',
-          label: '财务信息'
+          label: '媒体聚焦'
         }, {
           value: '2',
-          label: '双皮奶'
+          label: '生态信息'
         }, {
           value: '3',
-          label: '蚵仔煎'
+          label: '统计信息'
         }, {
           value: '4',
-          label: '龙须面'
-        }, {
-          value: '5',
-          label: '北京烤鸭'
+          label: '商务信息'
         }],
         leftItems: [{
           label: '新闻编辑',
@@ -60,21 +56,19 @@
         {
           bnt: '商务信息'
         }],
-        news: []
+        news: [],
+        tab: '媒体聚焦'
       }
     },
     methods: {
       onSubmitW () {
         console.log('提交文章')
       },
-      deleteNews (tab) {
-        deleteNews({'id': tab})
-      },
       dataSource (tab) {
-        if (!tab) {
-          tab = '媒体聚焦'
+        if (tab) {
+          this.tab = tab
         }
-        getNewsTitle({category: tab}).then(resp => {
+        getNewsTitle({category: this.tab}).then(resp => {
           console.log(resp)
           this.news.splice(0, this.news.length)
           for (let k in resp.data.data) {
@@ -83,6 +77,13 @@
         }).catch(resp => {
           this.$alert('网络差', '失败', {confirmButtonText: 'ok'})
         })
+      },
+      dltNews (tab) {
+        deleteNews({'id': tab}).then(resp => {
+          this.dataSource()
+        })
+      },
+      editNews (id) {
       }
     }
   }

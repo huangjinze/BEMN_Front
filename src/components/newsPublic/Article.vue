@@ -36,7 +36,7 @@
             <el-row>
               <el-col :span="8">
                 <el-form-item label="文章类型">
-                  <el-select v-model="write.value" placeholder="请选择">
+                  <el-select v-model="write.label" placeholder="请选择">
                     <el-option
                       v-for="item in options"
                       :key="item.value"
@@ -100,6 +100,7 @@ export default {
         cancelButtonText: '取消',
         type: 'warning'
       }).then(() => {
+        this.$emit('delete', id)
         this.$message({
           type: 'success',
           message: '删除成功!'
@@ -111,13 +112,18 @@ export default {
         })
       })
     },
-    editNew () {
+    editNew (id) {
+      this.flage = 'flase'
+      this.$emit('edit', id)
     },
     edit () {
       this.flage = 'flase'
     },
     onSubmit () {
+      // console.log(this.content)
+      // console.log(this.write)
       this.$emit('Submit')
+      // this.flage = 'true'
     }
   }
 }
