@@ -15,17 +15,17 @@
                   <span class="addnew">新闻</span><a @click="edit" style="cursor:pointer;" class="el-icon-circle-plus-outline"></a>
                 </el-col>
                 <el-col>
-                  <el-button type="primary" class="bnt-tag" v-for="rightBnt in rightBnts" :key="rightBnt.value">
+                  <el-button type="primary" class="bnt-tag" v-for="rightBnt in rightBnts" :key="rightBnt.value" @click="changeCategory($event)">
                     {{rightBnt.bnt}}
                   </el-button>
                 </el-col>
               </el-row>
               <el-row class="new-row" v-for="index in news" :key="index.no">
-                <el-col :span="20" class="new-title">{{index.titile}}</el-col>
+                <el-col :span="20" class="new-title">{{index.title}}</el-col>
                 <span style="float:right;">
-                  <el-button type="danger" icon="el-icon-delete" @click="deleteNew">
+                  <el-button type="danger" icon="el-icon-delete" @click="deleteNew(index.no)">
                   </el-button>
-                  <el-button type="success" icon="el-icon-edit">
+                  <el-button type="success" icon="el-icon-edit" @click="editNew(index.no)">
                   </el-button>
                 </span>
               </el-row>
@@ -89,7 +89,12 @@ export default {
     options: {type: Array, default: []}
   },
   methods: {
-    deleteNew () {
+    changeCategory (event) {
+      console.log(event.currentTarget.innerText)
+      this.$emit('changeCategory', event.currentTarget.innerText)
+    },
+    deleteNew (id) {
+      console.log(id)
       this.$confirm('此操作将永久删除该文章, 是否继续?', '提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
@@ -105,6 +110,8 @@ export default {
           message: '已取消删除'
         })
       })
+    },
+    editNew () {
     },
     edit () {
       this.flage = 'flase'

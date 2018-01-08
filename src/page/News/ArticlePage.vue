@@ -5,7 +5,8 @@
       <navi></navi>
     </div>
     <div slot="main">
-      <articles :options="options" :leftItems="leftItems" :rightBnts="rightBnts" :news="news" @Submit="onSubmitW"></articles>
+      <articles :options="options" :leftItems="leftItems" :rightBnts="rightBnts" :news="news"
+      @Submit="onSubmitW" @changeCategory="dataSource" @delete="deleteNews"></articles>
     </div>
   </BasePage>
 </template>
@@ -14,7 +15,12 @@
   import navi from '../../components/layout/navi'
   import BasePage from '../../components/BasePage'
   import articles from '../../components/newsPublic/Article'
+  import {getNewsTitle} from '../../model/articleDate'
+  import {deleteNews} from '../../model/articleDate'
   export default {
+    mounted () {
+      this.dataSource()
+    },
     components: {
       navi,
       BasePage,
@@ -54,27 +60,29 @@
         {
           bnt: '商务信息'
         }],
-        news: [{
-          titile: 'One!!!!',
-          no: '1'
-        },
-        {
-          titile: 'two!!!!',
-          no: '2'
-        },
-        {
-          titile: 'three!!!!',
-          no: '3'
-        },
-        {
-          titile: 'Mac n Cheese (live mashup)',
-          no: '4'
-        }]
+        news: []
       }
     },
     methods: {
       onSubmitW () {
         console.log('提交文章')
+      },
+      deleteNews (tab) {
+        deleteNews({'id': tab})
+      },
+      dataSource (tab) {
+        if (!tab) {
+          tab = '媒体聚焦'
+        }
+        getNewsTitle({category: tab}).then(resp => {
+          console.log(resp)
+          this.news.splice(0, this.news.length)
+          for (let k in resp.data.data) {
+            this.news.push({'title': resp.data.data[k].title, 'no': resp.data.data[k].id})
+          }
+        }).catch(resp => {
+          this.$alert('网络差', '失败', {confirmButtonText: 'ok'})
+        })
       }
     }
   }
