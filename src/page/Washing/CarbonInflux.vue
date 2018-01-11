@@ -27,8 +27,8 @@
 
     <div v-if="step === 3">
 
-      <charts class="testchart" id="chart_1"  :xAxis="chartMetaData.xAxis" :yAxis="chartMetaData.yAxis"
-              :series="chartMetaData.series"></charts>
+      <charts class="testchart" id="chart_1"  :xAxis="chartUMetaData.xAxis" :yAxis="chartUMetaData.yAxis"
+              :series="chartUMetaData.series"></charts>
       请输入u*值：<el-input-number  v-model="form.u" :step="0.1"></el-input-number>
       <el-button @click="onUValueDraw" type="primary">确认</el-button>
 
@@ -94,7 +94,7 @@
           u: 4
         },
         interpolationOptions: [{label: '内插', value: '内插'}, {label: '外插', value: '外插'}],
-        chartMetaData: {xAxis: {}, yAxis: {}, series: []},
+        chartUMetaData: {xAxis: {}, yAxis: {}, series: []},
         chartMetaDataUAdjust: {xAxis: {}, yAxis: {}, series: []},
         adjustChartShow: false
       }
@@ -106,11 +106,11 @@
           station: '盐池_1',
           classification: '通量'}).then(resp => {
             this.loading = true
-            resp.data.data[0].map(item => {
+            resp.data.data.map(item => {
               let index = {
                 name: item.name,
-                high: isNaN(parseFloat(item.max_default_value)) ? 0 : parseFloat(item.max_default_value),
-                low: isNaN(parseFloat(item.min_default_value)) ? 0 : parseFloat(item.min_default_value),
+                max_default_value: isNaN(parseFloat(item.max_default_value)) ? 0 : parseFloat(item.max_default_value),
+                min_default_value: isNaN(parseFloat(item.min_default_value)) ? 0 : parseFloat(item.min_default_value),
                 isShow: true
               }
               console.log(index)
@@ -122,6 +122,10 @@
     methods: {
       onNextClick () {
         this.loading = true
+
+        if (this.step === 1) {
+          this.postIndexes()
+        }
 
         this.step = this.step + 1
         if (this.step >= 4) {
@@ -146,6 +150,9 @@
       onUValueDraw () {
         console.log('draw')
         this.adjustChartShow = true
+      },
+      postIndexes () {
+
       }
     }
   }

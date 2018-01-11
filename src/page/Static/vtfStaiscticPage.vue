@@ -74,7 +74,7 @@ export default {
       this.loading = true
       let data = {xAxis: {data: []}, series: [{name: 'co2_flux', type: 'bar', data: []}]}
       getVTFData({'index': this.formValue.index[1],
-        domin: '水土保持',
+        domain: '水土保持',
         station: '盐池_1',
         classification: '气象',
         start_time: this.formValue.start_time,

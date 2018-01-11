@@ -20,8 +20,8 @@
       <el-form v-model="showIndexes">
         <el-form-item v-for="(item,index) in showIndexes" :key="index">
       <span>{{ item.name }}:
-        <el-input-number v-model="item.low"></el-input-number> -
-        <el-input-number v-model="item.high"></el-input-number> </span>
+        <el-input-number v-model="item.min_default_value"></el-input-number> -
+        <el-input-number v-model="item.max_default_value"></el-input-number> </span>
         </el-form-item>
       </el-form>
     </div>
@@ -42,7 +42,7 @@
     name: 'rangeCheck',
     props: {
       indexes: {type: Array},
-      input: {type: Array, default: () => { return [] }}
+      input: {type: Array}
     },
     data () {
       return {
@@ -59,7 +59,7 @@
       }
     },
     updated () {
-      this.$emit('input', this.input)
+      this.$emit('input', this.showIndexes)
     },
     methods: {
       onIndexesSelectChange (values) {
