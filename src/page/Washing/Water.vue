@@ -7,7 +7,7 @@
     </el-steps>
 
     <div v-if="step === 0">
-      <rangeCheck :indexes="form.indexes"></rangeCheck>
+      <rangeCheck :indexes="form.indexes" v-model="form.range"></rangeCheck>
     </div>
 
     <div v-if="step === 1">
@@ -61,7 +61,8 @@
         form: {
           z: 4,
           interpolation: ' ',
-          indexes: []
+          indexes: [],
+          range: []
         },
         interpolationOptions: [{label: '内插', value: '内插'}, {label: '外插', value: '外插'}]
       }
@@ -102,7 +103,8 @@
               let index = {
                 name: item.name,
                 high: isNaN(parseFloat(item.max_default_value)) ? 0 : parseFloat(item.max_default_value),
-                low: isNaN(parseFloat(item.min_default_value)) ? 0 : parseFloat(item.min_default_value)
+                low: isNaN(parseFloat(item.min_default_value)) ? 0 : parseFloat(item.min_default_value),
+                isShow: true
               }
               console.log(index)
               this.form.indexes.push(index)
