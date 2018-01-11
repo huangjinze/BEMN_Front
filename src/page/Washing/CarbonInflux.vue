@@ -9,7 +9,9 @@
     </el-steps>
 
     <div v-if="step === 0">
-      <rangeCheck></rangeCheck>
+      <rangeCheck
+        :indexes="form.indexes"
+        v-model="form.range"></rangeCheck>
     </div>
 
     <div v-if="step === 1">
@@ -66,6 +68,7 @@
   import charts from '../../components/echart/charts'
   import ElButton from 'element-ui/packages/button/src/button'
   import ElInputNumber from 'element-ui/packages/input-number/src/input-number'
+  import {getWashingIndexAndRange} from '../../model/data'
 
   export default {
     components: {
@@ -85,7 +88,9 @@
         loading: false,
         form: {
           z: 4,
-          interpolation: '',
+          interpolation: ' ',
+          indexes: [],
+          range: [],
           u: 4
         },
         interpolationOptions: [{label: '内插', value: '内插'}, {label: '外插', value: '外插'}],
@@ -93,6 +98,26 @@
         chartMetaDataUAdjust: {xAxis: {}, yAxis: {}, series: []},
         adjustChartShow: false
       }
+    },
+    mounted () {
+      getWashingIndexAndRange(
+        {
+          domain: '水土保持',
+          station: '盐池_1',
+          classification: '通量'}).then(resp => {
+            this.loading = true
+            resp.data.data[0].map(item => {
+              let index = {
+                name: item.name,
+                high: isNaN(parseFloat(item.max_default_value)) ? 0 : parseFloat(item.max_default_value),
+                low: isNaN(parseFloat(item.min_default_value)) ? 0 : parseFloat(item.min_default_value),
+                isShow: true
+              }
+              console.log(index)
+              this.form.indexes.push(index)
+            })
+            this.loading = false
+          })
     },
     methods: {
       onNextClick () {
