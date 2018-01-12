@@ -10,7 +10,7 @@
 
     <div v-if="step === 0">
       <rangeCheck
-        :indexes="form.indexes"
+        :indexes="indexes"
         v-model="form.range"></rangeCheck>
     </div>
 
@@ -68,7 +68,7 @@
   import charts from '../../components/echart/charts'
   import ElButton from 'element-ui/packages/button/src/button'
   import ElInputNumber from 'element-ui/packages/input-number/src/input-number'
-  import {getWashingIndexAndRange} from '../../model/data'
+  import {checkWashingIndexRange} from '../../model/data'
 
   export default {
     components: {
@@ -80,6 +80,10 @@
       washingForm,
       charts},
     name: 'carbonInflux',
+    props: {
+      washing_form: {type: Object},
+      indexes: {type: Array}
+    },
     data () {
       return {
         step: 0,
@@ -89,41 +93,27 @@
         form: {
           z: 4,
           interpolation: ' ',
-          indexes: [],
           range: [],
           u: 4
         },
+        m_indexes: this.indexes,
         interpolationOptions: [{label: '内插', value: '内插'}, {label: '外插', value: '外插'}],
         chartUMetaData: {xAxis: {}, yAxis: {}, series: []},
         chartMetaDataUAdjust: {xAxis: {}, yAxis: {}, series: []},
         adjustChartShow: false
       }
     },
-    mounted () {
-      getWashingIndexAndRange(
-        {
-          domain: '水土保持',
-          station: '盐池_1',
-          classification: '通量'}).then(resp => {
-            this.loading = true
-            resp.data.data.map(item => {
-              let index = {
-                name: item.name,
-                max_default_value: isNaN(parseFloat(item.max_default_value)) ? 0 : parseFloat(item.max_default_value),
-                min_default_value: isNaN(parseFloat(item.min_default_value)) ? 0 : parseFloat(item.min_default_value),
-                isShow: true
-              }
-              console.log(index)
-              this.form.indexes.push(index)
-            })
-            this.loading = false
-          })
+    watch: {
+      m_indexes: function (newValue) {
+        console.log('test')
+        this.form.range.splice(0, this.form.range.length)
+      }
     },
     methods: {
       onNextClick () {
         this.loading = true
 
-        if (this.step === 1) {
+        if (this.step === 0) {
           this.postIndexes()
         }
 
@@ -152,7 +142,24 @@
         this.adjustChartShow = true
       },
       postIndexes () {
-
+        checkWashingIndexRange(
+          {
+            'data': this.form.range,
+            'domain': '水土保持',
+            'year': this.washing_form.year,
+            'station': this.washing_form.station,
+            'classification': '通量',
+            'user_mail': '1103232282@qq.com'
+          }).then((resp) => {
+            if (resp.data.status === 'success') {
+              console.log(resp)
+              alert(resp.data.data[0])
+            } else {
+              alert(resp.data.reason)
+            }
+          }).catch(() => {
+            alert('网络差')
+          })
       }
     }
   }

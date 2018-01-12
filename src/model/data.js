@@ -12,3 +12,7 @@ export const getIndexData = params => { return axios.get(host + '/fluxdata/origi
 export const getWashingIndexAndRange = params => {
   return axios.get(host + '/station/vft/getIndexesRange', {'params': params})
 }
+
+export const checkWashingIndexRange = params => {
+  return axios.post(host + '/dataProcess/vft/checkRange', params, {headers: {'Content-Type': 'application/json'}})
+}

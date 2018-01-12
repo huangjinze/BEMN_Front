@@ -50,6 +50,11 @@
         showIndexes: this.input
       }
     },
+    watch: {
+      showIndexes: function (newValue) {
+        this.selectedIndexes = this.showIndexes.map((item) => { return item.name })
+      }
+    },
     computed: {
       indexesOptions: function () {
         return this.indexes.map(

@@ -2,7 +2,7 @@
 <el-form v-model="form" @click="onFormChange">
 
   <el-form-item>
-    <el-select v-model="form.station">
+    <el-select v-model="form.station" @change="onStationChange">
       <el-option
         v-for="item in stations"
         :key="item.label"
@@ -28,7 +28,8 @@
       v-model="form.year"
       align="right"
       type="year"
-      placeholder="选择年">
+      placeholder="选择年"
+      value-format="yyyy">
     </el-date-picker>
   </el-form-item>
 
@@ -51,11 +52,22 @@
     name: 'washingForm',
     data () {
       return {
-        filelist: []
+        filelist: [],
+        form: {
+          classification: 'co2',
+          year: '',
+          station: '奥林匹克'
+        }
       }
     },
     props: {
-      stations: {type: Array, default: () => { return [{label: '八达岭', value: '八达岭'}, {label: '奥林匹克', value: '奥林匹克'}] }},
+      stations: {type: Array,
+        default: () => {
+          return [
+          {label: '八达岭', value: '八达岭'},
+          {label: '奥林匹克', value: '奥林匹克'},
+          {label: '盐池_1', value: '盐池_1'}]
+        }},
       classifications: {type: Array,
         default: () => {
           return [{label: '碳通量', value: 'co2'},
@@ -64,7 +76,16 @@
           {label: '能量', value: 'energy'}]
         }
       },
-      form: Object
+      input: {type: Object},
+      StationChange: {type: Function}
+    },
+    watch: {},
+    mounted () {
+      this.$emit('input', this.form)
+    },
+    updated () {
+      console.log('updata')
+      this.$emit('input', this.form)
     },
     methods: {
       onFileChange (file, fileList) {
@@ -72,6 +93,9 @@
       },
       onFormChange () {
         this.$emit('input', this.form)
+      },
+      onStationChange () {
+        this.$emit('StationChange')
       }
     }
   }
