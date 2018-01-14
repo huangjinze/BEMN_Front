@@ -36,28 +36,29 @@
             <el-row>
               <el-col :span="8">
                 <el-form-item label="文章类型">
-                  <el-select v-model="write.label" placeholder="请选择">
+                  <el-select v-model="newContents.category" placeholder="请选择">
                     <el-option
                       v-for="item in options"
                       :key="item.value"
                       :label="item.label"
-                      :value="item.value">
+                      :value="item.label">
                     </el-option>
                   </el-select>
                 </el-form-item>
               </el-col>
               <el-col :span="16">
                 <el-form-item label="文章标题">
-                  <el-input v-model="write.title"></el-input>
+                  <el-input v-model="newContents.title" style="text-align: left;"></el-input>
                 </el-form-item>
               </el-col>
             </el-row>
             <el-row>
               <el-form-item>
-                <vue-editor v-model="content"></vue-editor>
+                <vue-editor v-model="newContents.content"></vue-editor>
               </el-form-item>
             </el-row>
             <el-row>
+              <el-button style="float: right;margin-left: 10px;" type="warning" @click="quxiao">取消修改</el-button>
               <el-button style="float: right;" type="primary" @click="onSubmit">发布文章</el-button>
             </el-row>
           </el-form>
@@ -74,19 +75,15 @@ export default {
   data () {
     return {
       labelPosition: 'top',
-      flage: 'true',
-      content: '',
-      write: {
-        title: '',
-        value: ''
-      }
+      flage: 'true'
     }
   },
   props: {
     leftItems: {type: Array, default: []},
     rightBnts: {type: Array, default: []},
     news: {type: Array, default: []},
-    options: {type: Array, default: []}
+    options: {type: Array, default: []},
+    newContents: {type: Object, default: []}
   },
   methods: {
     changeCategory (event) {
@@ -112,18 +109,20 @@ export default {
         })
       })
     },
+    quxiao () {
+      this.flage = 'true'
+    },
     editNew (id) {
       this.flage = 'flase'
       this.$emit('edit', id)
     },
     edit () {
       this.flage = 'flase'
+      this.newContents = {}
     },
     onSubmit () {
-      // console.log(this.content)
-      // console.log(this.write)
-      this.$emit('Submit')
-      // this.flage = 'true'
+      this.$emit('Submit', [this.newContents])
+      this.flage = 'true'
     }
   }
 }
@@ -170,7 +169,7 @@ export default {
         padding-left: 15px;
         height: 35px;
         line-height: 35px;
-    }
+    }   
 </style>
 
 
