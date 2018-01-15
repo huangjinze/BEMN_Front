@@ -1,7 +1,7 @@
 <template>
   <div id="dataManager">
     <el-button @click="onClick" class="export" icon="el-icon-download">导出</el-button>
-    <el-tabs type="border-card" @tab-click="handleClick">
+    <el-tabs v-model="tab2" type="border-card" @tab-click="handleClick">
       <el-tab-pane v-for="nav in navs" :key="nav.value" :label="nav.label">
         <!-- 页内内容开始 -->
         <el-table ref="multipleTable" :data="nav.tableData" stripe tooltip-effect="dark" style="width: 100%" @selection-change="handleSelectionChange">
@@ -28,19 +28,19 @@
   </div>
 </template>
 <script>
-  var tab1 = 'A'
-  var tab2 = '0'
   export default {
+    data () {
+      return {
+        tab2: '0'
+      }
+    },
     props: {
       dataExport: Function,
       navs: {type: Array, default: []}
     },
     methods: {
       handleClick (tab, event) {
-        console.log(tab, event)
-        this.$emit('changePage', [tab.label, '1', tab.index])
-        tab1 = tab.label
-        tab2 = tab.index
+        this.$emit('changePage', ['1', tab.index])
       },
       toggleSelection (rows) {
         if (rows) {
@@ -62,7 +62,8 @@
       },
       handleCurrentChange (val) {
         console.log(`当前页: ${val}`)
-        this.$emit('changePage', [tab1, val, tab2])
+        this.$emit('changePage', [val, this.tab2])
+        // tab[0]为分页组件的当前页数，tab[1]为便签页组件的当前索引
       }
     }
   }
@@ -72,11 +73,9 @@
   .handle-box {
     margin-bottom: 20px;
   }
-
   .handle-select {
     width: 120px;
   }
-
   .handle-input {
     width: 300px;
     display: inline-block;
