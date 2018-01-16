@@ -4,20 +4,20 @@
         <div slot="header">header</div>
         <div slot="aside"><navi></navi></div>
         <div slot="main">
-            <headGuider :initTopPartTags="stationName" :initTopSiteTags="className" :partTags="stations" :siteTags="classes" @ClickPart="parentStationListen" @ClickSite="parentClassListen"></headGuider>
-            <indexChoice :indices="index" :col_name="colName" :tableData="tableData"></indexChoice>
+          <topIndexSelect :initTopPartTags="stationName" :initTopSiteTags="className" ref="profile" :indices="index" :indexTags="indexTags" @ClickIndexClass="parentIndexClassListen" @ClickTower="parentStationListen" @ClickClass="parentClassListen" @ClickIndex="parentIndexListen" @CloseStation="CloseStationListen" @CloseClass="CloseClassListen"></topIndexSelect>
+          <dataManager v-if="index[0].flag == 4" :navs="navs" @Click="dataExport" @changePage="dataSource"></dataManager>
         </div>
     </BasePage>
 </template>
 <script>
 import navi from '../../components/layout/navi'
 import BasePage from '../../components/BasePage'
-import headGuider from '../../components/headGuider'
-import indexChoice from '../../components/indexChoice'
-import {getStation, getClass} from '../../model/vftData'
+import topIndexSelect from '../../components/multiSelect/topIndexSelect'
+import dataManager from '../../components/dataManager'
+import {getStation, getClass, getIndexTableData} from '../../model/vftData'
 import {getVFTIndex} from '../../model/data'
 export default {
-  components: {navi, BasePage, headGuider, indexChoice},
+  components: {navi, BasePage, topIndexSelect, dataManager},
   data () {
     return {
       stationName: [
@@ -29,55 +29,93 @@ export default {
       stations: [],
       classes: [],
       index: [],
-      colName: [
-         {text: '样地编号', id: '1', prop: 'id'},
-         {text: '森林枯落物厚度', id: '2', prop: 'thickness'},
-         {text: '调查时间', id: '3', prop: 'searchTime'}
-      ],
-      tableData: [
-         {id: 'LS-Y- 854', thickness: '2.77', searchTime: '2014-03-20'},
-         {id: 'LS-Y- 855', thickness: '3.59', searchTime: '2014-03-20'},
-         {id: 'LS-Y- 856', thickness: '2.77', searchTime: '2014-03-20'}
-      ],
-      activeNames: []
+      indexTags: [],
+      allIndexTags: new Map(),
+      navs: []
     }
   },
   mounted: function () {
     getStation({domain: '水土保持'}).then(resp => {
       let data = resp.data.data
       console.log(data)
+      this.index.splice(0, this.index.length)
+      this.index.push({ text: '选择站点', flag: 1 })
       for (var i = 0; i < data.length; i++) {
-        this.stations.push({ text: data[i], id: i + 1 })
+        this.indexTags.push({ text: data[i], id: i + 1 })
       }
+      this.stations = Array.from(this.indexTags)
+    }).catch(resp => {
+      this.$alert('获取失败', '失败', {confirmButtonText: 'ok'})
     })
   },
   methods: {
     parentStationListen (id) {
       let temp = this.stations.find(function (value, index, stations) { return value.id === id })
       getClass({domain: '水土保持', station: temp.text}).then(resp => {
-      //  console.log(resp)
+        //  console.log(resp)
         let data = resp.data.data
-        console.log(resp.data)
+        this.index.splice(0, this.index.length)
+        this.index.push({ text: '选择类型', flag: 2 })
+        this.indexTags.splice(0, this.indexTags.length)
         for (var i = 0; i < data.length; i++) {
-          this.classes.push({ text: data[i], id: i + 1 })
+          this.indexTags.push({ text: data[i], id: i + 1 })
         }
+        this.stationName[0] = temp.text
+        this.classes = Array.from(this.indexTags)
+      }).catch(resp => {
+        this.$alert('获取失败', '失败', {confirmButtonText: 'ok'})
       })
     },
-    parentClassListen (stationName, id) {
-      console.log(stationName)
-      let temp = this.classes.find(function (value, index, classes) { return value.id === id })
-      getVFTIndex({station: stationName, classification: temp.text, domain: '水土保持'}).then(resp => {
+    parentClassListen (id) {
+      let temp = this.indexTags.find(function (value, index, classes) { return value.id === id })
+      getVFTIndex({station: this.stationName[0], classification: temp.text, domain: '水土保持'}).then(resp => {
         let data = resp.data.data[0]
-        console.log(data)
         let i = 0
         this.index.splice(0, this.index.length)
+        this.navs.splice(0, this.navs.length)
+        this.allIndexTags.clear()
         for (let k in data) {
-          this.index.push({ text: k, id: i + 1 })
+          this.index.push({text: k, id: i + 1, flag: 4})
+          this.navs.push({label: k})
           i++
+          this.allIndexTags.set(k, data[k])
         }
-        console.log(data)
+        this.indexTags.splice(0, this.indexTags.length)
+        this.className[0] = temp.text
+        for (var j = 0; j < this.index.length; j++) {
+          let category = this.index[j].text
+          getIndexTableData({station: '盐池_1', classification: '通量', domain: '水土保持', category: category, page: 1}).then(resp => {
+            var data = resp.data.data
+            var cols = []
+            for (var h = 0; h < data.title.length; h++) {
+              let title = data.title[h]
+              cols.push({prop: title.factor_name, label: title.factor_name})
+            }
+            var obj = this.navs.find(function (value, index, classes) { return value.label === category })
+            this.$set(obj, 'mcols', cols)
+            this.$set(obj, 'tableData', data.data)
+          })
+        }
       }).catch(resp => {
-        this.$alert('网络差', '失败', {confirmButtonText: 'ok'})
+        this.$alert('数据获取失败', '失败', {confirmButtonText: 'ok'})
+      })
+      console.log(this.navs)
+    },
+    CloseStationListen () {
+      this.index.splice(0, this.index.length)
+      this.index.push({ text: '选择站点', flag: 1 })
+      this.indexTags = Array.from(this.stations)
+    },
+    CloseClassListen () {
+      this.index.splice(0, this.index.length)
+      this.index.push({ text: '选择类型', flag: 2 })
+      this.indexTags = Array.from(this.classes)
+    },
+    getTableData (station, classification, domain, category, page) {
+      getIndexTableData({station: station, classification: classification, domain: domain, category: category, page: page}).then(resp => {
+        console.log('dddd')
+      }).catch(resp => {
+        this.$alert('数据获取失败', '失败', {confirmButtonText: 'ok'})
       })
     }
   }
