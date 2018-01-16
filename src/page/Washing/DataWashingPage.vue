@@ -62,7 +62,8 @@
         form: {
           classification: 'co2',
           year: '',
-          station: ''
+          station: '',
+          indexes: []
         }
       }
     },
