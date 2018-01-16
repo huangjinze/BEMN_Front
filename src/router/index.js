@@ -34,12 +34,12 @@ export default new Router({
       component: tifStaiscticPage
     },
     {
-      path: '/dataManager',
+      path: '/dataManager', // 森林领域样地信息 负责人陈宇捷
       name: 'dataManager',
       component: dataManager
     },
     {
-      path: '/vtf/list',
+      path: '/vtf/list', // 水土保持领域数据展示 负责人陈宇捷
       name: 'vtflist',
       component: vtfList
     },
@@ -54,7 +54,7 @@ export default new Router({
       component: LoginPage
     },
     {
-      path: '/article',
+      path: '/article', // 后台新闻管理页面 负责人陈宇捷
       name: 'article',
       component: Article
     },
