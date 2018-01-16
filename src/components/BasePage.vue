@@ -37,5 +37,8 @@
     background-color: #313131;
     color: #fff;
   }
+  .el-main{
+    overflow: hidden;
+  }
 </style>
 
