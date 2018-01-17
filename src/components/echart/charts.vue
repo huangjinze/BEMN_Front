@@ -19,6 +19,7 @@
       xAxis: {type: Object, default: []},     // echart xAxis 对象
       yAxis: {type: Object, default: []},     // echart yAxis 对象
       series: {type: Array, default: []},
+      title: {type: String, default: ''},
       id: String},
     mounted: function () {
       console.log(echarts)
@@ -54,7 +55,7 @@
 //        const colors = ['#d14a61', '#5793f3', '#675bba', '#13CE66']
         const option = {
           title: {
-            text: 'ECharts 入门示例'
+            text: this.title
           },
           tooltip: {},
           legend: {
