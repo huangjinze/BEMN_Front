@@ -8,10 +8,10 @@
 
       <div class="content-form" >
 
-        <div  v-if="form.classification == 'co2'">
+        <el-col :span="24"  v-if="form.classification == 'co2'">
           <CarbonInflux>
           </CarbonInflux>
-        </div>
+        </el-col>
 
         <div  v-if="form.classification == 'water'">
         <Water>
@@ -62,7 +62,8 @@
         form: {
           classification: 'co2',
           year: '',
-          station: ''
+          station: '',
+          indexes: []
         }
       }
     },

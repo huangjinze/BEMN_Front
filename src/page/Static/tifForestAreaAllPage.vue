@@ -1,7 +1,7 @@
 <!-- 该模块为:点击导航栏的“数据展示”->“森林领域”->“全部”时，显示的页面内容-->
 <<template>
     <BasePage>
-        <div slot="header">header</div>
+        <el-row slot="header">北京城市副中心核心区林地绿地大数据平台</el-row>
         <div slot="aside"><navi></navi></div>
         <div slot="main" class="main">
             <el-row  class="row" :gutter="24" >
