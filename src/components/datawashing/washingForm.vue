@@ -2,7 +2,9 @@
 <el-form v-model="form" @click="onFormChange">
 
   <el-col :span="6">
+
     <el-form-item>
+      <span>通量塔：</span>
       <el-select v-model="form.station">
         <el-option
                 v-for="item in stations"
@@ -16,6 +18,7 @@
 
   <el-col :span="6">
     <el-form-item>
+      <span>指标：</span>
       <el-select v-model="form.classification">
         <el-option
                 v-for="item in classifications"
@@ -29,6 +32,7 @@
 
   <el-col :span="6">
     <el-form-item>
+      <span>年份：</span>
       <el-date-picker
               v-model="form.year"
               align="right"
