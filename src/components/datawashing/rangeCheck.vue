@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <el-row>
     <span>
       <el-select v-model="selectedIndexes"
                  multiple
@@ -16,16 +16,24 @@
       </el-select>
     </span>
 
-    <div>
-      <el-form v-model="showIndexes">
-        <el-form-item v-for="(item,index) in showIndexes" :key="index">
-      <span>{{ item.name }}:
-        <el-input-number v-model="item.low"></el-input-number> -
-        <el-input-number v-model="item.high"></el-input-number> </span>
-        </el-form-item>
-      </el-form>
-    </div>
-  </div>
+    <el-row>
+      <el-col :span="24">
+        <el-form v-model="showIndexes">
+          <el-form-item v-for="(item,index) in showIndexes" :key="index">
+      <el-col :span="8">{{ item.name }}:
+        <el-col :span="3">
+          <el-input-number v-model="item.low"></el-input-number> -
+        </el-col>
+        <el-col :span="3">
+          <el-input-number v-model="item.high"></el-input-number>
+        </el-col>
+
+      </el-col>
+          </el-form-item>
+        </el-form>
+      </el-col>
+    </el-row>
+  </el-row>
 
 </template>
 
@@ -79,5 +87,6 @@
   .el-select{
     margin-top: -10px;
   }
+
 
 </style>
