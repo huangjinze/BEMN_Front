@@ -1,7 +1,6 @@
 
 <template>
   <el-container>
-    <el-header><slot name="header"></slot></el-header>
     <!--北京城市副中心核心区林地绿地大数据平台-->
     <el-header><slot name="header">北京城市副中心核心区林地绿地大数据平台</slot></el-header>
     <el-container>
