@@ -7,14 +7,12 @@
       <el-step title="4 u*选择"></el-step>
     </el-steps>
 
-    <div v-if="step === 0">
-      <el-col :span="24" id="rangeCheck">
-        <el-col :span="3">
-          指标选择：
-        </el-col>
-        <el-col :span="5">
-          <rangeCheck :indexes="form.indexes" v-model="form.range"></rangeCheck>
-        </el-col>
+    <div v-show="step === 0">
+      <el-col id="rangeCheck">
+        <rangeCheck
+                :indexes="form.indexes"
+                v-model="form.range">
+        </rangeCheck>
       </el-col>
     </div>
 
@@ -152,7 +150,7 @@
   }
   #rangeCheck{
     text-align: center;
-    margin: 30px 0 24px 30%;
+    margin: 30px 0 24px 0;
   }
   #zValue,#drawGraph,#methodSelect,#charts{
     margin-top: 30px;
