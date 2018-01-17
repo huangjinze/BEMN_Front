@@ -20,3 +20,11 @@ export const checkWashingIndexRange = params => {
 export const despiking = params => {
   return axios.post(host + '/dataProcess/vft/despiking', params, {headers: {'Content-Type': 'application/json'}})
 }
+
+export const CStore = params => {
+  return axios.get(host + '/dataProcess/vft/Cstorge', {'params': params})
+}
+
+export const UStar = params => {
+  return axios.get(host + '/dataProcess/vft/pca', {'params': params})
+}

@@ -29,7 +29,7 @@
     <el-col :span="24" v-if="step === 2" id="storage">
       <p class="el-icon-warning">对于植被较高的站点该步骤非常重要，如奥林匹克公园、八达岭等，对于低矮植被课不做此步骤，比如盐池灌木、草地等 </p>
       <el-col :span="24">
-        <el-button id="skip">
+        <el-button id="skip" @click="onSkipClick">
           跳过
         </el-button>
       </el-col>
@@ -78,7 +78,7 @@
   import charts from '../../components/echart/charts'
   import ElButton from 'element-ui/packages/button/src/button'
   import ElInputNumber from 'element-ui/packages/input-number/src/input-number'
-  import {checkWashingIndexRange, despiking} from '../../model/data'
+  import {checkWashingIndexRange, despiking, CStore, UStar} from '../../model/data'
 
   export default {
     components: {
@@ -120,6 +120,9 @@
       }
     },
     methods: {
+      onSkipClick () {
+        this.step = this.step + 1
+      },
       onNextClick () {
         this.loading = true
 
@@ -139,6 +142,47 @@
             'classification': '通量',
             'user_mail': '1103232282@qq.com',
             'z': this.form.z
+          }).then((resp) => {
+            this.loading = false
+            if (resp.data.status === 'success') {
+              console.log(resp)
+              alert(resp.data.data[0])
+            } else {
+              alert(resp.data.reason)
+            }
+          }).catch(() => {
+            this.loading = false
+            alert('网络差')
+          })
+        }
+
+        if (this.step === 2) {
+          CStore({
+            'domain': '水土保持',
+            'year': this.washing_form.year,
+            'station': this.washing_form.station,
+            'user_mail': '1103232282@qq.com'
+          }).then((resp) => {
+            this.loading = false
+            if (resp.data.status === 'success') {
+              console.log(resp)
+              alert(resp.data.data[0])
+            } else {
+              alert(resp.data.reason)
+            }
+          }).catch(() => {
+            this.loading = false
+            alert('网络差')
+          })
+        }
+
+        if (this.step === 3) {
+          UStar({
+            'domain': '水土保持',
+            'year': this.washing_form.year,
+            'station': this.washing_form.station,
+            'user_mail': '1103232282@qq.com',
+            'ustarc': this.form.u
           }).then((resp) => {
             this.loading = false
             if (resp.data.status === 'success') {
@@ -179,6 +223,7 @@
         this.loading = true
         return checkWashingIndexRange(
           {
+            'type': '碳通量',
             'data': this.form.range,
             'domain': '水土保持',
             'year': this.washing_form.year,
