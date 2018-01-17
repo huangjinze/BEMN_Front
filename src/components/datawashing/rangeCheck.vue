@@ -23,11 +23,13 @@
 
     <div>
       <el-form v-model="showIndexes">
-        <el-form-item v-for="(item,index) in showIndexes" :key="index">
+        <div v-for="(item,index) in showIndexes" :key="index">
+          <el-form-item>
       <span>{{ item.name }}:
         <el-input-number v-model="item.min_default_value"></el-input-number> -
         <el-input-number v-model="item.max_default_value"></el-input-number> </span>
-        </el-form-item>
+          </el-form-item>
+        </div>
       </el-form>
     </div>
   </div>
