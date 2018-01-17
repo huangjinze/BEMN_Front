@@ -10,19 +10,14 @@
       </el-steps>
     </el-col>
 
-    <el-col v-if="step === 0">
-      <el-col :span="24"  id="rangeCheck">
-        <el-col :span="3">
-          指标选择：
-        </el-col>
-        <el-col :span="5">
+    <div v-show="step === 0">
+      <el-col id="rangeCheck">
           <rangeCheck
-                  :indexes="form.indexes"
+                  :indexes="indexes"
                   v-model="form.range">
           </rangeCheck>
-        </el-col>
       </el-col>
-    </el-col>
+    </div>
 
     <el-col :span="24" v-if="step === 1" id="zValue">
       z值：
@@ -58,10 +53,10 @@
       插补方法选择 ：
       <el-select v-model="form.interpolation">
         <el-option
-          v-for="item in interpolationOptions"
-          :key="item.label"
-          :label="item.label"
-          :value="item.value">
+                v-for="item in interpolationOptions"
+                :key="item.label"
+                :label="item.label"
+                :value="item.value">
         </el-option>
       </el-select>
     </div>
@@ -83,7 +78,7 @@
   import charts from '../../components/echart/charts'
   import ElButton from 'element-ui/packages/button/src/button'
   import ElInputNumber from 'element-ui/packages/input-number/src/input-number'
-  import {getWashingIndexAndRange} from '../../model/data'
+  import {checkWashingIndexRange, despiking} from '../../model/data'
 
   export default {
     components: {
@@ -95,6 +90,10 @@
       washingForm,
       charts},
     name: 'carbonInflux',
+    props: {
+      washing_form: {type: Object},
+      indexes: {type: Array}
+    },
     data () {
       return {
         step: 0,
@@ -104,47 +103,61 @@
         form: {
           z: 4,
           interpolation: ' ',
-          indexes: [],
           range: [],
           u: 4
         },
+        m_indexes: this.indexes,
         interpolationOptions: [{label: '内插', value: '内插'}, {label: '外插', value: '外插'}],
-        chartMetaData: {xAxis: {}, yAxis: {}, series: []},
+        chartUMetaData: {xAxis: {}, yAxis: {}, series: []},
         chartMetaDataUAdjust: {xAxis: {}, yAxis: {}, series: []},
         adjustChartShow: false
       }
     },
-    mounted () {
-      getWashingIndexAndRange(
-        {
-          domain: '水土保持',
-          station: '盐池_1',
-          classification: '通量'}).then(resp => {
-            this.loading = true
-            resp.data.data[0].map(item => {
-              let index = {
-                name: item.name,
-                high: isNaN(parseFloat(item.max_default_value)) ? 0 : parseFloat(item.max_default_value),
-                low: isNaN(parseFloat(item.min_default_value)) ? 0 : parseFloat(item.min_default_value),
-                isShow: true
-              }
-              console.log(index)
-              this.form.indexes.push(index)
-            })
-            this.loading = false
-          })
+    watch: {
+      m_indexes: function (newValue) {
+        console.log('test')
+        this.form.range.splice(0, this.form.range.length)
+      }
     },
     methods: {
       onNextClick () {
         this.loading = true
 
-        this.step = this.step + 1
+        if (this.step === 0) {
+          this.postIndexes().then(
+            () => {
+              this.loading = false
+            })
+        }
+
+        if (this.step === 1) {
+          despiking({
+            'data': this.form.range,
+            'domain': '水土保持',
+            'year': this.washing_form.year,
+            'station': this.washing_form.station,
+            'classification': '通量',
+            'user_mail': '1103232282@qq.com',
+            'z': this.form.z
+          }).then((resp) => {
+            this.loading = false
+            if (resp.data.status === 'success') {
+              console.log(resp)
+              alert(resp.data.data[0])
+            } else {
+              alert(resp.data.reason)
+            }
+          }).catch(() => {
+            this.loading = false
+            alert('网络差')
+          })
+        }
+
         if (this.step >= 4) {
           this.nextDisable = true
         }
         this.preDisable = false
-
-        this.loading = false
+        this.step = this.step + 1
       },
       onPreClick () {
         this.loading = true
@@ -161,15 +174,45 @@
       onUValueDraw () {
         console.log('draw')
         this.adjustChartShow = true
+      },
+      postIndexes () {
+        this.loading = true
+        return checkWashingIndexRange(
+          {
+            'data': this.form.range,
+            'domain': '水土保持',
+            'year': this.washing_form.year,
+            'station': this.washing_form.station,
+            'classification': '通量',
+            'user_mail': '1103232282@qq.com'
+          }).then((resp) => {
+            if (resp.data.status === 'success') {
+              console.log(resp)
+              alert(resp.data.data[0])
+            } else {
+              alert(resp.data.reason)
+            }
+          }).catch(() => {
+            alert('网络差')
+          })
       }
     }
   }
 </script>
 
 <style scoped>
+
   #rangeCheck{
     text-align: center;
-    margin: 30px 0 24px 30%;
+    margin: 30px 0 24px 0;
+    float: left;
+  }
+  /*.rangeCheck{*/
+    /*float: left;*/
+  /*}*/
+  .indexSelect{
+    text-align: right;
+    margin-top: 8px;
   }
   #dataWashing{
     /*border-bottom: solid 1px #c4c6cb;*/
@@ -190,5 +233,5 @@
     background-color: #5b8ecf;
     color: white;
   }
-  .charts{}
+
 </style>
