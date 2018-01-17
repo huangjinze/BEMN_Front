@@ -8,6 +8,6 @@ export const getClass = params => { return axios.get(host + '/station/vft/getCla
 // 文件导出
 export const showExport = params => { return axios.get('http://127.0.0.1/excel/vft/showExport', {'params': params}) }
 // 获取表格数据
-export const getIndexTableData = params => { return axios.get('http://127.0.0.1/fluxdata/origindata/show', {'params': params}) }
+export const getIndexTableData = params => { return axios.get(host + '/fluxdata/origindata/show', {'params': params}) }
 // 获取表格记录数
-export const getTableCounts = params => { return axios.get('http://127.0.0.1/station/vft/tableCounts', {'params': params}) }
+export const getTableCounts = params => { return axios.get(host + '/station/vft/tableCounts', {'params': params}) }
