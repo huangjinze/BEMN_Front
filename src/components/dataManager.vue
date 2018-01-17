@@ -1,16 +1,25 @@
 <template>
   <div id="dataManager">
     <el-button @click="onClick" class="export" icon="el-icon-download">导出</el-button>
-    <el-tabs v-model="tab2" type="border-card" @tab-click="handleClick">
+    <el-tabs type="border-card" @tab-click="handleClick">
       <el-tab-pane v-for="nav in navs" :key="nav.value" :label="nav.label">
         <!-- 页内内容开始 -->
-        <el-table ref="multipleTable" :data="nav.tableData" stripe tooltip-effect="dark" style="width: 100%" @selection-change="handleSelectionChange">
+        <el-table ref="multipleTable" :data="nav.tableData" stripe tooltip-effect="dark" style="width: 100%" max-height="450" @selection-change="handleSelectionChange">
           <el-table-column type="selection" width="50" v-if="nav.mcols">
           </el-table-column>
           <template v-for="item in nav.mcols">
             <el-table-column v-bind:key="item.value" :prop="item.prop" v-bind:label="item.label">
             </el-table-column>
           </template>
+          <el-table-column
+                  fixed="right"
+                  label="操作"
+                  width="100">
+            <template slot-scope="scope">
+              <el-button type="text" size="medium">查看</el-button>
+              <el-button type="text" size="medium">编辑</el-button>
+            </template>
+          </el-table-column>
         </el-table>
         <div align="center">
           <el-pagination
@@ -18,7 +27,7 @@
             @current-change="handleCurrentChange"
             :page-size="15"
             layout="prev, pager, next, jumper"
-            :total="1000">
+            :total="totalSize[0]">
           </el-pagination>
         </div>
         <!-- 页内内容结束 -->
@@ -29,18 +38,15 @@
 </template>
 <script>
   export default {
-    data () {
-      return {
-        tab2: '0'
-      }
-    },
     props: {
       dataExport: Function,
-      navs: {type: Array, default: []}
+      navs: {type: Array, default: []},
+      totalSize: []
     },
     methods: {
       handleClick (tab, event) {
-        this.$emit('changePage', ['1', tab.index])
+        console.log(tab, event)
+        this.$emit('changeTab', [tab.label, '1', tab.index])
       },
       toggleSelection (rows) {
         if (rows) {
@@ -62,8 +68,7 @@
       },
       handleCurrentChange (val) {
         console.log(`当前页: ${val}`)
-        this.$emit('changePage', [val, this.tab2])
-        // tab[0]为分页组件的当前页数，tab[1]为便签页组件的当前索引
+        this.$emit('changePage', [val])
       }
     }
   }
@@ -73,9 +78,11 @@
   .handle-box {
     margin-bottom: 20px;
   }
+
   .handle-select {
     width: 120px;
   }
+
   .handle-input {
     width: 300px;
     display: inline-block;
