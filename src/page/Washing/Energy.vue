@@ -101,7 +101,7 @@
           station: '盐池_1',
           classification: '通量'}).then(resp => {
             this.loading = true
-            resp.data.data[0].map(item => {
+            resp.data.data.map(item => {
               let index = {
                 name: item.name,
                 high: isNaN(parseFloat(item.max_default_value)) ? 0 : parseFloat(item.max_default_value),

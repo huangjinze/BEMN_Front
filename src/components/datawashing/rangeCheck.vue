@@ -14,15 +14,22 @@
           :value="item.value">
         </el-option>
       </el-select>
+      <!--<el-cascader-->
+        <!--:options="indexesOptions"-->
+        <!--v-model="selectedIndexes"-->
+        <!--@change="onIndexesSelectChange"-->
+      <!--&gt;</el-cascader>-->
     </span>
 
     <div>
       <el-form v-model="showIndexes">
-        <el-form-item v-for="(item,index) in showIndexes" :key="index">
+        <div v-for="(item,index) in showIndexes" :key="index">
+          <el-form-item>
       <span>{{ item.name }}:
-        <el-input-number v-model="item.low"></el-input-number> -
-        <el-input-number v-model="item.high"></el-input-number> </span>
-        </el-form-item>
+        <el-input-number v-model="item.min_default_value"></el-input-number> -
+        <el-input-number v-model="item.max_default_value"></el-input-number> </span>
+          </el-form-item>
+        </div>
       </el-form>
     </div>
   </div>
@@ -42,12 +49,17 @@
     name: 'rangeCheck',
     props: {
       indexes: {type: Array},
-      input: {type: Array, default: () => { return [] }}
+      input: {type: Array}
     },
     data () {
       return {
         selectedIndexes: [],
         showIndexes: this.input
+      }
+    },
+    watch: {
+      showIndexes: function (newValue) {
+        this.selectedIndexes = this.showIndexes.map((item) => { return item.name })
       }
     },
     computed: {
@@ -59,7 +71,7 @@
       }
     },
     updated () {
-      this.$emit('input', this.input)
+      this.$emit('input', this.showIndexes)
     },
     methods: {
       onIndexesSelectChange (values) {
