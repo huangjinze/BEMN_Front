@@ -8,6 +8,7 @@
 <script>
   import login from '../../components/user/login.vue'
   import {mapActions} from 'vuex'
+  import { host } from '../../model/data'
 //  import {loginUser} from '../../model/user'
   import * as THREE from 'three'
   import nx from '../../assets/pages/textures/nx.jpg'
@@ -38,7 +39,7 @@
       return {
         loginForm: {
         },
-        codeUrl: 'http://bemnwork/captcha/mews?r=' + Math.random()
+        codeUrl: host + '/captcha/mews?r=' + Math.random()
       }
     },
     mounted: function () {
@@ -48,7 +49,7 @@
     methods: {
       onRefreshCode () {
         console.log('refresh code')
-        this.codeUrl = 'http://bemnwork/captcha/mews?r=' + Math.random()
+        this.codeUrl = host + '/captcha/mews?r=' + Math.random()
       },
       onLoginClick () {
         console.log('on login')
@@ -64,8 +65,6 @@
       init () {
         var container, mesh
         container = this.$refs.mybox
-//        alert(container)
-        console.log(container)
         camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 1, 1100)
         scene = new THREE.Scene()
         textureplaceholder = document.createElement('canvas')
@@ -80,10 +79,11 @@
           this.loadTexture(py), // top
           this.loadTexture(ny), // bottom
           this.loadTexture(pz), // back
-          this.loadTexture(nz) // front
+          this.loadTexture(nz)  // front
         ]
-        mesh = new THREE.Mesh(new THREE.BoxGeometry(300, 300, 300, 7, 7, 7), new THREE.MeshFaceMaterial(materials))
-        mesh.scale.x = -1
+        var geometry = new THREE.BoxGeometry(300, 300, 300, 7, 7, 7)
+        geometry.scale(-1, 1, 1)
+        mesh = new THREE.Mesh(geometry, materials)
         scene.add(mesh)
         for (var i = 0, l = mesh.geometry.vertices.length; i < l; i++) {
           var vertex = mesh.geometry.vertices[ i ]
@@ -96,12 +96,10 @@
         renderer.setPixelRatio(window.devicePixelRatio)
         renderer.setSize(window.innerWidth, window.innerHeight)
         container.appendChild(renderer.domElement)
-//        alert(container.appendChild(renderer.domElement))
         document.addEventListener('mousedown', this.onDocumentMouseDown, false)
         document.addEventListener('mousemove', this.onDocumentMouseMove, false)
         document.addEventListener('mouseup', this.onDocumentMouseUp, false)
-        document.addEventListener('mousewheel', this.onDocumentMouseWheel, false)
-        document.addEventListener('MozMousePixelScroll', this.onDocumentMouseWheel, false)
+        document.addEventListener('wheel', this.onDocumentMouseWheel, false)
         document.addEventListener('touchstart', this.onDocumentTouchStart, false)
         document.addEventListener('touchmove', this.onDocumentTouchMove, false)
         //
@@ -124,7 +122,7 @@
         return material
       },
       onDocumentMouseDown (event) {
-        // event.preventDefault();
+        event.preventDefault()
         isUserInteracting = true
         onPointerDownPointerX = event.clientX
         onPointerDownPointerY = event.clientY
@@ -142,15 +140,8 @@
       },
       onDocumentMouseWheel (event) {
         // WebKit
-        if (event.wheelDeltaY) {
-          camera.fov -= event.wheelDeltaY * 0.05
-          // Opera / Explorer 9
-        } else if (event.wheelDelta) {
-          camera.fov -= event.wheelDelta * 0.05
-          // Firefox
-        } else if (event.detail) {
-          camera.fov -= event.detail * 0.05
-        }
+        var fov = camera.fov + event.deltaY * 0.05
+        camera.fov = THREE.Math.clamp(fov, 10, 75)
         camera.updateProjectionMatrix()
       },
       onDocumentTouchStart (event) {
@@ -180,14 +171,10 @@
         lat = Math.max(-85, Math.min(85, lat))
         phi = THREE.Math.degToRad(90 - lat)
         theta = THREE.Math.degToRad(lon)
-
         target.x = 500 * Math.sin(phi) * Math.cos(theta)
         target.y = 500 * Math.cos(phi)
         target.z = 500 * Math.sin(phi) * Math.sin(theta)
-
-        camera.position.copy(target).negate()
         camera.lookAt(target)
-
         renderer.render(scene, camera)
       }
     }

@@ -143,9 +143,9 @@
 <script>
   //  import {store} from '../store/index'
   import {mapState, mapGetters} from 'vuex'
-  import navi from '../components/layout/navi'
-  import BasePage from '../components/BasePage'
-  import {RoleInfo, DeleteRole, AddRole, FindRolePermission, ChangeRole, FindRolePermissionName} from '../model/roles'
+  import navi from '../../components/layout/navi'
+  import BasePage from '../../components/BasePage'
+  import {RoleInfo, DeleteRole, AddRole, FindRolePermission, ChangeRole, FindRolePermissionName} from '../../model/roles'
   export default {
     components: {navi, BasePage},
     data () {

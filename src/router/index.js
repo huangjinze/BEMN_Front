@@ -13,6 +13,11 @@ import ImportPage from '@/page/ImportPage.vue'
 import vftDataShowPage from '@/page/Static/vftDataShowPage.vue'
 import Index from '@/page/Index.vue'
 import DataWashingPage from '@/page/Washing/DataWashingPage.vue'
+import UserPage from '@/page/user/UserPage.vue'
+import RolesPage from '@/page/user/RolesPage.vue'
+import vtfStation from '@/page/Station/vtfStation.vue'
+import tifStation from '@/page/Station/tifStation.vue'
+import example from '@/page/user/example.vue'
 
 Vue.use(Router)
 
@@ -82,6 +87,31 @@ export default new Router({
       path: '/washing',
       name: 'DataWashingPage',
       component: DataWashingPage
+    },
+    {
+      path: '/users',
+      name: 'users',
+      component: UserPage
+    },
+    {
+      path: '/roles',
+      name: 'roles',
+      component: RolesPage
+    },
+    {
+      path: '/vtfstation',
+      name: 'vtfstation',
+      component: vtfStation
+    },
+    {
+      path: '/tifstation',
+      name: 'tifstation',
+      component: tifStation
+    },
+    {
+      path: '/example',
+      name: 'example',
+      component: example
     }
   ]
 
