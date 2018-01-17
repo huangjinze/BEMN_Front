@@ -30,7 +30,7 @@
     </el-form-item>
   </el-col>
   <el-col  :xs="24" :sm="12" :md="6" :lg="6">
-    <el-form-item>
+    <el-form-item prop="time">
       <span>年份：</span>
       <el-date-picker
               v-model="form.year"
@@ -68,6 +68,11 @@
           classification: 'co2',
           year: '',
           station: '奥林匹克'
+        },
+        rules: {
+          time: [
+            { type: 'string', required: true, message: '请选择时间', trigger: 'blur' }
+          ]
         }
       }
     },
