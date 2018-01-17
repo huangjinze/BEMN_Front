@@ -86,5 +86,8 @@
 </script>
 
 <style scoped>
+  .el-select{
+    margin-top: -10px;
+  }
 
 </style>

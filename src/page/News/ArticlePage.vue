@@ -6,7 +6,7 @@
     </div>
     <div slot="main">
       <articles :options="options" :leftItems="leftItems" :rightBnts="rightBnts" :news="news"
-      @Submit="onSubmitW" @changeCategory="dataSource" @delete="dltNews" @edit="editNews"></articles>
+      @Submit="onSubmitW" @changeCategory="dataSource" @delete="dltNews" @edit="EditNews" :newContents="newContents"></articles>
     </div>
   </BasePage>
 </template>
@@ -15,7 +15,7 @@
   import navi from '../../components/layout/navi'
   import BasePage from '../../components/BasePage'
   import articles from '../../components/newsPublic/Article'
-  import {getNewsTitle, deleteNews} from '../../model/articleDate'
+  import {getNewsTitle, deleteNews, addNews, getNews, editNews} from '../../model/articleDate'
   export default {
     mounted () {
       this.dataSource()
@@ -57,12 +57,26 @@
           bnt: '商务信息'
         }],
         news: [],
-        tab: '媒体聚焦'
+        tab: '媒体聚焦',
+        newContents: {}
       }
     },
     methods: {
-      onSubmitW () {
-        console.log('提交文章')
+      onSubmitW (content) {
+        console.log(content[0])
+        if (!content[0].id) {
+          addNews({'newsTitle': content[0].title, 'newsContent': content[0].content, 'category': content[0].category}).then(resp => {
+            this.$alert('成功发布新闻内容', '提示', {confirmButtonText: 'ok'})
+          }).catch(resp => {
+            this.$alert('网络差', '失败', {confirmButtonText: 'ok'})
+          })
+        } else {
+          editNews({'getId': content[0].id, 'newsTitle': content[0].title, 'newsContent': content[0].content, 'category': content[0].category}).then(resp => {
+            this.$alert('成功修改新闻内容', '提示', {confirmButtonText: 'ok'})
+          }).catch(resp => {
+            this.$alert('网络差', '失败', {confirmButtonText: 'ok'})
+          })
+        }
       },
       dataSource (tab) {
         if (tab) {
@@ -75,7 +89,7 @@
             this.news.push({'title': resp.data.data[k].title, 'no': resp.data.data[k].id})
           }
         }).catch(resp => {
-          this.$alert('网络差', '失败', {confirmButtonText: 'ok'})
+          this.$alert('提交文章失败', '失败', {confirmButtonText: 'ok'})
         })
       },
       dltNews (tab) {
@@ -83,8 +97,13 @@
           this.dataSource()
         })
       },
-      editNews (id) {
+      EditNews (id) {
+        getNews({'id': id}).then(resp => {
+          this.newContents = resp.data.data[0]
+        })
       }
     }
   }
 </script>
+
+

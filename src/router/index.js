@@ -18,6 +18,7 @@ Vue.use(Router)
 
 export default new Router({
   routes: [
+    // 首页，负责人：雷答
     {
       path: '/',
       name: 'home',
@@ -34,15 +35,16 @@ export default new Router({
       component: tifStaiscticPage
     },
     {
-      path: '/dataManager',
+      path: '/dataManager', // 森林领域样地信息 负责人陈宇捷
       name: 'dataManager',
       component: dataManager
     },
     {
-      path: '/vtf/list',
+      path: '/vtf/list', // 水土保持领域数据展示 负责人陈宇捷
       name: 'vtflist',
       component: vtfList
     },
+    // 水保领域_导入导出页面，负责人：雷答
     {
       path: '/vtf/Importpage',
       name: 'vtfImportpage',
@@ -54,10 +56,11 @@ export default new Router({
       component: LoginPage
     },
     {
-      path: '/article',
+      path: '/article', // 后台新闻管理页面 负责人陈宇捷
       name: 'article',
       component: Article
     },
+    // 森林领域_卡片显示统计值的页面，负责人：雷答
     {
       path: '/tif/forestAreaAll',
       name: 'forestAreaAll',
@@ -68,6 +71,7 @@ export default new Router({
       name: 'water',
       component: forestDominPage
     },
+    // 水保领域_选择标签显示表格的页面，负责人：雷答
     {
       path: '/vft/dataShow',
       name: 'dataShow',

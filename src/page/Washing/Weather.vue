@@ -7,17 +7,24 @@
     </el-steps>
 
     <div v-if="step === 0">
-      <rangeCheck :indexes="form.indexes" v-model="form.range"></rangeCheck>
+      <el-col :span="24" id="rangeCheck">
+        <el-col :span="3">
+          指标选择：
+        </el-col>
+        <el-col :span="5">
+          <rangeCheck :indexes="form.indexes" v-model="form.range"></rangeCheck>
+        </el-col>
+      </el-col>
     </div>
 
-    <div v-if="step === 1">
+    <div v-if="step === 1" id="zValue">
       z值：
       <el-input-number v-model="form.z">
 
       </el-input-number>
     </div>
 
-    <div v-if="step === 2">
+    <div v-if="step === 2" id="methodSelect">
       插补方法选择 ：
       <el-select v-model="form.interpolation">
         <el-option
@@ -31,8 +38,8 @@
 
     <div class="bottom-op">
       <el-button-group>
-        <el-button type="primary" @click="onPreClick" :disabled="preDisable">pre</el-button>
-        <el-button type="primary" @click="onNextClick" :disabled="nextDisable">next</el-button>
+        <el-button type="primary" @click="onPreClick" :disabled="preDisable">前一步</el-button>
+        <el-button type="primary" @click="onNextClick" :disabled="nextDisable">后一步</el-button>
       </el-button-group>
     </div>
   </div>
@@ -116,5 +123,16 @@
 </script>
 
 <style scoped>
+  .bottom-op{
+    float: right;
+  }
+  #rangeCheck{
+    text-align: center;
+    margin: 30px 0 24px 30%;
+  }
+  #zValue,#methodSelect{
+    margin-top: 30px;
+    text-align: center;
+  }
 
 </style>

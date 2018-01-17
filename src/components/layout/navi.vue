@@ -1,4 +1,3 @@
-
 <template>
     <div id="">
         <el-row class="tac">
@@ -12,6 +11,10 @@
                     <i class="el-icon-menu"></i>
                     <span slot="title">综合信息</span>
                 </el-menu-item>
+                <el-menu-item index="/washing" >
+                    <i class="fa fa-refresh" aria-hidden="true"></i>
+                    <span slot="title">数据清洗</span>
+                </el-menu-item>
                 <el-submenu index="2">
                     <template slot="title">
                         <i class="el-icon-date"></i>
@@ -24,7 +27,7 @@
                             水土保持领域
                         </template>
                         <el-menu-item-group>
-                            <el-menu-item index="/dataManager">
+                            <el-menu-item index="/vft/list">
                                 <i class="fa fa-table" aria-hidden="true"></i>
                                 数据展示
                             </el-menu-item>
@@ -41,7 +44,7 @@
                             森林领域
                         </template>
                         <el-menu-item-group>
-                            <el-menu-item index="2-2-1"><i class="fa fa-tint" aria-hidden="true"></i>水文</el-menu-item>
+                            <el-menu-item index="/tif/water"><i class="fa fa-tint" aria-hidden="true"></i>水文</el-menu-item>
                             <el-menu-item index="2-2-2"><i class="fa fa-globe" aria-hidden="true"></i>土壤</el-menu-item>
                             <el-menu-item index="2-2-3"><i class="fa fa-leaf" aria-hidden="true"></i>生物</el-menu-item>
                             <el-menu-item index="2-2-4"><i class="fa fa-cloud" aria-hidden="true"></i>气象</el-menu-item>
