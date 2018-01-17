@@ -278,7 +278,7 @@
   }
 </script>
 
-<style>
+<style scoped>
     /*Theme CSS*/
     @import "../assets/pages/css/grayscale.min.css";
     @import "../assets/pages/css/style2.css";

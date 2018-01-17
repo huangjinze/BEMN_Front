@@ -21,7 +21,7 @@
                 <el-col :span="24">
                   <div class="grid-content bg-purple">
                     <el-form-item>
-                      <el-input v-model="form.email" placeholder="用户名" ></el-input>
+                      <el-input v-model="form.email" placeholder="邮箱" ></el-input>
                     </el-form-item>
                   </div>
                 </el-col>
@@ -30,7 +30,7 @@
                 <el-col :span="24">
                   <div class="grid-content bg-purple">
                     <el-form-item>
-                      <el-input v-model="form.password" placeholder="密码"></el-input>
+                      <el-input v-model="form.password" placeholder="密码" type="password"></el-input>
                     </el-form-item>
                   </div>
                 </el-col>

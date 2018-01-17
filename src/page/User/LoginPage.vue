@@ -1,6 +1,6 @@
 <template>
-  <div>
-    <div ref="mybox" style="position:absolute;left:0;top:0"></div>
+  <div style="margin: 0;padding: 0">
+    <div ref="mybox" style="position:absolute;left:0;top:0;margin: 0;padding: 0"></div>
     <login v-model="loginForm" :CodeUrl="codeUrl" @refreshCode="onRefreshCode" @loginClick="onLoginClick"></login>
   </div>
 </template>
@@ -8,6 +8,7 @@
 <script>
   import login from '../../components/user/login.vue'
   import {mapActions} from 'vuex'
+//  import {loginUser} from '../../model/user'
   import * as THREE from 'three'
   import nx from '../../assets/pages/textures/nx.jpg'
   import ny from '../../assets/pages/textures/ny.jpg'
@@ -37,7 +38,7 @@
       return {
         loginForm: {
         },
-        codeUrl: 'http://172.19.32.116/captcha/mews?r=' + Math.random()
+        codeUrl: 'http://bemnwork/captcha/mews?r=' + Math.random()
       }
     },
     mounted: function () {
@@ -47,11 +48,17 @@
     methods: {
       onRefreshCode () {
         console.log('refresh code')
-        this.codeUrl = 'http://172.19.32.116/captcha/mews?r=' + Math.random()
+        this.codeUrl = 'http://bemnwork/captcha/mews?r=' + Math.random()
       },
       onLoginClick () {
         console.log('on login')
-        this.LoginUser(this.loginForm)
+        this.LoginUser(this.loginForm).then((resp) => {
+          console.log('after', resp)
+          if (resp.status === 'success') {
+            this.$store.commit('SET_STATUS', resp)
+            this.$router.push({path: '/'})
+          }
+        })
       },
       ...mapActions({LoginUser: 'Login'}),
       init () {
