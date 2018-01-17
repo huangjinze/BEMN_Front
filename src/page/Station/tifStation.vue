@@ -263,7 +263,7 @@
           ],
           elevation: [
             {
-              pattern: /^[0-9]*$/,
+              pattern: /^\d+(\.\d+)?$/,
               message: '海拔有误！'
             }
           ]
