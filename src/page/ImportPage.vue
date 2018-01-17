@@ -3,8 +3,11 @@
   <BasePage>
     <div slot="header">header</div>
     <div slot="aside"><navi></navi></div>
-    <div slot="main" align="center">
-      <dataImport @ClicktableData="onClickDataTable" @ClickvalueData="onClickMonthTable" @ClicktableMonth="onClickDataValue" @ClickvalueMonth="onClickMonthValue" @ClickOridata="onClickOridata" @ClickChooseFile="onClickFIle" :upLoadUrl="upLoadUrl" :targetOptions="targetOptions"></dataImport>
+    <div slot="main">
+      <!--<headGuider :initTopPartTags="stationName" :initTopSiteTags="className" ref="profile" :partTags="stations" :siteTags="classes" @ClickPart="parentStationListen" @ClickSite="parentClassListen" @CloseIndex="closeIndexListen"></headGuider>-->
+      <!--<indexSelect :indices="index" :indexTags="indexTags" @ClickIndexClass="parentIndexClassListen" @ClickIndex="parentIndexListen"></indexSelect>-->
+      <topIndexSelect :initTopPartTags="stationName" :initTopSiteTags="className" ref="profile" :indices="index" :indexTags="indexTags" @ClickIndexClass="parentIndexClassListen" @ClickTower="parentStationListen" @ClickClass="parentClassListen" @ClickIndex="parentIndexListen" @CloseStation="CloseStationListen" @CloseClass="CloseClassListen"></topIndexSelect>
+      <dataImport @ClicktableData="onClickDataTable" @ClicktableMonth="onClickMonthTable" @ClickvalueData="onClickDataValue" @ClickvalueMonth="onClickMonthValue" @ClickOridata="onClickOridata" @ClickChooseFile="onClickFIle" :upLoadUrl="upLoadUrl" :targetOptions="targetOptions"></dataImport>
     </div>
   </BasePage>
 </template>
@@ -12,224 +15,211 @@
 
 <script>
   import dataImport from '../components/dataImport/dataImport'
+//  import indexSelect from '../components/dataImport/indexSelect'
+  import topIndexSelect from '../components/multiSelect/topIndexSelect'
   import navi from '../components/layout/navi'
+//  import headGuider from '../components/headGuider'
   import BasePage from '../components/BasePage'
-
+  import moment from 'moment'
+  import {getStation, getClass} from '../model/vftData'
+  import {getVFTIndex} from '../model/data'
+//  import { host } from '../model/data'
   export default {
-    components: {dataImport, navi, BasePage},
+    components: {dataImport, navi, BasePage, topIndexSelect},
     name: 'StaiscticPage',
     data () {
       return {
         upLoadUrl: 'url',
-        targetOptions: [{
-          value: 'zhinan',
-          label: '指南',
-          children: [{
-            value: 'shejiyuanze',
-            label: '设计原则',
-            children: [{
-              value: 'yizhi',
-              label: '一致'
-            }, {
-              value: 'fankui',
-              label: '反馈'
-            }, {
-              value: 'xiaolv',
-              label: '效率'
-            }, {
-              value: 'kekong',
-              label: '可控'
-            }]
-          }, {
-            value: 'daohang',
-            label: '导航',
-            children: [{
-              value: 'cexiangdaohang',
-              label: '侧向导航'
-            }, {
-              value: 'dingbudaohang',
-              label: '顶部导航'
-            }]
-          }]
-        }, {
-          value: 'zujian',
-          label: '组件',
-          children: [{
-            value: 'basic',
-            label: 'Basic',
-            children: [{
-              value: 'layout',
-              label: 'Layout 布局'
-            }, {
-              value: 'color',
-              label: 'Color 色彩'
-            }, {
-              value: 'typography',
-              label: 'Typography 字体'
-            }, {
-              value: 'icon',
-              label: 'Icon 图标'
-            }, {
-              value: 'button',
-              label: 'Button 按钮'
-            }]
-          }, {
-            value: 'form',
-            label: 'Form',
-            children: [{
-              value: 'radio',
-              label: 'Radio 单选框'
-            }, {
-              value: 'checkbox',
-              label: 'Checkbox 多选框'
-            }, {
-              value: 'input',
-              label: 'Input 输入框'
-            }, {
-              value: 'input-number',
-              label: 'InputNumber 计数器'
-            }, {
-              value: 'select',
-              label: 'Select 选择器'
-            }, {
-              value: 'cascader',
-              label: 'Cascader 级联选择器'
-            }, {
-              value: 'switch',
-              label: 'Switch 开关'
-            }, {
-              value: 'slider',
-              label: 'Slider 滑块'
-            }, {
-              value: 'time-picker',
-              label: 'TimePicker 时间选择器'
-            }, {
-              value: 'date-picker',
-              label: 'DatePicker 日期选择器'
-            }, {
-              value: 'datetime-picker',
-              label: 'DateTimePicker 日期时间选择器'
-            }, {
-              value: 'upload',
-              label: 'Upload 上传'
-            }, {
-              value: 'rate',
-              label: 'Rate 评分'
-            }, {
-              value: 'form',
-              label: 'Form 表单'
-            }]
-          }, {
-            value: 'data',
-            label: 'Data',
-            children: [{
-              value: 'table',
-              label: 'Table 表格'
-            }, {
-              value: 'tag',
-              label: 'Tag 标签'
-            }, {
-              value: 'progress',
-              label: 'Progress 进度条'
-            }, {
-              value: 'tree',
-              label: 'Tree 树形控件'
-            }, {
-              value: 'pagination',
-              label: 'Pagination 分页'
-            }, {
-              value: 'badge',
-              label: 'Badge 标记'
-            }]
-          }, {
-            value: 'notice',
-            label: 'Notice',
-            children: [{
-              value: 'alert',
-              label: 'Alert 警告'
-            }, {
-              value: 'loading',
-              label: 'Loading 加载'
-            }, {
-              value: 'message',
-              label: 'Message 消息提示'
-            }, {
-              value: 'message-box',
-              label: 'MessageBox 弹框'
-            }, {
-              value: 'notification',
-              label: 'Notification 通知'
-            }]
-          }, {
-            value: 'navigation',
-            label: 'Navigation',
-            children: [{
-              value: 'menu',
-              label: 'NavMenu 导航菜单'
-            }, {
-              value: 'tabs',
-              label: 'Tabs 标签页'
-            }, {
-              value: 'breadcrumb',
-              label: 'Breadcrumb 面包屑'
-            }, {
-              value: 'dropdown',
-              label: 'Dropdown 下拉菜单'
-            }, {
-              value: 'steps',
-              label: 'Steps 步骤条'
-            }]
-          }, {
-            value: 'others',
-            label: 'Others',
-            children: [{
-              value: 'dialog',
-              label: 'Dialog 对话框'
-            }, {
-              value: 'tooltip',
-              label: 'Tooltip 文字提示'
-            }, {
-              value: 'popover',
-              label: 'Popover 弹出框'
-            }, {
-              value: 'card',
-              label: 'Card 卡片'
-            }, {
-              value: 'carousel',
-              label: 'Carousel 走马灯'
-            }, {
-              value: 'collapse',
-              label: 'Collapse 折叠面板'
-            }]
-          }]
-        }, {
-          value: 'ziyuan',
-          label: '资源',
-          children: [{
-            value: 'axure',
-            label: 'Axure Components'
-          }, {
-            value: 'sketch',
-            label: 'Sketch Templates'
-          }, {
-            value: 'jiaohu',
-            label: '组件交互文档'
-          }]
-        }]
+        stationName: [
+          '奥林匹克'
+        ],
+        className: [
+          '通量'
+        ],
+        indexName: [],
+        stations: [],
+        classes: [],
+        index: [],
+        allIndexTags: new Map(),
+        indexTags: []
       }
     },
+    mounted: function () {
+      getStation({domain: '水土保持'}).then(resp => {
+        let data = resp.data.data
+        console.log(data)
+        this.index.splice(0, this.index.length)
+        this.index.push({ text: '选择站点', flag: 1 })
+        for (var i = 0; i < data.length; i++) {
+          this.indexTags.push({ text: data[i], id: i + 1 })
+        }
+        this.stations = Array.from(this.indexTags)
+      }).catch(resp => {
+        this.$alert('获取失败', '失败', {confirmButtonText: 'ok'})
+      })
+    },
     methods: {
+      parentStationListen (id) {
+        let temp = this.stations.find(function (value, index, stations) { return value.id === id })
+        getClass({domain: '水土保持', station: temp.text}).then(resp => {
+          //  console.log(resp)
+          let data = resp.data.data
+          console.log(resp.data)
+          this.index.splice(0, this.index.length)
+          this.index.push({ text: '选择类型', flag: 2 })
+          this.indexTags.splice(0, this.indexTags.length)
+          for (var i = 0; i < data.length; i++) {
+            this.indexTags.push({ text: data[i], id: i + 1 })
+          }
+          this.stationName[0] = temp.text
+          this.classes = Array.from(this.indexTags)
+        }).catch(resp => {
+          this.$alert('获取失败', '失败', {confirmButtonText: 'ok'})
+        })
+      },
+      parentClassListen (id) {
+        let temp = this.indexTags.find(function (value, index, classes) { return value.id === id })
+        getVFTIndex({station: this.stationName[0], classification: temp.text, domain: '水土保持'}).then(resp => {
+          let data = resp.data.data[0]
+          let i = 0
+          this.index.splice(0, this.index.length)
+          this.allIndexTags.clear()
+          for (let k in data) {
+            this.index.push({text: k, id: i + 1, flag: 3})
+            i++
+            this.allIndexTags.set(k, data[k])
+          }
+          this.indexTags.splice(0, this.indexTags.length)
+          for (var j = 0; j < data[this.index[0].text].length; j++) {
+            this.indexTags.push({ text: data[this.index[0].text][j], id: j + 1 })
+          }
+          console.log(this.indexTags)
+          this.className[0] = temp.text
+        }).catch(resp => {
+          this.$alert('获取失败', '失败', {confirmButtonText: 'ok'})
+        })
+      },
+      parentIndexClassListen (id) {
+        let text = this.index[id].text
+        this.indexTags.splice(0, this.indexTags.length)
+        for (var j = 0; j < this.allIndexTags.get(text).length; j++) {
+          this.indexTags.push({ text: this.allIndexTags.get(text)[j], id: j + 1 })
+        }
+      },
+      parentIndexListen (id) {
+        let temp = this.indexTags.find(function (value, index, classes) { return value.id === id })
+        this.indexName[0] = temp.text
+      },
+      CloseStationListen () {
+        this.index.splice(0, this.index.length)
+        this.index.push({ text: '选择站点', flag: 1 })
+        this.indexTags = Array.from(this.stations)
+      },
+      CloseClassListen () {
+        this.index.splice(0, this.index.length)
+        this.index.push({ text: '选择类型', flag: 2 })
+        this.indexTags = Array.from(this.classes)
+      },
       onClickDataTable (DataTable) {
-        alert(DataTable)
+        console.log(DataTable)
+        let topTag = this.$refs.profile.topIndexTags[0]
+        if (DataTable[0] && DataTable[1] && topTag) {
+          let startDate = moment(DataTable[0]).format('YYYY-MM-DD')
+          let endDate = moment(DataTable[1]).format('YYYY-MM-DD')
+          let domain = '水土保持'
+          let stationName = this.stationName[0]
+          let className = this.className[0]
+          let indexName = this.indexName[0]
+//          showExport({domain: domain,
+//            station_name: stationName,
+//            clickIndex: indexName,
+//            startTime: startDate,
+//            endTime: endDate,
+//            dataType: 'clean',
+//            class_name: className})
+          window.open('http://127.0.0.1/excel/vft/showExport?domain=' + domain +
+                  '&station_name=' + stationName +
+                  '&clickIndex=' + indexName +
+                  '&startTime=' + startDate +
+                  '&endTime=' + endDate +
+                  '&dataType=clean&class_name=' + className)
+        } else if (!topTag) {
+          this.$message({
+            message: '请先选择指标',
+            type: 'warning'
+          })
+        } else {
+          this.$message({
+            message: '开始日与结束日不应为空',
+            type: 'warning'
+          })
+        }
       },
       onClickMonthTable (MonthTable) {
-        alert(MonthTable)
+        let topTag = this.$refs.profile.topIndexTags[0]
+        if (MonthTable[0] && MonthTable[1] && topTag) {
+          let startDate = MonthTable[0]
+          let endDate = MonthTable[1]
+          let domain = '水土保持'
+          let stationName = this.stationName[0]
+          let className = this.className[0]
+          let indexName = this.indexName[0]
+          window.open('http://127.0.0.1/excel/vft/compareExport?domain=' + domain + '&station_name=' + stationName + '&clickIndex=' + indexName + '&startTime=' + startDate + '&endTime=' + endDate + '&dataType=clean&class_name=' + className)
+        } else if (!topTag) {
+          this.$message({
+            message: '请先选择指标',
+            type: 'warning'
+          })
+        } else {
+          this.$message({
+            message: '开始月与结束月不应为空',
+            type: 'warning'
+          })
+        }
       },
       onClickDataValue (DataValue) {
-        alert(DataValue)
+        let topTag = this.$refs.profile.topIndexTags[0]
+        if (DataValue[0] && DataValue[1] && topTag) {
+          let startDate = moment(DataValue[0]).format('YYYY-MM-DD')
+          let endDate = moment(DataValue[1]).format('YYYY-MM-DD')
+          let domain = '水土保持'
+          let stationName = this.stationName[0]
+          let className = this.className[0]
+          let indexName = this.indexName[0]
+          window.open('http://127.0.0.1/excel/vft/showStatistics?domain=' + domain + '&station_name=' + stationName + '&clickIndex=' + indexName + '&startTime=' + startDate + '&endTime=' + endDate + '&dataType=clean&class_name=' + className)
+        } else if (!topTag) {
+          this.$message({
+            message: '请先选择指标',
+            type: 'warning'
+          })
+        } else {
+          this.$message({
+            message: '开始日与结束日不应为空',
+            type: 'warning'
+          })
+        }
       },
       onClickMonthValue (MonthValue) {
-        alert(MonthValue)
+        let topTag = this.$refs.profile.topIndexTags[0]
+        if (MonthValue[0] && MonthValue[1] && topTag) {
+          let startDate = MonthValue[0]
+          let endDate = MonthValue[1]
+          let domain = '水土保持'
+          let stationName = this.stationName[0]
+          let className = this.className[0]
+          let indexName = this.indexName[0]
+          window.open('http://127.0.0.1/excel/vft/compareStatistics?domain=' + domain + '&station_name=' + stationName + '&clickIndex=' + indexName + '&startTime=' + startDate + '&endTime=' + endDate + '&dataType=clean&class_name=' + className)
+        } else if (!topTag) {
+          this.$message({
+            message: '请先选择指标',
+            type: 'warning'
+          })
+        } else {
+          this.$message({
+            message: '开始月与结束月不应为空',
+            type: 'warning'
+          })
+        }
       },
       onClickOridata (year) {
         alert(year)

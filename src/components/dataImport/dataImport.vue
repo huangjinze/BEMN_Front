@@ -1,15 +1,6 @@
 <!--数据导出页面的具体内容-->
 <template>
     <div class="main">
-            <el-col :span="24">
-                <div class="sub-title"></div>
-                <el-cascader
-                        v-model="selectedTarget"
-                        placeholder="搜索"
-                        :options="targetOptions"
-                        filterable>
-                </el-cascader>
-            </el-col>
             <table>
                 <tr style="height: 150px">
                     <td width="100px"><h2>展示</h2></td>
@@ -76,7 +67,6 @@
   export default {
     data () {
       return {
-        selectedTarget: [],
         state: '',
         StartDate: '',
         EndDate: '',
@@ -124,8 +114,7 @@
       }
     },
     props: {
-      upLoadUrl: String,
-      targetOptions: {type: Array, default: []}
+      upLoadUrl: String
     },
     methods: {
       querySearch (queryString, cb) {
@@ -160,25 +149,25 @@
         this.$message.warning(`当前限制选择 1 个文件，本次选择了 ${files.length} 个文件，共选择了 ${files.length + fileList.length} 个文件`)
       },
       OuttableDate () {
-        var DataTable = new Array(2)
+        var DataTable = []
         DataTable.push(this.StartDate)
         DataTable.push(this.EndDate)
         this.$emit('ClicktableData', DataTable)
       },
       OuttableMonth () {
-        var MonthTable = new Array(2)
+        var MonthTable = []
         MonthTable.push(this.StartMonth)
         MonthTable.push(this.EndMonth)
-        this.$emit('ClickvalueData', MonthTable)
+        this.$emit('ClicktableMonth', MonthTable)
       },
       OutvalueDate () {
-        var DataValue = new Array(2)
+        var DataValue = []
         DataValue.push(this.StartDate)
         DataValue.push(this.EndDate)
-        this.$emit('ClicktableMonth', DataValue)
+        this.$emit('ClickvalueData', DataValue)
       },
       OutvalueMonth () {
-        var MonthValue = new Array(2)
+        var MonthValue = []
         MonthValue.push(this.StartMonth)
         MonthValue.push(this.EndMonth)
         this.$emit('ClickvalueMonth', MonthValue)
