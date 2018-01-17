@@ -48,7 +48,7 @@
                             <el-menu-item index="2-2-2"><i class="fa fa-globe" aria-hidden="true"></i>土壤</el-menu-item>
                             <el-menu-item index="2-2-3"><i class="fa fa-leaf" aria-hidden="true"></i>生物</el-menu-item>
                             <el-menu-item index="2-2-4"><i class="fa fa-cloud" aria-hidden="true"></i>气象</el-menu-item>
-                            <el-menu-item index="2-2-5"><i class="fa fa-th-large" aria-hidden="true"></i>样地信息</el-menu-item>
+                            <el-menu-item index="/dataManager"><i class="fa fa-th-large" aria-hidden="true"></i>样地信息</el-menu-item>
                             <el-menu-item index="2-2-6"><i class="fa fa-pagelines" aria-hidden="true"></i>森林健康</el-menu-item>
                             <el-menu-item index="2-2-7"><i class="fa fa-stumbleupon" aria-hidden="true"></i>径流场信息</el-menu-item>
                             <el-menu-item index="2-2-8"><i class="fa fa-font-awesome" aria-hidden="true"></i>测流堰信息</el-menu-item>
