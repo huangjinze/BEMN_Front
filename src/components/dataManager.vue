@@ -4,13 +4,22 @@
     <el-tabs type="border-card" @tab-click="handleClick">
       <el-tab-pane v-for="nav in navs" :key="nav.value" :label="nav.label">
         <!-- 页内内容开始 -->
-        <el-table ref="multipleTable" :data="nav.tableData" stripe tooltip-effect="dark" style="width: 100%" @selection-change="handleSelectionChange">
+        <el-table ref="multipleTable" :data="nav.tableData" stripe tooltip-effect="dark" style="width: 100%" max-height="450" @selection-change="handleSelectionChange">
           <el-table-column type="selection" width="50" v-if="nav.mcols">
           </el-table-column>
           <template v-for="item in nav.mcols">
             <el-table-column v-bind:key="item.value" :prop="item.prop" v-bind:label="item.label">
             </el-table-column>
           </template>
+          <el-table-column
+                  fixed="right"
+                  label="操作"
+                  width="100">
+            <template slot-scope="scope">
+              <el-button type="text" size="medium">查看</el-button>
+              <el-button type="text" size="medium">编辑</el-button>
+            </template>
+          </el-table-column>
         </el-table>
         <div align="center">
           <el-pagination
@@ -18,7 +27,7 @@
             @current-change="handleCurrentChange"
             :page-size="15"
             layout="prev, pager, next, jumper"
-            :total="1000">
+            :total="totalSize[0]">
           </el-pagination>
         </div>
         <!-- 页内内容结束 -->
@@ -33,12 +42,13 @@
   export default {
     props: {
       dataExport: Function,
-      navs: {type: Array, default: []}
+      navs: {type: Array, default: []},
+      totalSize: []
     },
     methods: {
       handleClick (tab, event) {
         console.log(tab, event)
-        this.$emit('changePage', [tab.label, '1', tab.index])
+        this.$emit('changeTab', [tab.label, '1', tab.index])
         tab1 = tab.label
         tab2 = tab.index
       },
