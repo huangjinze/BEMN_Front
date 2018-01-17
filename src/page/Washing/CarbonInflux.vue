@@ -8,24 +8,24 @@
       <el-step title="5 插补缺失"></el-step>
     </el-steps>
 
-    <div v-if="step === 0">
+    <div v-show="step === 0">
       <rangeCheck
         :indexes="indexes"
         v-model="form.range"></rangeCheck>
     </div>
 
-    <div v-if="step === 1">
+    <div v-show="step === 1">
       z值：
       <el-input-number v-model="form.z">
 
       </el-input-number>
     </div>
 
-    <div v-if="step === 2">
+    <div v-show="step === 2">
       <i class="el-icon-warning">对于植被较高的站点该步骤非常重要，如奥林匹克公园、八达岭等，对于低矮植被课不做此步骤，比如盐池灌木、草地等 </i>
     </div>
 
-    <div v-if="step === 3">
+    <div v-show="step === 3">
 
       <charts class="testchart" id="chart_1"  :xAxis="chartUMetaData.xAxis" :yAxis="chartUMetaData.yAxis"
               :series="chartUMetaData.series"></charts>
@@ -39,7 +39,7 @@
 
     </div>
 
-    <div v-if="step === 4">
+    <div v-show="step === 4">
       插补方法选择 ：
       <el-select v-model="form.interpolation">
         <el-option
@@ -68,7 +68,7 @@
   import charts from '../../components/echart/charts'
   import ElButton from 'element-ui/packages/button/src/button'
   import ElInputNumber from 'element-ui/packages/input-number/src/input-number'
-  import {checkWashingIndexRange} from '../../model/data'
+  import {checkWashingIndexRange, despiking} from '../../model/data'
 
   export default {
     components: {
@@ -114,16 +114,40 @@
         this.loading = true
 
         if (this.step === 0) {
-          this.postIndexes()
+          this.postIndexes().then(
+            () => {
+              this.loading = false
+            })
         }
 
-        this.step = this.step + 1
+        if (this.step === 1) {
+          despiking({
+            'data': this.form.range,
+            'domain': '水土保持',
+            'year': this.washing_form.year,
+            'station': this.washing_form.station,
+            'classification': '通量',
+            'user_mail': '1103232282@qq.com',
+            'z': this.form.z
+          }).then((resp) => {
+            this.loading = false
+            if (resp.data.status === 'success') {
+              console.log(resp)
+              alert(resp.data.data[0])
+            } else {
+              alert(resp.data.reason)
+            }
+          }).catch(() => {
+            this.loading = false
+            alert('网络差')
+          })
+        }
+
         if (this.step >= 4) {
           this.nextDisable = true
         }
         this.preDisable = false
-
-        this.loading = false
+        this.step = this.step + 1
       },
       onPreClick () {
         this.loading = true
@@ -142,7 +166,8 @@
         this.adjustChartShow = true
       },
       postIndexes () {
-        checkWashingIndexRange(
+        this.loading = true
+        return checkWashingIndexRange(
           {
             'data': this.form.range,
             'domain': '水土保持',

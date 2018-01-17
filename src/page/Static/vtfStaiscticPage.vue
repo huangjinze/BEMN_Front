@@ -10,7 +10,7 @@
         @Click="onClick"
         v-loading="loading"></chartForm>
       <charts class="testchart" id="1"  :xAxis="chartMetaData.xAxis" :yAxis="chartMetaData.yAxis"
-      :series="chartMetaData.series"></charts>
+      :series="chartMetaData.series" title='水土保持数据'></charts>
     </div>
   </BasePage>
 </template>

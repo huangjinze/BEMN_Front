@@ -14,6 +14,11 @@
           :value="item.value">
         </el-option>
       </el-select>
+      <!--<el-cascader-->
+        <!--:options="indexesOptions"-->
+        <!--v-model="selectedIndexes"-->
+        <!--@change="onIndexesSelectChange"-->
+      <!--&gt;</el-cascader>-->
     </span>
 
     <div>
