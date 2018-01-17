@@ -1,44 +1,47 @@
 <template>
   <div id="dataManager">
     <el-button @click="onClick" class="export" icon="el-icon-download">导出</el-button>
-    <el-tabs type="border-card">
-      <el-tab-pane label="森林群落结构">
+    <el-tabs v-model="tab2" type="border-card" @tab-click="handleClick">
+      <el-tab-pane v-for="nav in navs" :key="nav.value" :label="nav.label">
         <!-- 页内内容开始 -->
-        <el-table ref="multipleTable" :data="tableData3" stripe tooltip-effect="dark" style="width: 100%" @selection-change="handleSelectionChange">
-          <el-table-column type="selection" width="50">
+        <el-table ref="multipleTable" :data="nav.tableData" stripe tooltip-effect="dark" style="width: 100%" @selection-change="handleSelectionChange">
+          <el-table-column type="selection" width="50" v-if="nav.mcols">
           </el-table-column>
-          <template v-for="item in cols">
+          <template v-for="item in nav.mcols">
             <el-table-column v-bind:key="item.value" :prop="item.prop" v-bind:label="item.label">
             </el-table-column>
           </template>
-          <el-pagination
-            layout="prev, pager, next"
-            :total="50">
-          </el-pagination>
         </el-table>
+        <div align="center">
+          <el-pagination
+            @size-change="handleSizeChange"
+            @current-change="handleCurrentChange"
+            :page-size="15"
+            layout="prev, pager, next, jumper"
+            :total="1000">
+          </el-pagination>
+        </div>
         <!-- 页内内容结束 -->
       </el-tab-pane>
-      <el-tab-pane label="森林群落乔木层生物量和林木生长量及养分">
-        配置管理
-      </el-tab-pane>
-      <el-tab-pane label="森林凋落物量">角色管理
-
-      </el-tab-pane>
-      <el-tab-pane label="群落的天然更新">定时任务补偿
-
-      </el-tab-pane>
     </el-tabs>
-    
+
   </div>
 </template>
 <script>
   export default {
+    data () {
+      return {
+        tab2: '0'
+      }
+    },
     props: {
       dataExport: Function,
-      tableData3: {type: Array, default: []},
-      cols: {type: Array, default: []}
+      navs: {type: Array, default: []}
     },
     methods: {
+      handleClick (tab, event) {
+        this.$emit('changePage', ['1', tab.index])
+      },
       toggleSelection (rows) {
         if (rows) {
           rows.forEach(row => {
@@ -53,21 +56,26 @@
       },
       onClick () {
         this.$emit('Click')
+      },
+      handleSizeChange (val) {
+        console.log(`每页 ${val} 条`)
+      },
+      handleCurrentChange (val) {
+        console.log(`当前页: ${val}`)
+        this.$emit('changePage', [val, this.tab2])
+        // tab[0]为分页组件的当前页数，tab[1]为便签页组件的当前索引
       }
     }
   }
 </script>
 
 <style scoped>
-  @import url("//unpkg.com/element-ui@2.0.5/lib/theme-chalk/index.css");
   .handle-box {
     margin-bottom: 20px;
   }
-
   .handle-select {
     width: 120px;
   }
-
   .handle-input {
     width: 300px;
     display: inline-block;
@@ -76,4 +84,5 @@
     position: absolute;
     right: 28px;
     z-index: 1;
-  }</style>
+  }
+</style>
