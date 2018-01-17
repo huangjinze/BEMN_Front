@@ -112,7 +112,7 @@ export default {
       this.getTableData(1)
     },
     changeDataByPage (page) {
-      this.getTableData(page[1])
+      this.getTableData(page[0])
     },
     getTableData (page) {
       var category = this.currentTab[0]

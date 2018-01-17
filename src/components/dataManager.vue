@@ -37,8 +37,6 @@
   </div>
 </template>
 <script>
-  var tab1 = 'A'
-  var tab2 = '0'
   export default {
     props: {
       dataExport: Function,
@@ -49,8 +47,6 @@
       handleClick (tab, event) {
         console.log(tab, event)
         this.$emit('changeTab', [tab.label, '1', tab.index])
-        tab1 = tab.label
-        tab2 = tab.index
       },
       toggleSelection (rows) {
         if (rows) {
@@ -72,7 +68,7 @@
       },
       handleCurrentChange (val) {
         console.log(`当前页: ${val}`)
-        this.$emit('changePage', [tab1, val, tab2])
+        this.$emit('changePage', [val])
       }
     }
   }
