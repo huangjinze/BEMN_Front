@@ -41,17 +41,11 @@
     </el-col>
 
     <el-col :span="24" v-if="step === 3">
-      <el-col :span="24" id="charts">
-        <charts class="testchart" id="chart_1"  :xAxis="chartMetaData.xAxis" :yAxis="chartMetaData.yAxis"
-                :series="chartMetaData.series">
-        </charts>
-      </el-col>
 
-      <el-col :span="24" id="selectU">
-        请输入u*值：
-        <el-input-number  v-model="form.u" :step="0.1"></el-input-number>
-        <el-button @click="onUValueDraw" type="primary">确认</el-button>
-      </el-col>
+      <charts class="testchart" id="chart_1"  :xAxis="chartMetaData.xAxis" :yAxis="chartMetaData.yAxis"
+              :series="chartMetaData.series"></charts>
+      请输入u*值：<el-input-number  v-model="form.u" :step="0.1"></el-input-number>
+      <el-button @click="onUValueDraw" type="primary">确认</el-button>
 
       <div v-if="adjustChartShow">
         <charts class="chartAdjust" id="chart_2"  :xAxis="chartMetaDataUAdjust.xAxis" :yAxis="chartMetaDataUAdjust.yAxis"
@@ -60,7 +54,7 @@
 
     </el-col>
 
-    <el-col :span="24" v-if="step === 4" id="methodSelect">
+    <div v-if="step === 4">
       插补方法选择 ：
       <el-select v-model="form.interpolation">
         <el-option
@@ -70,7 +64,7 @@
           :value="item.value">
         </el-option>
       </el-select>
-    </el-col>
+    </div>
 
     <div class="bottom-op">
       <el-button-group>
@@ -178,12 +172,17 @@
     margin: 30px 0 24px 30%;
   }
   #dataWashing{
+    /*border-bottom: solid 1px #c4c6cb;*/
     margin-top: 24px;
   }
   .bottom-op{
     float: right;
   }
-  #zValue,#methodSelect,#storage{
+  #zValue{
+    margin-top: 30px;
+    text-align: center;
+  }
+  #storage{
     margin-top: 30px;
     text-align: center;
   }
@@ -191,13 +190,5 @@
     background-color: #5b8ecf;
     color: white;
   }
-  #charts{
-    margin-top: 30px;
-  }
-  #selectU{
-    text-align: center;
-  }
-  #selectU .el-input-number{
-    margin-right: 17px;
-  }
+  .charts{}
 </style>
