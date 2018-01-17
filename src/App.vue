@@ -19,4 +19,7 @@
   input{
     text-align: center;
   }
+  body{
+    margin: 0;
+  }
 </style>

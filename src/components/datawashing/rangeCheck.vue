@@ -22,14 +22,14 @@
       <!--&gt;</el-cascader>-->
     </span>
 
-    <el-col id="indexRange"  style="float: left;">
-      <el-form v-model="showIndexes" style="float: left;width: 50%">
-        <el-col v-for="(item,index) in showIndexes" :key="index">
+    <el-col id="indexRange">
+      <el-form v-model="showIndexes">
+        <el-col v-for="(item,index) in showIndexes" :key="index" :xs="24" :sm="24" :md="12" :lg="12" style="padding-left: 2%">
           <el-form-item>
-      <el-col class="range">{{ item.name }}:
+      <div class="range">{{ item.name }}:
         <el-input-number v-model="item.min_default_value"></el-input-number> -
         <el-input-number v-model="item.max_default_value"></el-input-number>
-      </el-col>
+      </div>
           </el-form-item>
         </el-col>
       </el-form>
@@ -92,9 +92,6 @@
 <style scoped>
   #indexRange{
     margin-top: 20px;
-  }
-  .range{
-    float: left;
   }
 
 </style>

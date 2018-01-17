@@ -41,7 +41,7 @@
     overflow: hidden;
   }
   .el-header{
-    margin-top: 22px;
+    padding-top: 22px;
   }
 </style>
 
