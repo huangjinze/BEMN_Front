@@ -13,6 +13,11 @@
                     :key="tag.text"
                     @close="handleSiteClose(tag.text)"
             >{{tag.text}}</el-tag>
+            <el-tag closable
+                    v-for="tag in topIndexTags"
+                    :key="tag.text"
+                    @close="handleIndexClose(tag.text)"
+            >{{tag.text}}</el-tag>
             <li class="station_cookie" style="display: none;"></li>
             <li class="region_cookie" style="display: none;"></li>
         </div>
@@ -51,6 +56,7 @@ export default {
     return {
       topPartTags: [],
       topSiteTags: [],
+      topIndexTags: [],
       activeName: ['1', '2']
     }
   },
@@ -60,6 +66,10 @@ export default {
       required: true
     },
     initTopSiteTags: {
+      type: Array,
+      required: true
+    },
+    initTopIndexTags: {
       type: Array,
       required: true
     },
@@ -79,6 +89,9 @@ export default {
   },
   mounted: function () {
     this.$nextTick(function () {
+//      this.$on('childMethod', function () {
+//        console.log('监听成功')
+//      })
       this.topPartTags.push({ text: this.initTopPartTags[0] })
       this.topSiteTags.push({ text: this.initTopSiteTags[0] })
     })
@@ -87,24 +100,38 @@ export default {
     handlePartClose (tag) {
       this.topPartTags.splice(this.topPartTags.indexOf(tag), 1)
       this.topSiteTags.pop()
+      this.topIndexTags.pop()
       this.siteTags.splice(0, this.siteTags.length)
+      this.$emit('CloseIndex')
     },
     handleSiteClose (tag) {
       this.topSiteTags.splice(this.topSiteTags.indexOf(tag), 1)
+      this.topIndexTags.pop()
+      this.$emit('CloseIndex')
+    },
+    handleIndexClose (tag) {
+      this.topIndexTags.splice(this.topIndexTags.indexOf(tag), 1)
     },
     selectPart (text, id) {
     //    this.dynamicTags.splice(this.dynamicTags.indexOf(tag), 1);
       this.topPartTags.pop()
       this.topPartTags.push({ text: text })
       this.topSiteTags.pop()
+      this.topIndexTags.pop()
       this.siteTags.splice(0, this.siteTags.length)
+      this.$emit('CloseIndex')
       this.$emit('ClickPart', id)
     },
     selectSite (text, id) {
           //    this.dynamicTags.splice(this.dynamicTags.indexOf(tag), 1);
       this.topSiteTags.pop()
+      this.topIndexTags.pop()
       this.topSiteTags.push({ text: text })
       this.$emit('ClickSite', this.topPartTags[0].text, id)
+    },
+    addIndexTag (text) {
+      this.topIndexTags.pop()
+      this.topIndexTags.push({ text: text })
     }
   },
   name: 'headGuider'
