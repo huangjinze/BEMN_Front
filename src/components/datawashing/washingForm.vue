@@ -1,5 +1,5 @@
 <template>
-<el-form v-model="form" @click="onFormChange">
+<el-form v-model="form" @click="onFormChange" :rules="rules">
 
   <el-col :xs="24" :sm="12" :md="6" :lg="6">
     <el-form-item>
@@ -30,7 +30,7 @@
     </el-form-item>
   </el-col>
   <el-col  :xs="24" :sm="12" :md="6" :lg="6">
-    <el-form-item prop="time">
+    <el-form-item prop="year">
       <span>年份：</span>
       <el-date-picker
               v-model="form.year"
@@ -70,7 +70,7 @@
           station: '奥林匹克'
         },
         rules: {
-          time: [
+          year: [
             { type: 'string', required: true, message: '请选择时间', trigger: 'blur' }
           ]
         }
