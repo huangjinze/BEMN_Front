@@ -92,14 +92,14 @@
         }
 //        renderer = new THREE.CanvasRenderer()
         renderer = new THREE.WebGLRenderer({antialias: true})
-        console.log(renderer)
+//        console.log(renderer)
         renderer.setPixelRatio(window.devicePixelRatio)
         renderer.setSize(window.innerWidth, window.innerHeight)
         container.appendChild(renderer.domElement)
         document.addEventListener('mousedown', this.onDocumentMouseDown, false)
         document.addEventListener('mousemove', this.onDocumentMouseMove, false)
         document.addEventListener('mouseup', this.onDocumentMouseUp, false)
-        document.addEventListener('wheel', this.onDocumentMouseWheel, false)
+        document.addEventListener('mousewheel', this.onDocumentMouseWheel, false)
         document.addEventListener('touchstart', this.onDocumentTouchStart, false)
         document.addEventListener('touchmove', this.onDocumentTouchMove, false)
         //
@@ -122,7 +122,7 @@
         return material
       },
       onDocumentMouseDown (event) {
-        event.preventDefault()
+//        event.preventDefault()
         isUserInteracting = true
         onPointerDownPointerX = event.clientX
         onPointerDownPointerY = event.clientY
