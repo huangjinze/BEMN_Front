@@ -14,7 +14,7 @@
             </div>
             <!--按钮-->
             <div class="button" style="margin-right: 15px; float:right;">
-                <el-button type="primary" v-on:click="Addinfo = true">添加</el-button>
+                <el-button type="primary" v-on:click="Addinfo = true" v-if="PermissionAdd === true">添加</el-button>
                 <!--<el-button type="primary" v-on:click="DeleteInfo">删除</el-button>-->
                 <!--<el-button type="primary" v-on:click="ResetPwd">重置密码</el-button>-->
             </div>
@@ -60,10 +60,12 @@
                             <template slot-scope="scope">
                                 <el-button
                                         size="mini"
+                                        v-if="PermissionChange === true"
                                         v-on:click="handleEdit(scope.$index, scope.row)">编辑</el-button>
                                 <el-button
                                         size="mini"
                                         type="danger"
+                                        v-if="PermissionDelete === true"
                                         @click="handleDelete(scope.$index, scope.row)">删除</el-button>
                                 <!--<el-button-->
                                         <!--size="mini"-->
@@ -146,6 +148,7 @@
                         <el-button type="primary" @click="changeinfo">确 定</el-button>
                     </div>
                 </el-dialog>
+                <el-button type="primary" @click="asd">确 定</el-button>
             </div>
         </div>
     </BasePage>
@@ -157,6 +160,7 @@
   import navi from '../../components/layout/navi'
   import BasePage from '../../components/BasePage'
   import {UserInfo, AddUser, DeleteUser, FindRoleId, ChangeUser} from '../../model/user'
+  import {addPermission, changePermission, deletePermission} from '../../Permission/UserPermission'
   export default {
     components: {navi, BasePage},
     data () {
@@ -164,6 +168,9 @@
         tableData: [],
         Addinfo: false,
         Changeinfo: false,
+        PermissionAdd: false,
+        PermissionChange: false,
+        PermissionDelete: false,
         formadd: {
           name: '',
           phone: '',
@@ -220,6 +227,22 @@
       }
     },
     mounted: function () {
+//      console.log('poip', this.msg)
+      if (addPermission(this.msg) === true) {
+        this.PermissionAdd = true
+      } else {
+        this.PermissionAdd = false
+      }
+      if (changePermission(this.msg) === true) {
+        this.PermissionChange = true
+      } else {
+        this.PermissionChange = false
+      }
+      if (deletePermission(this.msg) === true) {
+        this.PermissionDelete = true
+      } else {
+        this.PermissionDelete = false
+      }
       UserInfo().then(resp => {
 //        console.log('userinfo', resp.data.data[1])
 //        console.log('userinfo', resp.data.data[0].length)
@@ -254,6 +277,9 @@
       })
     },
     methods: {
+      asd () {
+//        console.log(this.msg)
+      },
       indexMethod (index) {
         return index + 1
       },

@@ -14,7 +14,7 @@
             </div>
             <!--按钮-->
             <div class="button" style="margin-right: 15px; float:right;">
-                <el-button type="primary" v-on:click="Addinfo = true">添加</el-button>
+                <el-button type="primary" v-on:click="Addinfo = true"  v-if="PermissionAdd === true">添加</el-button>
                 <!--<el-button type="primary" v-on:click="DeleteInfo">删除</el-button>-->
                 <!--<el-button type="primary" v-on:click="ResetPwd">重置密码</el-button>-->
             </div>
@@ -86,8 +86,8 @@
                                 label="操作"
                                 width="150">
                             <template slot-scope="scope">
-                                <el-button type="primary" size="small" @click="handleEdit(scope.$index, scope.row)">编辑</el-button>
-                                <el-button type="warning" size="small" @click="handleDelete(scope.$index, scope.row)">删除</el-button>
+                                <el-button type="primary" size="small" v-if="PermissionChange === true" @click="handleEdit(scope.$index, scope.row)">编辑</el-button>
+                                <el-button type="warning" size="small" v-if="PermissionDelete === true" @click="handleDelete(scope.$index, scope.row)">删除</el-button>
                             </template>
                         </el-table-column>
                     </el-table>
@@ -152,7 +152,7 @@
                         <el-form-item label="站点名称" :label-width="formLabelWidth"  prop="station_name">
                             <el-input v-model="formchange.station_name" auto-complete="off" :disabled="true"></el-input>
                         </el-form-item>
-                        <el-form-item label="管理员" :label-width="formLabelWidth">
+                        <el-form-item label="管理员" :label-width="formLabelWidth"  v-show="PermissionChangeAdmin">
                             <el-select v-model="formchange.admin" placeholder="请选择">
                                 <el-option label="无" value=""></el-option>
                                 <el-option
@@ -207,6 +207,7 @@
   import navi from '../../components/layout/navi'
   import BasePage from '../../components/BasePage'
   import {vtfStationInfo, DeletevtfStation, AddvtfStation, ChangevtfInfo, FindUserId} from '../../model/station'
+  import {addTowerPermission, changeTowerPermission, addAdminPermission, changeAdminPermission, deleteAdminPermission, deleteTowerPermission} from '../../Permission/vtfStationPermission'
   export default {
     components: {navi, BasePage},
     data () {
@@ -214,6 +215,10 @@
         tableData: [],
         Addinfo: false,
         Changeinfo: false,
+        PermissionAdd: false,
+        PermissionChange: false,
+        PermissionDelete: false,
+        PermissionChangeAdmin: false,
         formadd: {
           domain: '水土保持',
           station_name: '',
@@ -271,6 +276,26 @@
       }
     },
     mounted: function () {
+      if (addTowerPermission(this.msg) === true) {
+        this.PermissionAdd = true
+      } else {
+        this.PermissionAdd = false
+      }
+      if (changeTowerPermission(this.msg) === true || addAdminPermission(this.msg) === true || changeAdminPermission(this.msg) === true || deleteAdminPermission(this.msg) === true) {
+        this.PermissionChange = true
+      } else {
+        this.PermissionChange = false
+      }
+      if (deleteTowerPermission(this.msg) === true) {
+        this.PermissionDelete = true
+      } else {
+        this.PermissionDelete = false
+      }
+      if (addAdminPermission(this.msg) === true || changeAdminPermission(this.msg) === true || deleteAdminPermission(this.msg) === true) {
+        this.PermissionChangeAdmin = true
+      } else {
+        this.PermissionChangeAdmin = false
+      }
       vtfStationInfo().then(resp => {
         console.log('tifStationInfo', resp.data.data)
 //        console.log('userinfo', resp.data.data[0].length)

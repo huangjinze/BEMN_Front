@@ -14,7 +14,7 @@
             </div>
             <!--按钮-->
             <div class="button" style="margin-right: 15px; float:right;">
-                <el-button type="primary" v-on:click="Addinfo = true">添加</el-button>
+                <el-button type="primary" v-on:click="Addinfo = true" v-if="PermissionAdd === true">添加</el-button>
                 <!--<el-button type="primary" v-on:click="DeleteInfo">删除</el-button>-->
                 <!--<el-button type="primary" v-on:click="ResetPwd">重置密码</el-button>-->
             </div>
@@ -54,10 +54,12 @@
                                 <el-button
                                         size="mini"
                                         type="primary"
+                                        v-if="PermissionChange === true"
                                         v-on:click="handleEdit(scope.$index, scope.row)">编辑</el-button>
                                 <el-button
                                         size="mini"
                                         type="warning"
+                                        v-if="PermissionDelete === true"
                                         @click="handleDelete(scope.$index, scope.row)">删除</el-button>
                             </template>
                         </el-table-column>
@@ -145,10 +147,14 @@
   import navi from '../../components/layout/navi'
   import BasePage from '../../components/BasePage'
   import {RoleInfo, DeleteRole, AddRole, FindRolePermission, ChangeRole, FindRolePermissionName} from '../../model/roles'
+  import {addPermission, changePermission, deletePermission} from '../../Permission/RolePermission'
   export default {
     components: {navi, BasePage},
     data () {
       return {
+        PermissionAdd: false,
+        PermissionChange: false,
+        PermissionDelete: false,
         tableData: [],
         tags: [],
         Addinfo: false,
@@ -202,8 +208,24 @@
       }
     },
     mounted: function () {
+//      console.log(this.msg)
+      if (addPermission(this.msg) === true) {
+        this.PermissionAdd = true
+      } else {
+        this.PermissionAdd = false
+      }
+      if (changePermission(this.msg) === true) {
+        this.PermissionChange = true
+      } else {
+        this.PermissionChange = false
+      }
+      if (deletePermission(this.msg) === true) {
+        this.PermissionDelete = true
+      } else {
+        this.PermissionDelete = false
+      }
       RoleInfo().then(resp => {
-        console.log('roles', resp.data.data[0])
+//        console.log('roles', resp.data.data[0])
 //        console.log('userinfo', resp.data.data[0].length)
         for (let i = 0; i < resp.data.data[0].length; i++) {
           this.tableData.push({
@@ -213,14 +235,14 @@
           })
 //          console.log(this.tableData)
         }
-        console.log('permission', resp.data.data[1])
+//        console.log('permission', resp.data.data[1])
         for (let i = 0; i < resp.data.data[1].length; i++) {
           this.permissions.push({
             'lable': resp.data.data[1][i].display_name,
             'value': resp.data.data[1][i].id
           })
         }
-        console.log('permission', this.permissions)
+//        console.log('permission', this.permissions)
       }).catch(resp => {
         this.$alert('网络差', '失败', {confirmButtonText: 'ok'})
       })
@@ -234,18 +256,17 @@
       })
     },
     methods: {
+      asd () {
+        console.log(this.PermissionAdd)
+      },
       indexMethod (index) {
         return index + 1
-      },
-      con () {
-        console.log(this.msg[0])
-        console.log(this.msg[0].length)
       },
       count () {
         console.log(this.multipleSelection)
       },
       handleEdit (index, row) {
-        console.log(index, row)
+//        console.log(index, row)
         this.Changeinfo = true
         this.formchange.display_name = row.display_name
         this.formchange.name = row.name
@@ -256,26 +277,26 @@
           'display_name': row.display_name
         })
         FindRolePermission(name[0]).then(resp => {
-          console.log('addinfo', resp)
+//          console.log('addinfo', resp)
           for (let i = 0; i < resp.data.data[0].length; i++) {
             this.formchange.permission.push(
               resp.data.data[0][i].permission_id
             )
           }
-          console.log(this.formchange.permission)
+//          console.log(this.formchange.permission)
         }).catch(resp => {
           this.$alert('网络差', '失败', {confirmButtonText: 'ok'})
         })
       },
       showinfo (index, row) {
-        console.log(index, row)
+//        console.log(index, row)
         this.Showinfo = true
         var name = []
         name.push({
           'display_name': row.display_name
         })
         FindRolePermissionName(name[0]).then(resp => {
-          console.log('addinfo', resp)
+//          console.log('addinfo', resp)
           this.forminfo.display_name = row.display_name
           this.forminfo.name = row.name
           this.forminfo.description = row.description
@@ -286,7 +307,7 @@
               'type': 'success'
             })
           }
-          console.log(this.tags)
+//          console.log(this.tags)
         }).catch(resp => {
           this.$alert('网络差', '失败', {confirmButtonText: 'ok'})
         })
@@ -299,7 +320,7 @@
         })
         console.log(name)
         DeleteRole(name[0]).then(resp => {
-          console.log('addinfo', resp)
+//          console.log('addinfo', resp)
           if (resp.data.status === 'success') {
             alert('删除成功')
             document.location.reload()
@@ -311,9 +332,9 @@
         })
       },
       confirminfo () {
-        console.log(this.formadd)
+//        console.log(this.formadd)
         AddRole(this.formadd).then(resp => {
-          console.log('addinfo', resp)
+//          console.log('addinfo', resp)
           if (resp.data.status === 'success') {
             alert('添加成功')
             document.location.reload()
@@ -325,9 +346,9 @@
         })
       },
       changeinfo () {
-        console.log(this.formchange.permission)
+//        console.log(this.formchange.permission)
         ChangeRole(this.formchange).then(resp => {
-          console.log('changeinfo', resp)
+//          console.log('changeinfo', resp)
           if (resp.data.status === 'success') {
             this.$alert('修改成功', {confirmButtonText: 'ok'})
 //            document.location.reload()
