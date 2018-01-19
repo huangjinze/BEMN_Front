@@ -11,3 +11,5 @@ export const showExport = params => { return axios.get('http://127.0.0.1/excel/v
 export const getIndexTableData = params => { return axios.get(host + '/fluxdata/origindata/show', {'params': params}) }
 // 获取表格记录数
 export const getTableCounts = params => { return axios.get(host + '/station/vft/tableCounts', {'params': params}) }
+// 上传文件
+export const submitTwoSelect = params => { return axios.get('http://127.0.0.1/excel/vft/submit', {'params': params}, {headers: {'Content-Type': 'application/json'}}) }

@@ -41,7 +41,10 @@
     props: {
       dataExport: Function,
       navs: {type: Array, default: []},
-      totalSize: []
+      totalSize: {
+        type: Array,
+        required: true
+      }
     },
     methods: {
       handleClick (tab, event) {
@@ -60,15 +63,14 @@
       handleSelectionChange (val) {
         this.multipleSelection = val
       },
-      onClick () {
-        this.$emit('Click')
-      },
       handleSizeChange (val) {
         console.log(`每页 ${val} 条`)
       },
       handleCurrentChange (val) {
         console.log(`当前页: ${val}`)
         this.$emit('changePage', [val])
+      },
+      onClick () {
       }
     }
   }
