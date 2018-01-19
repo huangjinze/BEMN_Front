@@ -66,8 +66,8 @@
         filelist: [],
         form: {
           classification: 'co2',
-          year: '',
-          station: '奥林匹克'
+          year: '2012',
+          station: '盐池_1'
         },
         rules: {
           time: [

@@ -16,8 +16,8 @@
     },
     name: 'charts',
     props: {
-      xAxis: {type: Object, default: []},     // echart xAxis 对象
-      yAxis: {type: Object, default: []},     // echart yAxis 对象
+      xAxis: {type: Object, default: {}},     // echart xAxis 对象
+      yAxis: {type: Object, default: {}},     // echart yAxis 对象
       series: {type: Array, default: []},
       title: {type: String, default: ''},
       id: String},
