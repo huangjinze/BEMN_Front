@@ -1,34 +1,44 @@
 <template>
-  <div  v-loading="loading">
-    <el-steps :active="step" finish-status="success" simple>
-      <el-step title="1 范围检查"></el-step>
-      <el-step title="2 去除峰值"></el-step>
-      <el-step title="3 存储通量"></el-step>
-      <el-step title="4 u*选择"></el-step>
-      <el-step title="5 插补缺失"></el-step>
-    </el-steps>
+  <div  v-loading="loading" id="dataWashing">
+    <el-col :span="24">
+      <el-steps :active="step" finish-status="success" simple>
+        <el-step title="1 范围检查"></el-step>
+        <el-step title="2 去除峰值"></el-step>
+        <el-step title="3 存储通量"></el-step>
+        <el-step title="4 u*选择"></el-step>
+        <el-step title="5 插补缺失"></el-step>
+      </el-steps>
+    </el-col>
 
     <div v-show="step === 0">
-      <rangeCheck
-        :indexes="indexes"
-        v-model="form.range"></rangeCheck>
+      <el-col id="rangeCheck">
+          <rangeCheck
+                  :indexes="indexes"
+                  v-model="form.range">
+          </rangeCheck>
+      </el-col>
     </div>
 
-    <div v-show="step === 1">
+    <el-col :span="24" v-if="step === 1" id="zValue">
       z值：
       <el-input-number v-model="form.z">
 
       </el-input-number>
-    </div>
+    </el-col>
 
-    <div v-show="step === 2">
-      <i class="el-icon-warning">对于植被较高的站点该步骤非常重要，如奥林匹克公园、八达岭等，对于低矮植被课不做此步骤，比如盐池灌木、草地等 </i>
-    </div>
+    <el-col :span="24" v-if="step === 2" id="storage">
+      <p class="el-icon-warning">对于植被较高的站点该步骤非常重要，如奥林匹克公园、八达岭等，对于低矮植被课不做此步骤，比如盐池灌木、草地等 </p>
+      <el-col :span="24">
+        <el-button id="skip">
+          跳过
+        </el-button>
+      </el-col>
+    </el-col>
 
-    <div v-show="step === 3">
+    <el-col :span="24" v-if="step === 3">
 
-      <charts class="testchart" id="chart_1"  :xAxis="chartUMetaData.xAxis" :yAxis="chartUMetaData.yAxis"
-              :series="chartUMetaData.series"></charts>
+      <charts class="testchart" id="chart_1"  :xAxis="chartMetaData.xAxis" :yAxis="chartMetaData.yAxis"
+              :series="chartMetaData.series"></charts>
       请输入u*值：<el-input-number  v-model="form.u" :step="0.1"></el-input-number>
       <el-button @click="onUValueDraw" type="primary">确认</el-button>
 
@@ -37,24 +47,24 @@
                 :series="chartMetaDataUAdjust.series"></charts>
       </div>
 
-    </div>
+    </el-col>
 
-    <div v-show="step === 4">
+    <div v-if="step === 4">
       插补方法选择 ：
       <el-select v-model="form.interpolation">
         <el-option
-          v-for="item in interpolationOptions"
-          :key="item.label"
-          :label="item.label"
-          :value="item.value">
+                v-for="item in interpolationOptions"
+                :key="item.label"
+                :label="item.label"
+                :value="item.value">
         </el-option>
       </el-select>
     </div>
 
     <div class="bottom-op">
       <el-button-group>
-        <el-button type="primary" @click="onPreClick" :disabled="preDisable">pre</el-button>
-        <el-button type="primary" @click="onNextClick" :disabled="nextDisable">next</el-button>
+        <el-button type="primary" @click="onPreClick" :disabled="preDisable">前一步</el-button>
+        <el-button type="primary" @click="onNextClick" :disabled="nextDisable">后一步</el-button>
       </el-button-group>
     </div>
   </div>
@@ -191,5 +201,37 @@
 </script>
 
 <style scoped>
+
+  #rangeCheck{
+    text-align: center;
+    margin: 30px 0 24px 0;
+    float: left;
+  }
+  /*.rangeCheck{*/
+    /*float: left;*/
+  /*}*/
+  .indexSelect{
+    text-align: right;
+    margin-top: 8px;
+  }
+  #dataWashing{
+    /*border-bottom: solid 1px #c4c6cb;*/
+    margin-top: 24px;
+  }
+  .bottom-op{
+    float: right;
+  }
+  #zValue{
+    margin-top: 30px;
+    text-align: center;
+  }
+  #storage{
+    margin-top: 30px;
+    text-align: center;
+  }
+  #skip{
+    background-color: #5b8ecf;
+    color: white;
+  }
 
 </style>

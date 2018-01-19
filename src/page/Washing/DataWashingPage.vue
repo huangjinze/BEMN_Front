@@ -1,6 +1,5 @@
 <template>
   <BasePage>
-    <div slot="header">header</div>
     <div slot="aside"><navi></navi></div>
     <div slot="main" >
       <div class="top ">
@@ -11,10 +10,10 @@
 
       <div class="content-form" >
 
-        <div  v-if="form.classification == 'co2'">
+        <el-col :span="24"  v-if="form.classification == 'co2'">
           <CarbonInflux :washing_form="form" :indexes="indexes">
           </CarbonInflux>
-        </div>
+        </el-col>
 
         <div  v-if="form.classification == 'water'">
         <Water>
