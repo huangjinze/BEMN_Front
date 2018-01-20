@@ -38,6 +38,11 @@
 </template>
 <script>
   export default {
+    data () {
+      return {
+        tab2: '0'
+      }
+    },
     props: {
       dataExport: Function,
       navs: {type: Array, default: []},
@@ -45,8 +50,7 @@
     },
     methods: {
       handleClick (tab, event) {
-        console.log(tab, event)
-        this.$emit('changeTab', [tab.label, '1', tab.index])
+        this.$emit('changePage', ['1', tab.index])
       },
       toggleSelection (rows) {
         if (rows) {
@@ -68,7 +72,8 @@
       },
       handleCurrentChange (val) {
         console.log(`当前页: ${val}`)
-        this.$emit('changePage', [val])
+        this.$emit('changePage', [val, this.tab2])
+        // tab[0]为分页组件的当前页数，tab[1]为便签页组件的当前索引
       }
     }
   }
