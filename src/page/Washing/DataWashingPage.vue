@@ -1,17 +1,19 @@
 <template>
   <BasePage>
-    <div slot="header">header</div>
     <div slot="aside"><navi></navi></div>
     <div slot="main" >
-      <div class="top "><washingForm :form="form"></washingForm></div>
+      <div class="top ">
+        <washingForm v-model="form"
+                     @StationChange="getIndexes"></washingForm>
+      </div>
 
 
       <div class="content-form" >
 
-        <div  v-if="form.classification == 'co2'">
-          <CarbonInflux>
+        <el-col :span="24"  v-if="form.classification == 'co2'">
+          <CarbonInflux :washing_form="form" :indexes="indexes">
           </CarbonInflux>
-        </div>
+        </el-col>
 
         <div  v-if="form.classification == 'water'">
         <Water>
@@ -44,6 +46,7 @@
   import Water from './Water'
   import Weather from './Weather'
   import Energy from './Energy'
+  import {getWashingIndexAndRange} from '../../model/data.js'
 
   export default {
     components: {
@@ -59,27 +62,50 @@
     name: 'DataWashingPage',
     data () {
       return {
-        form: {
-          classification: 'co2',
-          year: '',
-          station: '',
-          indexes: []
-        }
+        form: {},
+        indexes: []
       }
     },
+    mounted () {
+      getWashingIndexAndRange(
+        {
+          domain: '水土保持',
+          station: this.form.station,
+          classification: '通量'}).then(resp => {
+            this.loading = true
+            resp.data.data.map(item => {
+              let index = {
+                name: item.name,
+                max_default_value: isNaN(parseFloat(item.max_default_value)) ? 0 : parseFloat(item.max_default_value),
+                min_default_value: isNaN(parseFloat(item.min_default_value)) ? 0 : parseFloat(item.min_default_value),
+                isShow: true
+              }
+              console.log(index)
+              this.indexes.push(index)
+            })
+            this.loading = false
+          })
+    },
     methods: {
-      onNextClick () {
-        this.loading = true
-        this.step = this.step + 1
-        this.loading = false
-      },
-      onPreClick () {
-        this.loading = true
-        this.step = this.step - 1
-        if (this.step < 0) {
-          this.step = 0
-        }
-        this.loading = false
+      getIndexes () {
+        getWashingIndexAndRange(
+          {
+            domain: '水土保持',
+            station: this.form.station,
+            classification: '通量'}).then(resp => {
+              this.loading = true
+              resp.data.data.map(item => {
+                let index = {
+                  name: item.name,
+                  max_default_value: isNaN(parseFloat(item.max_default_value)) ? 0 : parseFloat(item.max_default_value),
+                  min_default_value: isNaN(parseFloat(item.min_default_value)) ? 0 : parseFloat(item.min_default_value),
+                  isShow: true
+                }
+                console.log(index)
+                this.indexes.push(index)
+              })
+              this.loading = false
+            })
       }
     }
   }

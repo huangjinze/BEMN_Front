@@ -6,18 +6,23 @@
       <el-step title="3 插补缺失"></el-step>
     </el-steps>
 
-    <div v-if="step === 0">
-      <rangeCheck :indexes="form.indexes" v-model="form.range"></rangeCheck>
+    <div v-show="step === 0">
+      <el-col id="rangeCheck">
+        <rangeCheck
+                :indexes="form.indexes"
+                v-model="form.range">
+        </rangeCheck>
+      </el-col>
     </div>
 
-    <div v-if="step === 1">
+    <div v-if="step === 1" id="zValue">
       z值：
       <el-input-number v-model="form.z">
 
       </el-input-number>
     </div>
 
-    <div v-if="step === 2">
+    <div v-if="step === 2" id="methodSelect">
       插补方法选择 ：
       <el-select v-model="form.interpolation">
         <el-option
@@ -31,8 +36,8 @@
 
     <div class="bottom-op">
       <el-button-group>
-        <el-button type="primary" @click="onPreClick" :disabled="preDisable">pre</el-button>
-        <el-button type="primary" @click="onNextClick" :disabled="nextDisable">next</el-button>
+        <el-button type="primary" @click="onPreClick" :disabled="preDisable">前一步</el-button>
+        <el-button type="primary" @click="onNextClick" :disabled="nextDisable">后一步</el-button>
       </el-button-group>
     </div>
   </div>
@@ -99,7 +104,7 @@
           station: '盐池_1',
           classification: '通量'}).then(resp => {
             this.loading = true
-            resp.data.data[0].map(item => {
+            resp.data.data.map(item => {
               let index = {
                 name: item.name,
                 high: isNaN(parseFloat(item.max_default_value)) ? 0 : parseFloat(item.max_default_value),
@@ -116,5 +121,16 @@
 </script>
 
 <style scoped>
+  .bottom-op{
+    float: right;
+  }
+  #rangeCheck{
+    text-align: center;
+    margin: 30px 0 24px 0;
+  }
+  #zValue,#methodSelect{
+    margin-top: 30px;
+    text-align: center;
+  }
 
 </style>

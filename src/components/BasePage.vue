@@ -1,7 +1,8 @@
 
 <template>
   <el-container>
-    <el-header><slot name="header"></slot></el-header>
+    <!--北京城市副中心核心区林地绿地大数据平台-->
+    <el-header><slot name="header">北京城市副中心核心区林地绿地大数据平台</slot></el-header>
     <el-container>
       <el-aside width="200px"><slot name="aside"></slot></el-aside>
       <el-main><slot name="main"></slot></el-main>
@@ -36,6 +37,12 @@
   .el-footer{
     background-color: #313131;
     color: #fff;
+  }
+  .el-main{
+    overflow: hidden;
+  }
+  .el-header{
+    padding-top: 22px;
   }
 </style>
 
