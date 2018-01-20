@@ -8,8 +8,7 @@
         :targetOptions="targetOptions"
         v-model="formValue"
         @Click="onClick"></chartForm>
-      <charts class="testchart" id="1"  :xAxis="chartMetaData.xAxis" :yAxis="chartMetaData.yAxis"
-      :series="chartMetaData.series"></charts>
+      <charts class="testchart" id="1"  :chartMeta="chartMetaData"></charts>
     </div>
   </BasePage>
 </template>

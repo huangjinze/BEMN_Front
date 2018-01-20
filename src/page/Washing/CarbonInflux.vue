@@ -37,14 +37,12 @@
 
     <el-col :span="24" v-if="step === 3">
 
-      <charts class="testchart" id="chart_1"  :xAxis="chartUMetaData.xAxis" :yAxis="chartUMetaData.yAxis"
-              :series="chartUMetaData.series"></charts>
+      <charts class="testchart" id="chart_1" :chartMeta="chartUMetaData"></charts>
       请输入u*值：<el-input-number  v-model="form.u" :step="0.1"></el-input-number>
       <el-button @click="onUAdjustValueDraw" type="primary">确认</el-button>
 
       <div v-if="adjustChartShow" v-loading="loading">
-        <charts class="chartAdjust" id="chart_2"  :xAxis="chartMetaDataUAdjust.xAxis" :yAxis="chartMetaDataUAdjust.yAxis"
-                :series="chartMetaDataUAdjust.series"></charts>
+        <charts class="chartAdjust" id="chart_2"  :chartMeta="chartMetaDataUAdjust"></charts>
       </div>
 
     </el-col>
@@ -108,8 +106,22 @@
         },
         m_indexes: this.indexes,
         interpolationOptions: [{label: '内插', value: '内插'}, {label: '外插', value: '外插'}],
-        chartUMetaData: {xAxis: {}, yAxis: {}, series: []},
-        chartMetaDataUAdjust: {xAxis: {}, yAxis: {}, series: []},
+        chartUMetaData: {
+          title: {
+            text: 'U*数据'
+          },
+          xAxis: {},
+          yAxis: {},
+          series: []
+        },
+        chartMetaDataUAdjust: {
+          title: {
+            text: 'U*调整数据'
+          },
+          xAxis: {},
+          yAxis: {},
+          series: []
+        },
         adjustChartShow: false
       }
     },

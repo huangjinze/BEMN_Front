@@ -28,12 +28,12 @@ export default new Router({
       component: HomePage
     },
     {
-      path: '/vtf/staisctic',
+      path: '/vtf/staisctic', // 水土保持领域图表,负责人苏畅
       name: 'vtfstaisctic',
       component: vtfStaiscticPage
     },
     {
-      path: '/tif/staisctic',
+      path: '/tif/staisctic', // 森林领域图表,负责人苏畅
       name: 'tifstaisctic',
       component: tifStaiscticPage
     },
@@ -83,7 +83,7 @@ export default new Router({
       component: Index
     },
     {
-      path: '/washing',
+      path: '/washing', // 数据清洗,负责人苏畅
       name: 'DataWashingPage',
       component: DataWashingPage
     },
