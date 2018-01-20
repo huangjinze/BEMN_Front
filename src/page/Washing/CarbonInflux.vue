@@ -29,7 +29,7 @@
     <el-col :span="24" v-if="step === 2" id="storage">
       <p class="el-icon-warning">对于植被较高的站点该步骤非常重要，如奥林匹克公园、八达岭等，对于低矮植被课不做此步骤，比如盐池灌木、草地等 </p>
       <el-col :span="24">
-        <el-button id="skip">
+        <el-button id="skip" @click="onSkipClick">
           跳过
         </el-button>
       </el-col>
@@ -37,14 +37,12 @@
 
     <el-col :span="24" v-if="step === 3">
 
-      <charts class="testchart" id="chart_1"  :xAxis="chartMetaData.xAxis" :yAxis="chartMetaData.yAxis"
-              :series="chartMetaData.series"></charts>
+      <charts class="testchart" id="chart_1" :chartMeta="chartUMetaData"></charts>
       请输入u*值：<el-input-number  v-model="form.u" :step="0.1"></el-input-number>
-      <el-button @click="onUValueDraw" type="primary">确认</el-button>
+      <el-button @click="onUAdjustValueDraw" type="primary">确认</el-button>
 
-      <div v-if="adjustChartShow">
-        <charts class="chartAdjust" id="chart_2"  :xAxis="chartMetaDataUAdjust.xAxis" :yAxis="chartMetaDataUAdjust.yAxis"
-                :series="chartMetaDataUAdjust.series"></charts>
+      <div v-if="adjustChartShow" v-loading="loading">
+        <charts class="chartAdjust" id="chart_2"  :chartMeta="chartMetaDataUAdjust"></charts>
       </div>
 
     </el-col>
@@ -78,7 +76,7 @@
   import charts from '../../components/echart/charts'
   import ElButton from 'element-ui/packages/button/src/button'
   import ElInputNumber from 'element-ui/packages/input-number/src/input-number'
-  import {checkWashingIndexRange, despiking} from '../../model/data'
+  import {checkWashingIndexRange, despiking, CStore, UStar, Gapfill} from '../../model/data'
 
   export default {
     components: {
@@ -104,12 +102,26 @@
           z: 4,
           interpolation: ' ',
           range: [],
-          u: 4
+          u: 0.18
         },
         m_indexes: this.indexes,
         interpolationOptions: [{label: '内插', value: '内插'}, {label: '外插', value: '外插'}],
-        chartUMetaData: {xAxis: {}, yAxis: {}, series: []},
-        chartMetaDataUAdjust: {xAxis: {}, yAxis: {}, series: []},
+        chartUMetaData: {
+          title: {
+            text: 'U*数据'
+          },
+          xAxis: {},
+          yAxis: {},
+          series: []
+        },
+        chartMetaDataUAdjust: {
+          title: {
+            text: 'U*调整数据'
+          },
+          xAxis: {},
+          yAxis: {},
+          series: []
+        },
         adjustChartShow: false
       }
     },
@@ -117,9 +129,51 @@
       m_indexes: function (newValue) {
         console.log('test')
         this.form.range.splice(0, this.form.range.length)
+      },
+      step: function (newValue) {
+        if (newValue === 3) {
+          let data = {xAxis: {data: []}, series: [{name: 'co2_flux', type: 'bar', data: []}]}
+          this.loading = true
+          UStar({
+            'domain': '水土保持',
+            'year': this.washing_form.year,
+            'station': this.washing_form.station,
+            'user_mail': '1103232282@qq.com',
+            'type': '碳通量',
+            'ustarc': this.form.u
+          }).then((resp) => {
+            this.loading = false
+            console.log('net', resp)
+            if (resp.data.status !== 'success') {
+              this.$alert(resp.data.reason, '失败', {confirmButtonText: 'ok'})
+            } else {
+              if (resp.data.data.length !== 0) {
+                data.xAxis.data = resp.data.data[0].data.map((item) => {
+                  return item.x
+                })
+                data.series = resp.data.data.map((item) => {
+                  return {
+                    name: item.name,
+                    type: 'line',
+                    data: item.data.map((dataItem) => {
+                      return dataItem.y
+                    })}
+                })
+                console.log('chart', data)
+              }
+              this.chartUMetaData = Object.assign(this.chartUMetaData, data)
+            }
+          }).catch(() => {
+            this.loading = false
+            alert('网络差')
+          })
+        }
       }
     },
     methods: {
+      onSkipClick () {
+        this.step = this.step + 1
+      },
       onNextClick () {
         this.loading = true
 
@@ -138,7 +192,55 @@
             'station': this.washing_form.station,
             'classification': '通量',
             'user_mail': '1103232282@qq.com',
-            'z': this.form.z
+            'z': this.form.z,
+            'type': '碳通量'
+          }).then((resp) => {
+            this.loading = false
+            if (resp.data.status === 'success') {
+              console.log(resp)
+              alert(resp.data.data)
+            } else {
+              alert(resp.data.reason)
+            }
+          }).catch(() => {
+            this.loading = false
+            alert('网络差')
+          })
+        }
+
+        if (this.step === 2) {
+          CStore({
+            'domain': '水土保持',
+            'year': this.washing_form.year,
+            'station': this.washing_form.station,
+            'user_mail': '1103232282@qq.com',
+            'type': '碳通量'
+          }).then((resp) => {
+            this.loading = false
+            if (resp.data.status === 'success') {
+              console.log(resp)
+              alert(resp.data.data[0])
+            } else {
+              alert(resp.data.reason)
+            }
+          }).catch(() => {
+            this.loading = false
+            alert('网络差')
+          })
+        }
+
+        if (this.step === 3) {
+          this.loading = false
+        }
+
+        if (this.step === 4) {
+          this.loading = false
+          Gapfill({
+            'domain': '水土保持',
+            'year': this.washing_form.year,
+            'station': this.washing_form.station,
+            'user_mail': '1103232282@qq.com',
+            'type': '碳通量'
           }).then((resp) => {
             this.loading = false
             if (resp.data.status === 'success') {
@@ -163,22 +265,55 @@
         this.loading = true
 
         this.step = this.step - 1
-        this.preDisable = false
-        if (this.step <= 0) {
-          this.preDisable = true
-        }
+        this.preDisable = this.step <= 0
         this.nextDisable = false
 
         this.loading = false
       },
-      onUValueDraw () {
+      onUAdjustValueDraw () {
         console.log('draw')
+        let data = {xAxis: {data: []}, series: [{name: 'co2_flux', type: 'bar', data: []}]}
+        this.loading = true
+        UStar({
+          'domain': '水土保持',
+          'year': this.washing_form.year,
+          'station': this.washing_form.station,
+          'user_mail': '1103232282@qq.com',
+          'type': '碳通量',
+          'ustarc': this.form.u
+        }).then((resp) => {
+          this.loading = false
+          console.log('net', resp)
+          if (resp.data.status !== 'success') {
+            this.$alert(resp.data.reason, '失败', {confirmButtonText: 'ok'})
+          } else {
+            if (resp.data.data.length !== 0) {
+              data.xAxis.data = resp.data.data[0].data.map((item) => {
+                return item.x
+              })
+              data.series = resp.data.data.map((item) => {
+                return {
+                  name: item.name,
+                  type: 'line',
+                  data: item.data.map((dataItem) => {
+                    return dataItem.y
+                  })}
+              })
+              console.log('chart', data)
+            }
+            this.chartMetaDataUAdjust = Object.assign(this.chartMetaDataUAdjust, data)
+          }
+        }).catch(() => {
+          this.loading = false
+          alert('网络差')
+        })
         this.adjustChartShow = true
       },
       postIndexes () {
         this.loading = true
         return checkWashingIndexRange(
           {
+            'type': '碳通量',
             'data': this.form.range,
             'domain': '水土保持',
             'year': this.washing_form.year,
