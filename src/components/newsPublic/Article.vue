@@ -20,7 +20,7 @@
                   </el-button>
                 </el-col>
               </el-row>
-              <el-row class="new-row" v-for="index in news" :key="index.no">
+              <el-row class="new-row" v-for="index in news.splice((currentPage-1)*pageSize,currentPage*pageSize)" :key="index.no">
                 <el-col :span="20" class="new-title">{{index.title}}</el-col>
                 <span style="float:right;">
                   <el-button type="danger" icon="el-icon-delete" @click="deleteNew(index.no)">
@@ -29,6 +29,14 @@
                   </el-button>
                 </span>
               </el-row>
+              <div align="center">
+                <el-pagination
+                  :current-page.sync="currentPage"
+                  layout="prev, pager, next"
+                  :total="totalSize"
+                  :size="pageSize">
+                </el-pagination>
+              </div>
             </el-col>
         </el-row>
         <div id="edit" v-else>
@@ -75,7 +83,9 @@ export default {
   data () {
     return {
       labelPosition: 'top',
-      flage: 'true'
+      flage: 'true',
+      currentPage: 1,
+      pageSize: 10
     }
   },
   props: {
@@ -83,7 +93,8 @@ export default {
     rightBnts: {type: Array, default: []},
     news: {type: Array, default: []},
     options: {type: Array, default: []},
-    newContents: {type: Object, default: []}
+    newContents: {type: Object, default: []},
+    totalSize: {type: Number}
   },
   methods: {
     changeCategory (event) {
