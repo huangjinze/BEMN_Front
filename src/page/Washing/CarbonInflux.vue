@@ -42,7 +42,7 @@
       请输入u*值：<el-input-number  v-model="form.u" :step="0.1"></el-input-number>
       <el-button @click="onUAdjustValueDraw" type="primary">确认</el-button>
 
-      <div v-if="adjustChartShow">
+      <div v-if="adjustChartShow" v-loading="loading">
         <charts class="chartAdjust" id="chart_2"  :xAxis="chartMetaDataUAdjust.xAxis" :yAxis="chartMetaDataUAdjust.yAxis"
                 :series="chartMetaDataUAdjust.series"></charts>
       </div>
@@ -186,7 +186,7 @@
             this.loading = false
             if (resp.data.status === 'success') {
               console.log(resp)
-              alert(resp.data.data[0])
+              alert(resp.data.data)
             } else {
               alert(resp.data.reason)
             }
@@ -215,6 +215,10 @@
             this.loading = false
             alert('网络差')
           })
+        }
+
+        if (this.step === 3) {
+          this.loading = false
         }
 
         if (this.step === 4) {
