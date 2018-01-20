@@ -5,7 +5,7 @@
       <navi></navi>
     </div>
     <div slot="main">
-      <articles :options="options" :leftItems="leftItems" :rightBnts="rightBnts" :news="news"
+      <articles :options="options" :leftItems="leftItems" :rightBnts="rightBnts" :news="news" :totalSize="totalSize"
       @Submit="onSubmitW" @changeCategory="dataSource" @delete="dltNews" @edit="EditNews" :newContents="newContents"></articles>
     </div>
   </BasePage>
@@ -58,7 +58,8 @@
         }],
         news: [],
         tab: '媒体聚焦',
-        newContents: {}
+        newContents: {},
+        totalSize: 50
       }
     },
     methods: {
@@ -85,11 +86,12 @@
         getNewsTitle({category: this.tab}).then(resp => {
           console.log(resp)
           this.news.splice(0, this.news.length)
+          this.totalSize = resp.data.data.length
           for (let k in resp.data.data) {
             this.news.push({'title': resp.data.data[k].title, 'no': resp.data.data[k].id})
           }
         }).catch(resp => {
-          this.$alert('提交文章失败', '失败', {confirmButtonText: 'ok'})
+          this.$alert('网络差', '失败', {confirmButtonText: 'ok'})
         })
       },
       dltNews (tab) {

@@ -4,7 +4,7 @@ import vtfStaiscticPage from '@/page/Static/vtfStaiscticPage.vue'
 import tifStaiscticPage from '@/page/Static/tifStaiscticPage.vue'
 import HomePage from '@/page/HomePage'
 import dataManager from '@/page/DataPage'
-import vtfList from '@/page/VtfListPage'
+import vftList from '@/page/VftListPage'
 import LoginPage from '@/page/User/LoginPage'
 import Article from '@/page/News/ArticlePage'
 import tifForestAreaAllPage from '@/page/Static/tifForestAreaAllPage.vue'
@@ -43,9 +43,9 @@ export default new Router({
       component: dataManager
     },
     {
-      path: '/vtf/list', // 水土保持领域数据展示 负责人陈宇捷
-      name: 'vtflist',
-      component: vtfList
+      path: '/vft/list', // 水土保持领域数据展示 负责人陈宇捷
+      name: 'vftlist',
+      component: vftList
     },
     {
       path: '/vtf/Importpage',
