@@ -25,8 +25,7 @@
 
     <div v-if="step === 2" id="regression">
       <el-col :span="24" id="charts">
-        <charts class="testchart" id="1"  :xAxis="chartMetaData.xAxis" :yAxis="chartMetaData.yAxis"
-                :series="chartMetaData.series" v-if="closeChartShow"></charts>
+        <charts class="testchart" id="chart_1" :chartMeta="chartMetaData"></charts>
       </el-col>
       <el-col :span="24" id="drawGraph">
         <el-button @click="onUValueDraw" type="primary">生成回归图</el-button>
