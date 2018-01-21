@@ -143,7 +143,8 @@
 
 <script>
   //  import {store} from '../store/index'
-  import {mapState, mapGetters} from 'vuex'
+  import {mapGetters} from 'vuex'
+//  import store from '../../store/index'
   import navi from '../../components/layout/navi'
   import BasePage from '../../components/BasePage'
   import {RoleInfo, DeleteRole, AddRole, FindRolePermission, ChangeRole, FindRolePermissionName} from '../../model/roles'
@@ -207,8 +208,17 @@
         }
       }
     },
+    created: function () {
+      if (!this.msg) {
+        this.$store.commit('SET_STATUS', JSON.parse(sessionStorage.getItem('userInfo')))
+      }
+//      console.log('created', this.add())
+    },
     mounted: function () {
-//      console.log(this.msg)
+//      console.log('aaa', this.msg)
+//      this.add()
+//      console.log('created', this.add())
+//      console.log('status', this.info)
       if (addPermission(this.msg) === true) {
         this.PermissionAdd = true
       } else {
@@ -248,17 +258,11 @@
       })
     },
     computed: {
-      ...mapState([
-        'status'
-      ]),
       ...mapGetters({
         msg: 'GET_MSG'
       })
     },
     methods: {
-      asd () {
-        console.log(this.PermissionAdd)
-      },
       indexMethod (index) {
         return index + 1
       },

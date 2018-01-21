@@ -95,7 +95,7 @@
     mounted () {
       getWashingIndexAndRange(
         {
-          domain: '水土保持',
+          domain: '通量数据',
           station: '盐池_1',
           classification: '通量'}).then(resp => {
             this.loading = true

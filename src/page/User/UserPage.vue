@@ -148,7 +148,6 @@
                         <el-button type="primary" @click="changeinfo">确 定</el-button>
                     </div>
                 </el-dialog>
-                <el-button type="primary" @click="asd">确 定</el-button>
             </div>
         </div>
     </BasePage>
@@ -226,6 +225,13 @@
         }
       }
     },
+    created: function () {
+      if (!this.msg) {
+        console.log('vuex no info')
+        this.$store.commit('SET_STATUS', JSON.parse(sessionStorage.getItem('userInfo')))
+      }
+//      console.log('created', this.add())
+    },
     mounted: function () {
 //      console.log('poip', this.msg)
       if (addPermission(this.msg) === true) {
@@ -263,7 +269,7 @@
             'label': resp.data.data[1][i].display_name
           })
         }
-        console.log('role', this.options)
+//        console.log('role', this.options)
       }).catch(resp => {
         this.$alert('网络差', '失败', {confirmButtonText: 'ok'})
       })
@@ -284,14 +290,14 @@
         return index + 1
       },
       con () {
-        console.log(this.msg[0])
-        console.log(this.msg[0].length)
+//        console.log(this.msg[0])
+//        console.log(this.msg[0].length)
       },
       count () {
-        console.log(this.multipleSelection)
+//        console.log(this.multipleSelection)
       },
       handleEdit (index, row) {
-        console.log(index, row)
+//        console.log(index, row)
         this.Changeinfo = true
         this.formchange.name = row.name
         this.formchange.email = row.email
@@ -300,14 +306,14 @@
         this.formchange.age = row.age
         this.formchange.roles = ''
         if (row.role) {
-          console.log(row.role)
+//          console.log(row.role)
           var role = []
           role.push({
             'name': row.role
           })
 //        console.log('find', name)
           FindRoleId(role[0]).then(resp => {
-            console.log('find', resp)
+//            console.log('find', resp)
             this.formchange.roles = resp.data.data[0][0].id
           }).catch(resp => {
             this.$alert('网络差', '失败', {confirmButtonText: 'ok'})
@@ -320,9 +326,9 @@
         email.push({
           'email': row.email
         })
-        console.log(email)
+//        console.log(email)
         DeleteUser(email[0]).then(resp => {
-          console.log('addinfo', resp)
+//          console.log('addinfo', resp)
           if (resp.data.status === 'success') {
             this.$alert('删除成功', {confirmButtonText: 'ok'})
             document.location.reload()
@@ -334,9 +340,9 @@
         })
       },
       confirminfo () {
-        console.log(this.formadd)
+//        console.log(this.formadd)
         AddUser(this.formadd).then(resp => {
-          console.log('addinfo', resp)
+//          console.log('addinfo', resp)
           if (resp.data.status === 'success') {
             this.$alert('添加成功', {confirmButtonText: 'ok'})
             document.location.reload()
@@ -348,9 +354,9 @@
         })
       },
       changeinfo () {
-        console.log(this.formchange)
+//        console.log(this.formchange)
         ChangeUser(this.formchange).then(resp => {
-          console.log('addinfo', resp.data.status)
+//          console.log('addinfo', resp.data.status)
           if (resp.data.status === 'success') {
             this.$alert('修改成功', {confirmButtonText: 'ok'})
             document.location.reload()

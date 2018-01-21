@@ -6,7 +6,7 @@ let permissions = {
 }
 function listPermission (msg) {
   let per
-  console.log(msg)
+  // console.log(msg)
   for (let i = 0; i < msg[0].length; i++) {
     if (permissions[msg[0][i].permission_id] && msg[0][i].permission_id === 1) {
       per = true
@@ -19,7 +19,7 @@ function listPermission (msg) {
 }
 function addPermission (msg) {
   let per
-  console.log(msg)
+  // console.log(msg)
   for (let i = 0; i < msg[0].length; i++) {
     if (permissions[msg[0][i].permission_id] && msg[0][i].permission_id === 2) {
       per = true
@@ -32,7 +32,7 @@ function addPermission (msg) {
 }
 function changePermission (msg) {
   let per
-  console.log(msg)
+  // console.log(msg)
   for (let i = 0; i < msg[0].length; i++) {
     if (permissions[msg[0][i].permission_id] && msg[0][i].permission_id === 3) {
       per = true
@@ -45,7 +45,7 @@ function changePermission (msg) {
 }
 function deletePermission (msg) {
   let per
-  console.log(msg)
+  // console.log(msg)
   for (let i = 0; i < msg[0].length; i++) {
     if (permissions[msg[0][i].permission_id] && msg[0][i].permission_id === 4) {
       per = true

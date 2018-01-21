@@ -4,11 +4,11 @@
   <div slot="aside"><navi></navi></div>
   <div slot="main" class="main">
     <el-row class="left">
-      <h2 class="">森林领域</h2>
+      <h2 class="">森林生态</h2>
 
     </el-row>
     <el-row class="left">
-      <h2 class="">水土保持领域</h2>
+      <h2 class="">通量数据</h2>
       <el-col class="linear_gra linear_gra1" :span="6"
               v-for="(value, index) in vftResults"
               :key="value.name">

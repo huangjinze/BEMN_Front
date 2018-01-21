@@ -20,8 +20,11 @@ const user = {
     Login ({ commit, state }, form) {
       console.log('vuex login')
       return loginUser(form).then(function (resp) {
-        console.log('vuex log', resp.data)
-        console.log(resp.data.status)
+        console.log('vuex log', resp.data.data[0])
+        // console.log(resp.data.status)
+        window.sessionStorage.clear()
+        sessionStorage.setItem('userInfo', JSON.stringify(resp.data.data))
+        // console.log('qwe', localStorage.getItem('userInfo'))
         if (resp.data.status === 'failed' && resp.data.reason === 'captcha error!') {
           alert('验证码错误')
           document.location.reload()
@@ -33,7 +36,7 @@ const user = {
           commit('SET_NAME', resp.data.data[0].name)
           return resp.data
         }
-        commit('SET_STATUS', resp.data)
+        commit('SET_STATUS', resp.data.data)
       })
     },
     Logout ({ commit, state }) {
@@ -42,7 +45,7 @@ const user = {
   getters: {
     'GET_MSG': function (state) {
       console.log('获取', state.status)
-      return state.status.data
+      return state.status
     }
   }
 }

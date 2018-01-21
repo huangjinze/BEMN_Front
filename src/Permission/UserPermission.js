@@ -6,7 +6,7 @@ let permissions = {
 }
 function listPermission (msg) {
   let per
-  // console.log('', msg)
+  console.log('permission:', msg)
   for (let i = 0; i < msg[0].length; i++) {
     if (permissions[msg[0][i].permission_id] && msg[0][i].permission_id === 29) {
       per = true

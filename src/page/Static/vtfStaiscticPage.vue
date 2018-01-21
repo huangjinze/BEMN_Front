@@ -10,7 +10,7 @@
         @Click="onClick"
         v-loading="loading"></chartForm>
       <charts class="testchart" id="1"  :xAxis="chartMetaData.xAxis" :yAxis="chartMetaData.yAxis"
-      :series="chartMetaData.series" title='水土保持数据'></charts>
+      :series="chartMetaData.series" title='通量数据'></charts>
     </div>
   </BasePage>
 </template>
@@ -53,7 +53,7 @@ export default {
     }
   },
   mounted: function () {
-    getVFTIndex({station: '盐池_1', classification: '气象', domain: '水土保持'}).then(resp => {
+    getVFTIndex({station: '盐池_1', classification: '气象', domain: '通量数据'}).then(resp => {
       console.log('get_vft_index', resp)
       let data = resp.data.data[0]
       for (let k in data) {
@@ -74,7 +74,7 @@ export default {
       this.loading = true
       let data = {xAxis: {data: []}, series: [{name: 'co2_flux', type: 'bar', data: []}]}
       getVTFData({'index': this.formValue.index[1],
-        domain: '水土保持',
+        domain: '通量数据',
         station: '盐池_1',
         classification: '气象',
         start_time: this.formValue.start_time,

@@ -6,7 +6,7 @@
                 <el-row>
                     <el-col :span="24">
                         <div id="demo1" class="grid-content bg-purple-dark">
-                            <h3 class="title" style="display:inline;padding-left: 0px;padding-right: 6px;font-weight: bold;">森林领域</h3>
+                            <h3 class="title" style="display:inline;padding-left: 0px;padding-right: 6px;font-weight: bold;">森林生态</h3>
                         </div>
                     </el-col>
                 </el-row>
@@ -99,7 +99,7 @@
                         <el-form-item label="站点名称" :label-width="formLabelWidth"  prop="station_name">
                             <el-input v-model="formadd.station_name" auto-complete="off"></el-input>
                         </el-form-item>
-                        <el-form-item label="管理员" :label-width="formLabelWidth">
+                        <el-form-item label="管理员" :label-width="formLabelWidth" v-show="PerMissionAddAdmin === true">
                             <el-select v-model="formadd.admin" placeholder="请选择">
                                 <el-option label="无" value=""></el-option>
                                 <el-option
@@ -215,11 +215,12 @@
         Addinfo: false,
         Changeinfo: false,
         PermissionAdd: false,
+        PerMissionAddAdmin: false,
         PermissionChange: false,
         PermissionDelete: false,
         PermissionChangeAdmin: false,
         formadd: {
-          domain: '森林领域',
+          domain: '森林生态',
           station_name: '',
           admin: '',
           station_coding: '',
@@ -233,7 +234,7 @@
           remarks: ''
         },
         formchange: {
-          domain: '森林领域',
+          domain: '森林生态',
           station_name: '',
           admin: '',
           station_coding: '',
@@ -280,6 +281,11 @@
       } else {
         this.PermissionAdd = false
       }
+      if (addAdminPermission(this.msg) === true) {
+        this.PerMissionAddAdmin = true
+      } else {
+        this.PerMissionAddAdmin = false
+      }
       if (changeStationPermission(this.msg) === true || addAdminPermission(this.msg) === true || changeAdminPermission(this.msg) === true || deleteAdminPermission(this.msg) === true) {
         this.PermissionChange = true
       } else {
@@ -295,7 +301,8 @@
       } else {
         this.PermissionChangeAdmin = false
       }
-      tifStationInfo().then(resp => {
+//      console.log(this.msg[0][0].rolesname)
+      tifStationInfo(this.msg[0][0]).then(resp => {
         console.log('tifStationInfo', resp.data.data)
 //        console.log('userinfo', resp.data.data[0].length)
         for (let i = 0; i < resp.data.data[0].length; i++) {

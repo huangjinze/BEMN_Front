@@ -133,7 +133,7 @@
         if (this.step === 1) {
           despiking({
             'data': this.form.range,
-            'domain': '水土保持',
+            'domain': '通量数据',
             'year': this.washing_form.year,
             'station': this.washing_form.station,
             'classification': '通量',
@@ -180,7 +180,7 @@
         return checkWashingIndexRange(
           {
             'data': this.form.range,
-            'domain': '水土保持',
+            'domain': '通量数据',
             'year': this.washing_form.year,
             'station': this.washing_form.station,
             'classification': '通量',

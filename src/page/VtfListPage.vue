@@ -30,7 +30,7 @@
         // console.log(tab)
         // 返回tab[0]为分页组件的当前页数，tab[1]为便签页组件的当前索引
         if (!tab) {
-          getIndexData({station: '八达岭', classification: '通量', domain: '水土保持', category: 'A', page: 1}).then(resp => {
+          getIndexData({station: '八达岭', classification: '通量', domain: '通量数据', category: 'A', page: 1}).then(resp => {
             console.log(resp)
             console.log(resp.data.data)
             // 由我来生成头部！
@@ -45,7 +45,7 @@
             this.$alert('网络差', '失败', {confirmButtonText: 'ok'})
           })
         } else {
-          getIndexData({station: '八达岭', classification: '通量', domain: '水土保持', category: this.navs[tab[1]].label, page: tab[0]}).then(resp => {
+          getIndexData({station: '八达岭', classification: '通量', domain: '通量数据', category: this.navs[tab[1]].label, page: tab[0]}).then(resp => {
             this.navs[tab[1]].mcols.splice(0, this.navs[tab[1]].mcols.length)
             this.navs[tab[1]].tableData.splice(0, this.navs[tab[1]].tableData.length)
             // 由我来生成头部！
