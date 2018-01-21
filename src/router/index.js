@@ -4,7 +4,7 @@ import vtfStaiscticPage from '@/page/Static/vtfStaiscticPage.vue'
 import tifStaiscticPage from '@/page/Static/tifStaiscticPage.vue'
 import HomePage from '@/page/HomePage'
 import dataManager from '@/page/DataPage'
-import vtfList from '@/page/VtfListPage'
+import vftList from '@/page/VftListPage'
 import LoginPage from '@/page/User/LoginPage'
 import Article from '@/page/News/ArticlePage'
 import tifForestAreaAllPage from '@/page/Static/tifForestAreaAllPage.vue'
@@ -13,8 +13,8 @@ import ImportPage from '@/page/ImportPage.vue'
 import vftDataShowPage from '@/page/Static/vftDataShowPage.vue'
 import Index from '@/page/Index.vue'
 import DataWashingPage from '@/page/Washing/DataWashingPage.vue'
-import UserPage from '@/page/user/UserPage.vue'
-import RolesPage from '@/page/user/RolesPage.vue'
+import UserPage from '@/page/User/UserPage.vue'
+import RolesPage from '@/page/User/RolesPage.vue'
 import vtfStation from '@/page/Station/vtfStation.vue'
 import tifStation from '@/page/Station/tifStation.vue'
 
@@ -28,12 +28,12 @@ export default new Router({
       component: HomePage
     },
     {
-      path: '/vtf/staisctic',
+      path: '/vtf/staisctic', // 水土保持领域图表,负责人苏畅
       name: 'vtfstaisctic',
       component: vtfStaiscticPage
     },
     {
-      path: '/tif/staisctic',
+      path: '/tif/staisctic', // 森林领域图表,负责人苏畅
       name: 'tifstaisctic',
       component: tifStaiscticPage
     },
@@ -43,9 +43,9 @@ export default new Router({
       component: dataManager
     },
     {
-      path: '/vtf/list', // 水土保持领域数据展示 负责人陈宇捷
-      name: 'vtflist',
-      component: vtfList
+      path: '/vft/list', // 水土保持领域数据展示 负责人陈宇捷
+      name: 'vftlist',
+      component: vftList
     },
     {
       path: '/vtf/Importpage',
@@ -83,7 +83,7 @@ export default new Router({
       component: Index
     },
     {
-      path: '/washing',
+      path: '/washing', // 数据清洗,负责人苏畅
       name: 'DataWashingPage',
       component: DataWashingPage
     },

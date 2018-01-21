@@ -5,7 +5,7 @@
         <div slot="aside"><navi></navi></div>
         <div slot="main">
           <topIndexSelect :initTopPartTags="stationName" :initTopSiteTags="className" ref="profile" :indices="index" :indexTags="indexTags" @ClickTower="parentStationListen" @ClickClass="parentClassListen" @ClickIndex="parentTabListen" @CloseStation="CloseStationListen" @CloseClass="CloseClassListen"></topIndexSelect>
-          <dataManager v-if="index[0].flag == 4" :navs="navs" :totalSize="totalSize" @changePage="changeDataByPage" @changeTab="changeDataByTab"></dataManager>
+          <dataManager v-if="index[0].flag == 4" :navs="navs" :totalSize="totalSize" @changePage="changeDataByPage"></dataManager>
         </div>
     </BasePage>
 </template>
@@ -33,7 +33,7 @@ export default {
       allIndexTags: new Map(),
       navs: [],
       currentTab: [],
-      totalSize: []
+      totalSize: 0
     }
   },
   mounted: function () {
@@ -71,7 +71,7 @@ export default {
     parentClassListen (id) {
       let temp = this.indexTags.find(function (value, index, classes) { return value.id === id })
       getTableCounts({station_name: this.stationName[0], class_name: temp.text, domain: '水土保持'}).then(resp => {
-        this.totalSize[0] = Number(resp.data.data)
+        this.totalSize = Number(resp.data.data)
       }).catch(resp => {
         this.$alert('数据获取失败', '失败', {confirmButtonText: 'ok'})
       })
@@ -83,7 +83,7 @@ export default {
         this.allIndexTags.clear()
         for (let k in data) {
           this.index.push({text: k, id: i + 1, flag: 4})
-          this.navs.push({label: k})
+          this.navs.push({label: k, mcols: [], tableData: []})
           i++
           this.allIndexTags.set(k, data[k])
         }
@@ -110,17 +110,14 @@ export default {
       this.index.push({ text: '选择类型', flag: 2 })
       this.indexTags = Array.from(this.classes)
     },
-    changeDataByTab (tab) {
-      this.currentTab[0] = tab[0]
-      this.getTableData(1)
-    },
     changeDataByPage (page) {
+      this.currentTab[0] = this.index[page[1]].text
       this.getTableData(page[0])
     },
     getTableData (page) {
-      var category = this.currentTab[0]
       getIndexTableData({station: this.stationName[0], classification: this.className[0], domain: '水土保持', category: this.currentTab[0], page: page}).then(resp => {
         var data = resp.data.data
+        var category = this.currentTab[0]
         var cols = []
         for (var h = 0; h < data.title.length; h++) {
           let title = data.title[h]
