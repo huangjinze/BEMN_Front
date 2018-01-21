@@ -7,6 +7,7 @@
                  filterable
                  placeholder="请选择"
                  @change="onIndexesSelectChange"
+                 collapse-tags
                  size="large">
         <el-option
           v-for="(item, index) in indexesOptions"

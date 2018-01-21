@@ -1,5 +1,5 @@
 <template>
-  <div  v-loading="loading">
+  <div  v-loading.fullscreen.lock="loading">
     <el-steps :active="step" finish-status="success" simple>
       <el-step title="1 范围检查"></el-step>
       <el-step title="2 去除峰值"></el-step>

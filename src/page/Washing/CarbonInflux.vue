@@ -1,5 +1,5 @@
 <template>
-  <div  v-loading="loading" id="dataWashing">
+  <div  v-loading.fullscreen.lock="loading" id="dataWashing">
     <el-col :span="24">
       <el-steps :active="step" finish-status="success" simple>
         <el-step title="1 范围检查"></el-step>
