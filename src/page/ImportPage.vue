@@ -224,7 +224,7 @@
       },
       select_station (stationId) {
         let temp = this.stations.find(function (value, index, stations) { return value.id === stationId })
-        getClass({domain: '水土保持', station: temp.text}).then(resp => {
+        getClass({domain: '通量数据', station: temp.text}).then(resp => {
           //  console.log(resp)
           let data = resp.data.data
           console.log(resp.data)
@@ -241,7 +241,7 @@
         var j = uploadForm.get('class')
         var stationName = this.stations.find(function (value) { return value.id === Number(i) })
         var className = this.dataImport_classList.find(function (value) { return value.id === Number(j) })
-        submitTwoSelect({'station': stationName.text, 'class': className.text, 'domain': '水土保持', 'path': uploadForm.get('path')}).then(resp => {
+        submitTwoSelect({'station': stationName.text, 'class': className.text, 'domain': '通量数据', 'path': uploadForm.get('path')}).then(resp => {
           console.log(resp)
         }).catch(resp => {
           this.$alert('上传失败', '失败', {confirmButtonText: 'ok'})
