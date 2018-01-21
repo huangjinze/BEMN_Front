@@ -128,7 +128,9 @@
     watch: {
       m_indexes: function (newValue) {
         console.log('test')
-        this.form.range.splice(0, this.form.range.length)
+        if (typeof (this.form.range) !== 'undefined') {
+          this.form.range.splice(0, this.form.range.length)
+        }
       },
       step: function (newValue) {
         if (newValue === 3) {
@@ -234,7 +236,6 @@
         }
 
         if (this.step === 4) {
-          this.loading = false
           Gapfill({
             'domain': '水土保持',
             'year': this.washing_form.year,
@@ -328,6 +329,7 @@
               alert(resp.data.reason)
             }
           }).catch(() => {
+            this.loading = false
             alert('网络差')
           })
       }

@@ -9,8 +9,8 @@
                  @change="onIndexesSelectChange"
                  size="large">
         <el-option
-          v-for="item in indexesOptions"
-          :key="item.value"
+          v-for="(item, index) in indexesOptions"
+          :key="index"
           :label="item.label"
           :value="item.value">
         </el-option>
@@ -24,12 +24,13 @@
 
     <el-col id="indexRange">
       <el-form v-model="showIndexes">
-        <template v-for="(item,index) in showIndexes">
-          <el-col  :xs="24" :sm="24" :md="12" :lg="12" style="padding-left: 2%">
-            <el-form-item  :key="index">
+        <template >
+          <el-col v-for="(item,index) in showIndexes" :xs="24" :sm="24" :md="12" :lg="12" style="padding-left: 2%"  :key="index+'in19'">
+            <el-form-item  >
               <div class="range">{{ item.name }}:
-                <el-input-number v-model="item.min_default_value"></el-input-number> -
+                <el-input-number v-model="item.min_default_value"></el-input-number>
                 <el-input-number v-model="item.max_default_value"></el-input-number>
+                <span>{{ index }}</span>
               </div>
             </el-form-item>
           </el-col>
