@@ -4,7 +4,7 @@ import vtfStaiscticPage from '@/page/Static/vtfStaiscticPage.vue'
 import tifStaiscticPage from '@/page/Static/tifStaiscticPage.vue'
 import HomePage from '@/page/HomePage'
 import dataManager from '@/page/DataPage'
-import vftList from '@/page/VftListPage'
+import vtfList from '@/page/VftListPage'
 import LoginPage from '@/page/User/LoginPage'
 import Article from '@/page/News/ArticlePage'
 import tifForestAreaAllPage from '@/page/Static/tifForestAreaAllPage.vue'
@@ -13,8 +13,10 @@ import ImportPage from '@/page/ImportPage.vue'
 import vftDataShowPage from '@/page/Static/vftDataShowPage.vue'
 import Index from '@/page/Index.vue'
 import DataWashingPage from '@/page/Washing/DataWashingPage.vue'
-import UserPage from '@/page/User/UserPage.vue'
-import RolesPage from '@/page/User/RolesPage.vue'
+import UserPage from '@/page/user/UserPage.vue'
+import RolesPage from '@/page/user/RolesPage.vue'
+import ResetPassword from '@/page/user/ResetPassword.vue'
+import PersonalInfo from '@/page/user/PersonalInfo.vue'
 import vtfStation from '@/page/Station/vtfStation.vue'
 import tifStation from '@/page/Station/tifStation.vue'
 
@@ -28,24 +30,24 @@ export default new Router({
       component: HomePage
     },
     {
-      path: '/vtf/staisctic', // 水土保持领域图表,负责人苏畅
+      path: '/vtf/staisctic',
       name: 'vtfstaisctic',
       component: vtfStaiscticPage
     },
     {
-      path: '/tif/staisctic', // 森林领域图表,负责人苏畅
+      path: '/tif/staisctic',
       name: 'tifstaisctic',
       component: tifStaiscticPage
     },
     {
-      path: '/dataManager', // 森林领域样地信息 负责人陈宇捷
+      path: '/dataManager', // 森林生态样地信息 负责人陈宇捷
       name: 'dataManager',
       component: dataManager
     },
     {
-      path: '/vft/list', // 水土保持领域数据展示 负责人陈宇捷
-      name: 'vftlist',
-      component: vftList
+      path: '/vtf/list', // 通量数据数据展示 负责人陈宇捷
+      name: 'vtflist',
+      component: vtfList
     },
     {
       path: '/vtf/Importpage',
@@ -53,7 +55,7 @@ export default new Router({
       component: ImportPage
     },
     {
-      path: '/login',
+      path: '/login', //  登录界面-陆旻祎
       name: 'login',
       component: LoginPage
     },
@@ -78,34 +80,44 @@ export default new Router({
       component: vftDataShowPage
     },
     {
-      path: '/index',
+      path: '/index', //  首页-陆旻祎
       name: 'index',
       component: Index
     },
     {
-      path: '/washing', // 数据清洗,负责人苏畅
+      path: '/washing',
       name: 'DataWashingPage',
       component: DataWashingPage
     },
     {
-      path: '/users',
+      path: '/users', //  用户管理界面-陆旻祎
       name: 'users',
       component: UserPage
     },
     {
-      path: '/roles',
+      path: '/roles', //  角色管理界面-陆旻祎
       name: 'roles',
       component: RolesPage
     },
     {
-      path: '/vtfstation',
+      path: '/vtfstation',  //  vtf站点信息-陆旻祎
       name: 'vtfstation',
       component: vtfStation
     },
     {
-      path: '/tifstation',
+      path: '/tifstation',  //  tif站点信息-陆旻祎
       name: 'tifstation',
       component: tifStation
+    },
+    {
+      path: '/personalinfo',  //  个人信息及修改-陆旻祎
+      name: 'personalinfo',
+      component: PersonalInfo
+    },
+    {
+      path: '/resetpassword',  //  修改密码-陆旻祎
+      name: 'resetpassword',
+      component: ResetPassword
     }
   ]
 
