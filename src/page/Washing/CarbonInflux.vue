@@ -137,7 +137,7 @@
           let data = {xAxis: {data: []}, series: [{name: 'co2_flux', type: 'bar', data: []}]}
           this.loading = true
           UStar({
-            'domain': '水土保持',
+            'domain': '通量数据',
             'year': this.washing_form.year,
             'station': this.washing_form.station,
             'user_mail': '1103232282@qq.com',
@@ -189,7 +189,7 @@
         if (this.step === 1) {
           despiking({
             'data': this.form.range,
-            'domain': '水土保持',
+            'domain': '通量数据',
             'year': this.washing_form.year,
             'station': this.washing_form.station,
             'classification': '通量',
@@ -212,7 +212,7 @@
 
         if (this.step === 2) {
           CStore({
-            'domain': '水土保持',
+            'domain': '通量数据',
             'year': this.washing_form.year,
             'station': this.washing_form.station,
             'user_mail': '1103232282@qq.com',
@@ -237,7 +237,7 @@
 
         if (this.step === 4) {
           Gapfill({
-            'domain': '水土保持',
+            'domain': '通量数据',
             'year': this.washing_form.year,
             'station': this.washing_form.station,
             'user_mail': '1103232282@qq.com',
@@ -276,7 +276,7 @@
         let data = {xAxis: {data: []}, series: [{name: 'co2_flux', type: 'bar', data: []}]}
         this.loading = true
         UStar({
-          'domain': '水土保持',
+          'domain': '通量数据',
           'year': this.washing_form.year,
           'station': this.washing_form.station,
           'user_mail': '1103232282@qq.com',
@@ -316,7 +316,7 @@
           {
             'type': '碳通量',
             'data': this.form.range,
-            'domain': '水土保持',
+            'domain': '通量数据',
             'year': this.washing_form.year,
             'station': this.washing_form.station,
             'classification': '通量',

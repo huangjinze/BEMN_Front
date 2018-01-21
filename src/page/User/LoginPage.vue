@@ -56,7 +56,7 @@
         this.LoginUser(this.loginForm).then((resp) => {
           console.log('after', resp)
           if (resp.status === 'success') {
-            this.$store.commit('SET_STATUS', resp)
+//            this.$store.commit('SET_STATUS', resp)
             this.$router.push({path: '/'})
           }
         })

@@ -8,4 +8,7 @@ export const AddUser = params => { return axios.post(host + '/users/store', para
 export const DeleteUser = params => { return axios.post(host + '/users/destroy', params) }
 export const ChangeUser = params => { return axios.post(host + '/users/update', params) }
 export const FindRoleId = params => { return axios.post(host + '/users/findroleid', params) }
-export const logoutUser = () => { return axios.post('') }
+export const Info = params => { return axios.post(host + '/users/info', params) }
+export const ChangePersonalInfo = params => { return axios.post(host + '/users/changepersonalinfo', params) }
+export const ResetPwd = params => { return axios.post(host + '/users/resetpwd', params) }
+export const logoutUser = () => { return axios.post(host + '/logout') }
