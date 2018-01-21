@@ -42,25 +42,61 @@
                     <td><el-button type="primary" round v-on:click="OuttableMonth">导出表格</el-button></td>
                     <td><el-button type="primary" plain v-on:click="OutvalueMonth">导出统计值</el-button></td>
                 </tr>
-                <tr style="height: 150px">
-                    <td><h2>导入</h2></td>
-                    <td><h3>年份</h3></td>
-                    <td><el-input-number v-model="year" @change="handleChange" :min="2012" label="描述文字"></el-input-number></td>
-                    <td><h3>文件</h3></td>
-                    <td><el-upload
-                            class="upload-demo"
-                            :action=upLoadUrl
-                            :on-preview="handlePreview"
-                            :on-remove="handleRemove"
-                            multiple
-                            :limit="1"
-                            :on-exceed="handleExceed"
-                            :file-list="fileList">
-                        <el-button size="small" type="primary" v-on:click="ChooseFile">选择文件</el-button>
-                    </el-upload></td>
-                    <td><el-button type="primary" plain v-on:click="InOridata">导入原始数据</el-button></td>
+                <tr>
+
+                    <!--<td><el-upload-->
+                            <!--class="upload-demo"-->
+                            <!--:action=upLoadUrl-->
+                            <!--:on-preview="handlePreview"-->
+                            <!--:on-remove="handleRemove"-->
+                            <!--multiple-->
+                            <!--:limit="1"-->
+                            <!--:on-exceed="handleExceed"-->
+                            <!--:file-list="fileList">-->
+                        <!--<el-button size="small" type="primary" v-on:click="ChooseFile">选择文件</el-button>-->
+                    <!--</el-upload></td>-->
+                    <!--<td><el-button type="primary" plain v-on:click="InOridata">导入原始数据</el-button></td>-->
                 </tr>
             </table>
+            <el-row>
+                <el-col :span="2">
+                    <h2 style="margin:0">导入</h2>
+                </el-col>
+                <el-col :span="6">
+                    <el-select v-model="form.stationSelect" clearable placeholder="请选择站点" @change="selectStation">
+                        <el-option
+                                v-for="item in stationList"
+                                :key="item.id"
+                                :label="item.text"
+                                :value="item.id">
+                        </el-option>
+                    </el-select>
+                </el-col>
+                <el-col :span="6">
+                    <el-select v-model="form.classSelect" clearable :disabled="isDisabled" placeholder="请选择类型" @change="selectClass">
+                        <el-option
+                                v-for="item in classList"
+                                :key="item.id"
+                                :label="item.text"
+                                :value="item.id">
+                        </el-option>
+                    </el-select>
+                </el-col>
+                <el-col :span="6">
+                    <el-upload
+                            class="upload-demo"
+                            ref="upload"
+                            action="http://127.0.0.1/excel/vft/import"
+                            :on-preview="handlePreview"
+                            :on-remove="handleRemove"
+                            :auto-upload="false"
+                            :file-list="files"
+                            :on-success="onSuccess">
+                        <el-button slot="trigger" size="medium" type="primary">选取文件</el-button>
+                        <el-button style="margin-left: 10px;" size="medium" type="success" @click="submitUpload">上传</el-button>
+                    </el-upload>
+                </el-col>
+            </el-row>
     </div>
 </template>
 <script>
@@ -109,14 +145,40 @@
         }],
         StartMonth: '',
         EndMonth: '',
+        isDisabled: true,
         year: 2012,
-        fileList: []
+        uploadForm: new FormData(),   // 一个formdata
+        form: {
+          stationSelect: '',
+          classSelect: ''
+        },
+        files: []
       }
     },
     props: {
-      upLoadUrl: String
+      upLoadUrl: String,
+      stationList: {
+        type: Array,
+        required: true
+      },
+      classList: {
+        type: Array,
+        required: true
+      }
     },
     methods: {
+      selectStation (value) {
+        if (value) {
+          this.$emit('selectStation', value)
+          this.isDisabled = false
+        } else {
+          this.isDisabled = true
+        }
+      },
+      selectClass () {
+        this.uploadForm.append('station', this.form.stationSelect)
+        this.uploadForm.append('class', this.form.classSelect)
+      },
       querySearch (queryString, cb) {
         var canshuu = this.canshu
         var results = queryString ? canshuu.filter(this.createFilter(queryString)) : canshuu
@@ -172,11 +234,17 @@
         MonthValue.push(this.EndMonth)
         this.$emit('ClickvalueMonth', MonthValue)
       },
-      InOridata () {
-        this.$emit('ClickOridata', this.year)
+      submitUpload () {
+        if (this.form.stationSelect && this.form.classSelect) {
+          this.$refs.upload.submit()
+        } else {
+          this.$alert('请选择站点和类别', '失败', {confirmButtonText: 'ok'})
+        }
       },
-      ChooseFile () {
-        this.$emit('ClickChooseFile', this.fileList)
+      onSuccess (response) {
+        console.log(response)
+        this.uploadForm.append('path', response)
+        this.$emit('twoSelect', this.uploadForm)
       }
     }
   }

@@ -27,7 +27,7 @@
             @current-change="handleCurrentChange"
             :page-size="15"
             layout="prev, pager, next, jumper"
-            :total="totalSize[0]">
+            :total="totalSize">
           </el-pagination>
         </div>
         <!-- 页内内容结束 -->
@@ -46,7 +46,7 @@
     props: {
       dataExport: Function,
       navs: {type: Array, default: []},
-      totalSize: []
+      totalSize: 0
     },
     methods: {
       handleClick (tab, event) {

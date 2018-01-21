@@ -1,7 +1,7 @@
 <!-- 该组件为:多指标选择的标签页，标签页内为表格-->
 <template>
     <div :class="className" :id="id">
-        <el-tabs v-model="activeName2" type="border-card" @tab-click="handleClick" id="tabs">
+        <el-tabs type="border-card" @tab-click="handleClick" id="tabs">
             <el-tab-pane
                     v-for="(value, index) in indices"
                     :key="value.text"
@@ -30,6 +30,8 @@
         }
       },
       props: {
+        className: String,
+        id: String,
         indices: {
           type: Array,
           required: true

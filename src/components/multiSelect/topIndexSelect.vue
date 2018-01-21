@@ -21,7 +21,7 @@
             <li class="station_cookie" style="display: none;"></li>
             <li class="region_cookie" style="display: none;"></li>
         </div>
-        <indexSelect v-if="indices[0].flag < 4" :indices="indices" :indexTags="indexTags" @ClickIndexClass="ClickIndexClassListen" @ClickIndex="ChooseTag"></indexSelect>
+        <indexSelect v-if="flag < 4" :indices="indices" :indexTags="indexTags" @ClickIndexClass="ClickIndexClassListen" @ClickIndex="ChooseTag"></indexSelect>
     </div>
 
 </template>
@@ -34,19 +34,18 @@
         return {
           topPartTags: [],
           topSiteTags: [],
-          topIndexTags: []
+          topIndexTags: [],
+          flag: 0
         }
       },
       props: {
+        className: String,
+        id: String,
         initTopPartTags: {
           type: Array,
           required: true
         },
         initTopSiteTags: {
-          type: Array,
-          required: true
-        },
-        initTopIndexTags: {
           type: Array,
           required: true
         },
@@ -61,43 +60,43 @@
       },
       mounted: function () {
         this.$nextTick(function () {
-//      this.$on('childMethod', function () {
-//        console.log('监听成功')
-//      })
           this.topPartTags.push({ text: this.initTopPartTags[0] })
           this.topSiteTags.push({ text: this.initTopSiteTags[0] })
         })
       },
       methods: {
         handlePartClose (tag) {
+          this.flag = 1
           this.topPartTags.splice(this.topPartTags.indexOf(tag), 1)
           this.topSiteTags.pop()
           this.topIndexTags.pop()
           this.$emit('CloseStation')
         },
         handleSiteClose (tag) {
+          this.flag = 2
           this.topSiteTags.splice(this.topSiteTags.indexOf(tag), 1)
           this.topIndexTags.pop()
           this.$emit('CloseClass', this.topPartTags[0].text)
         },
         handleIndexClose (tag) {
+          this.flag = 3
           this.topIndexTags.splice(this.topIndexTags.indexOf(tag), 1)
         },
         ChooseTag (id) {
           let temp = this.indexTags.find(function (value, index, stations) { return value.id === id })
-          let flag = this.indices[0].flag
-          if (flag === 1) {
+          this.flag = this.indices[0].flag
+          if (this.flag === 1) {
             this.topPartTags.pop()
             this.topPartTags.push({ text: temp.text })
             this.topSiteTags.pop()
             this.topIndexTags.pop()
             this.$emit('ClickTower', id)
-          } else if (flag === 2) {
+          } else if (this.flag === 2) {
             this.topSiteTags.pop()
             this.topIndexTags.pop()
             this.topSiteTags.push({ text: temp.text })
             this.$emit('ClickClass', id)
-          } else if (flag === 3) {
+          } else if (this.flag === 3) {
             this.topIndexTags.pop()
             this.topIndexTags.push({ text: temp.text })
             this.$emit('ClickIndex', id)

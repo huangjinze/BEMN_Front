@@ -7,7 +7,7 @@
       <!--<headGuider :initTopPartTags="stationName" :initTopSiteTags="className" ref="profile" :partTags="stations" :siteTags="classes" @ClickPart="parentStationListen" @ClickSite="parentClassListen" @CloseIndex="closeIndexListen"></headGuider>-->
       <!--<indexSelect :indices="index" :indexTags="indexTags" @ClickIndexClass="parentIndexClassListen" @ClickIndex="parentIndexListen"></indexSelect>-->
       <topIndexSelect :initTopPartTags="stationName" :initTopSiteTags="className" ref="profile" :indices="index" :indexTags="indexTags" @ClickIndexClass="parentIndexClassListen" @ClickTower="parentStationListen" @ClickClass="parentClassListen" @ClickIndex="parentIndexListen" @CloseStation="CloseStationListen" @CloseClass="CloseClassListen"></topIndexSelect>
-      <dataImport @ClicktableData="onClickDataTable" @ClicktableMonth="onClickMonthTable" @ClickvalueData="onClickDataValue" @ClickvalueMonth="onClickMonthValue" @ClickOridata="onClickOridata" @ClickChooseFile="onClickFIle" :upLoadUrl="upLoadUrl" :targetOptions="targetOptions"></dataImport>
+      <dataImport :stationList="stations" :classList="dataImport_classList" @twoSelect="twoSelect" @selectStation="select_station"  @ClicktableData="onClickDataTable" @ClicktableMonth="onClickMonthTable" @ClickvalueData="onClickDataValue" @ClickvalueMonth="onClickMonthValue" :upLoadUrl="upLoadUrl" ></dataImport>
     </div>
   </BasePage>
 </template>
@@ -21,7 +21,7 @@
 //  import headGuider from '../components/headGuider'
   import BasePage from '../components/BasePage'
   import moment from 'moment'
-  import {getStation, getClass} from '../model/vftData'
+  import {getStation, getClass, submitTwoSelect} from '../model/vftData'
   import {getVFTIndex} from '../model/data'
 //  import { host } from '../model/data'
   export default {
@@ -41,7 +41,8 @@
         classes: [],
         index: [],
         allIndexTags: new Map(),
-        indexTags: []
+        indexTags: [],
+        dataImport_classList: []
       }
     },
     mounted: function () {
@@ -221,11 +222,30 @@
           })
         }
       },
-      onClickOridata (year) {
-        alert(year)
+      select_station (stationId) {
+        let temp = this.stations.find(function (value, index, stations) { return value.id === stationId })
+        getClass({domain: '水土保持', station: temp.text}).then(resp => {
+          //  console.log(resp)
+          let data = resp.data.data
+          console.log(resp.data)
+          this.dataImport_classList.splice(0, this.dataImport_classList.length)
+          for (var i = 0; i < data.length; i++) {
+            this.dataImport_classList.push({ text: data[i], id: i + 1 })
+          }
+        }).catch(resp => {
+          this.$alert('获取失败', '失败', {confirmButtonText: 'ok'})
+        })
       },
-      onClickFIle (fileList) {
-        // alert(fileList)
+      twoSelect (uploadForm) {
+        var i = uploadForm.get('station')
+        var j = uploadForm.get('class')
+        var stationName = this.stations.find(function (value) { return value.id === Number(i) })
+        var className = this.dataImport_classList.find(function (value) { return value.id === Number(j) })
+        submitTwoSelect({'station': stationName.text, 'class': className.text, 'domain': '水土保持', 'path': uploadForm.get('path')}).then(resp => {
+          console.log(resp)
+        }).catch(resp => {
+          this.$alert('上传失败', '失败', {confirmButtonText: 'ok'})
+        })
       }
     }
   }
