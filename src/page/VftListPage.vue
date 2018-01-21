@@ -5,7 +5,7 @@
       <navi></navi>
     </div>
     <div slot="main">
-      <dataManager :navs="navs" @changePage="dataSource">
+      <dataManager :navs="navs" @changePage="dataSource" :totalSize="totalSize">
       </dataManager>
     </div>
   </BasePage>
@@ -32,6 +32,7 @@
         if (!tab) {
           getIndexData({station: '八达岭', classification: '通量', domain: '水土保持', category: 'A', page: 1}).then(resp => {
             console.log(resp)
+            this.totalSize = resp.data.data.data.length
             console.log(resp.data.data)
             // 由我来生成头部！
             for (let k in resp.data.data.title) {
@@ -56,6 +57,7 @@
             for (let k in resp.data.data.data) {
               this.navs[tab[1]].tableData.push(resp.data.data.data[k])
             }
+            this.totalSize = resp.data.data.data.length
           }).catch(resp => {
             this.$alert('网络差', '失败', {confirmButtonText: 'ok'})
           })
@@ -73,7 +75,8 @@
         navs: [{
           label: 'A',
           mcols: [],
-          tableData: []
+          tableData: [],
+          totalSize: 0
         }, {
           label: 'B',
           mcols: [],
