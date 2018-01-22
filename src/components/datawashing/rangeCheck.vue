@@ -7,10 +7,11 @@
                  filterable
                  placeholder="请选择"
                  @change="onIndexesSelectChange"
+                 collapse-tags
                  size="large">
         <el-option
-          v-for="item in indexesOptions"
-          :key="item.value"
+          v-for="(item, index) in indexesOptions"
+          :key="index"
           :label="item.label"
           :value="item.value">
         </el-option>
@@ -24,11 +25,13 @@
 
     <el-col id="indexRange">
       <el-form v-model="showIndexes">
-        <template v-for="(item,index) in showIndexes">
-          <el-col  :xs="24" :sm="24" :md="12" :lg="12" style="padding-left: 2%">
-            <el-form-item  :key="index">
-              <div class="range">{{ item.name }}:
-                <el-input-number v-model="item.min_default_value"></el-input-number> -
+        <template >
+          <el-col v-for="(item,index) in showIndexes" :xs="24" :sm="24" :md="12" :lg="12" style="padding-left: 2%"  :key="index+'in19'">
+            <el-form-item  >
+              <div class="range">
+                <i class="el-icon-remove" @click="onRemoveTagClick(item.name)"></i>
+                {{ item.name }}:
+                <el-input-number v-model="item.min_default_value"></el-input-number> ~
                 <el-input-number v-model="item.max_default_value"></el-input-number>
               </div>
             </el-form-item>
@@ -62,9 +65,6 @@
       }
     },
     watch: {
-      showIndexes: function (newValue) {
-        this.selectedIndexes = this.showIndexes.map((item) => { return item.name })
-      }
     },
     computed: {
       indexesOptions: function () {
@@ -86,6 +86,16 @@
             return item.name === value
           })
         })
+      },
+      onRemoveTagClick (value) {
+        let index = this.selectedIndexes.indexOf(value)
+        this.selectedIndexes.splice(index, 1)
+        this.showIndexes = this.selectedIndexes.map((value) => {
+          return this.indexes.find((item, index) => {
+            console.log(item.name, index)
+            return item.name === value
+          })
+        })
       }
     }
   }
@@ -94,6 +104,9 @@
 <style scoped>
   #indexRange{
     margin-top: 20px;
+  }
+  .el-icon-remove{
+   color: #f56C6C;
   }
 
 </style>
