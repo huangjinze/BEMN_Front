@@ -115,7 +115,7 @@
         if (this.step === 1) {
           despiking({
             'data': this.form.range,
-            'domain': '水土保持',
+            'domain': '通量数据',
             'year': this.washing_form.year,
             'station': this.washing_form.station,
             'user_mail': '1103232282@qq.com',
@@ -127,10 +127,12 @@
               console.log(resp)
               alert(resp.data.data)
             } else {
+              this.step = this.step - 1
               alert(resp.data.reason)
             }
             this.loading = false
           }).catch(() => {
+            this.step = this.step - 1
             this.loading = false
             alert('网络差')
           })
@@ -139,7 +141,7 @@
         if (this.step === 2) {
           let data = {xAxis: {data: []}, series: [{name: 'co2_flux', type: 'bar', data: []}]}
           pca({
-            'domain': '水土保持',
+            'domain': '通量数据',
             'year': this.washing_form.year,
             'station': this.washing_form.station,
             'user_mail': '1103232282@qq.com',
@@ -148,6 +150,7 @@
             this.loading = false
             console.log('net', resp)
             if (resp.data.status !== 'success') {
+              this.step = this.step - 1
               this.$alert(resp.data.reason, '失败', {confirmButtonText: 'ok'})
             } else {
               if (resp.data.data.length !== 0) {
@@ -167,6 +170,7 @@
               this.chartMetaData = Object.assign(this.chartMetaData, data)
             }
           }).catch(() => {
+            this.step = this.step - 1
             this.loading = false
             alert('网络差')
           })
@@ -174,7 +178,7 @@
 
         if (this.step === 3) {
           Gapfill({
-            'domain': '水土保持',
+            'domain': '通量数据',
             'year': this.washing_form.year,
             'station': this.washing_form.station,
             'user_mail': '1103232282@qq.com',
@@ -185,9 +189,11 @@
               console.log(resp)
               alert(resp.data.data[0])
             } else {
+              this.step = this.step - 1
               alert(resp.data.reason)
             }
           }).catch(() => {
+            this.step = this.step - 1
             this.loading = false
             alert('网络差')
           })
@@ -221,7 +227,7 @@
           {
             'type': '碳通量',
             'data': this.form.range,
-            'domain': '水土保持',
+            'domain': '通量数据',
             'year': this.washing_form.year,
             'station': this.washing_form.station,
             'classification': '通量',
@@ -231,10 +237,12 @@
               console.log(resp)
               alert(resp.data.data[0])
             } else {
+              this.step = this.step - 1
               alert(resp.data.reason)
             }
             this.loading = false
           }).catch(() => {
+            this.step = this.step - 1
             this.loading = false
             alert('网络差')
           })

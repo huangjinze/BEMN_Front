@@ -85,7 +85,7 @@
         this.indexes.splice(0, this.indexes.length)
         return getWashingIndexAndRange(
           {
-            domain: '水土保持',
+            domain: '通量数据',
             station: this.form.station,
             classification: '通量'}).then(resp => {
               this.loading = true

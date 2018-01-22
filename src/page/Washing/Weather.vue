@@ -99,7 +99,7 @@
         if (this.step === 1) {
           despiking({
             'data': this.form.range,
-            'domain': '水土保持',
+            'domain': '通量数据',
             'year': this.washing_form.year,
             'station': this.washing_form.station,
             'user_mail': '1103232282@qq.com',
@@ -111,17 +111,19 @@
               console.log(resp)
               alert(resp.data.data)
             } else {
+              this.step = this.step - 1
               alert(resp.data.reason)
             }
           }).catch(() => {
             this.loading = false
+            this.step = this.step - 1
             alert('网络差')
           })
         }
 
         if (this.step === 2) {
           Gapfill({
-            'domain': '水土保持',
+            'domain': '通量数据',
             'year': this.washing_form.year,
             'station': this.washing_form.station,
             'user_mail': '1103232282@qq.com',
@@ -132,10 +134,12 @@
               console.log(resp)
               alert(resp.data.data[0])
             } else {
+              this.step = this.step - 1
               alert(resp.data.reason)
             }
           }).catch(() => {
             this.loading = false
+            this.step = this.step - 1
             alert('网络差')
           })
         }
@@ -165,7 +169,7 @@
           {
             'type': '气象',
             'data': this.form.range,
-            'domain': '水土保持',
+            'domain': '通量数据',
             'year': this.washing_form.year,
             'station': this.washing_form.station,
             'user_mail': '1103232282@qq.com'
@@ -174,9 +178,11 @@
               console.log(resp)
               alert(resp.data.data[0])
             } else {
+              this.step = this.step - 1
               alert(resp.data.reason)
             }
           }).catch(() => {
+            this.step = this.step - 1
             this.loading = false
             alert('网络差')
           })
