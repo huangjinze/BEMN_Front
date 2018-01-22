@@ -32,6 +32,37 @@
           :value="item.value">
         </el-option>
       </el-select>
+
+      <div>
+        <div>因变量自变量选择</div>
+        <div>
+          <el-button type="primary" size="small" @click="onAddVarClick">增加</el-button>
+          <el-button type="danger" size="small" @click="onDeleteVarClick">删除</el-button>
+        </div>
+        <div>
+          <div v-for="(item,index) in form.variables">
+            因变量:
+            <el-select v-model="item.independent_var">
+              <el-option
+                v-for="item in form.range"
+                :key="item.name+'independent'"
+                :label="item.name"
+                :value="item.name">
+              </el-option>
+            </el-select>
+            自变量:
+            <el-select v-model="item.dependent_var">
+              <el-option
+                v-for="item in form.range"
+                :key="item.name+'ubd'"
+                :label="item.name"
+                :value="item.name">
+              </el-option>
+            </el-select>
+          </div>
+        </div>
+      </div>
+
     </div>
 
     <div class="bottom-op">
@@ -71,7 +102,8 @@
           z: 4,
           interpolation: ' ',
           indexes: [],
-          range: []
+          range: [],
+          variables: [{independent_var: '', dependent_var: ''}]
         },
         m_indexes: this.indexes,
         interpolationOptions: [{label: '内插', value: '内插'}, {label: '外插', value: '外插'}]
@@ -186,6 +218,12 @@
             this.loading = false
             alert('网络差')
           })
+      },
+      onAddVarClick () {
+        this.form.variables.push({independent_var: '', dependent_var: ''})
+      },
+      onDeleteVarClick () {
+        this.form.variables.pop()
       }
     }
   }
