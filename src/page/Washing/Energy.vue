@@ -33,15 +33,6 @@
     </div>
 
     <div v-show="step === 3"  id="methodSelect">
-      插补方法选择 ：
-      <el-select v-model="form.interpolation">
-        <el-option
-          v-for="item in interpolationOptions"
-          :key="item.label"
-          :label="item.label"
-          :value="item.value">
-        </el-option>
-      </el-select>
 
       <div>
         <div>因变量自变量选择</div>
@@ -69,6 +60,16 @@
                 :value="item.name">
               </el-option>
             </el-select>
+            插补方法选择 ：
+            <el-select v-model="item.interpolation">
+              <el-option
+                v-for="item in interpolationOptions"
+                :key="item.label"
+                :label="item.label"
+                :value="item.value">
+              </el-option>
+            </el-select>
+
           </div>
         </div>
       </div>
@@ -118,11 +119,10 @@
         m_indexes: this.indexes,
         form: {
           z: 4,
-          interpolation: ' ',
           indexes: [],
           range: [],
           u: 4,
-          variables: [{independent_var: '', dependent_var: ''}]
+          variables: [{independent_var: '', dependent_var: '', interpolation: ''}]
         },
         interpolationOptions: [{label: '内插', value: '内插'}, {label: '外插', value: '外插'}],
         chartMetaData: {
@@ -280,7 +280,7 @@
           })
       },
       onAddVarClick () {
-        this.form.variables.push({independent_var: '', dependent_var: ''})
+        this.form.variables.push({independent_var: '', dependent_var: '', interpolation: ''})
       },
       onDeleteVarClick () {
         this.form.variables.pop()
