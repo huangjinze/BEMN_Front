@@ -214,7 +214,8 @@
             'year': this.washing_form.year,
             'station': this.washing_form.station,
             'user_mail': '1103232282@qq.com',
-            'type': '能量'
+            'type': '能量',
+            'variables': this.form.variables
           }).then((resp) => {
             this.loading = false
             if (resp.data.status === 'success') {
