@@ -15,7 +15,7 @@
       </el-dropdown>
     </el-header>
     <el-container>
-      <el-aside width="200px"><slot name="aside"></slot></el-aside>
+      <el-aside width="200px"><slot name="aside"><nav></nav></slot></el-aside>
       <el-main><slot name="main"></slot></el-main>
     </el-container>
     <el-footer>
@@ -30,10 +30,7 @@
   import {logoutUser} from '../model/user'
   export default {
     created: function () {
-      if (!this.msg) {
-        this.$store.commit('SET_STATUS', JSON.parse(sessionStorage.getItem('userInfo')))
-      }
-//      console.log('created', this.add())
+
     },
     computed: {
       ...mapGetters({

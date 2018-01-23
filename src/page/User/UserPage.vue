@@ -228,7 +228,7 @@
     created: function () {
       if (!this.msg) {
         console.log('vuex no info')
-        this.$store.commit('SET_STATUS', JSON.parse(sessionStorage.getItem('userInfo')))
+//        this.$store.commit('SET_STATUS', JSON.parse(sessionStorage.getItem('userInfo')))
       }
 //      console.log('created', this.add())
     },

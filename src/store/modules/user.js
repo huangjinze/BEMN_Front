@@ -5,7 +5,7 @@ const user = {
     name: '',
     mail: '',
     token: '',
-    roles: '',
+    roles: '0',
     status: ''
   },
   mutations: {
@@ -13,6 +13,7 @@ const user = {
       state.name = name
     },
     SET_STATUS: (state, status) => {
+      console.log('e2')
       state.status = status
     }
   },
@@ -44,7 +45,7 @@ const user = {
   },
   getters: {
     'GET_MSG': function (state) {
-      console.log('获取', state.status)
+      // console.log('获取', state.status)
       return state.status
     }
   }

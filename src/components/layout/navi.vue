@@ -145,7 +145,7 @@
       })
     },
     created: function () {
-      this.$store.commit('SET_STATUS', JSON.parse(sessionStorage.getItem('userInfo')))
+//      this.$store.commit('SET_STATUS', JSON.parse(sessionStorage.getItem('userInfo')))
     },
     mounted: function () {
 //      console.log(this.msg)
