@@ -29,7 +29,7 @@
           <el-col v-for="(item,index) in showIndexes" :xs="24" :sm="24" :md="12" :lg="12" style="padding-left: 2%"  :key="index+'in19'">
             <el-form-item  >
               <div class="range">
-                <i class="el-icon-remove" @click="onRemoveTagClick(item.name)"></i>
+                <i class="el-icon-remove" @click="onRemoveTagClick(item.name)" ></i>
                 {{ item.name }}:
                 <el-input-number v-model="item.min_default_value"></el-input-number> ~
                 <el-input-number v-model="item.max_default_value"></el-input-number>
@@ -106,7 +106,14 @@
     margin-top: 20px;
   }
   .el-icon-remove{
-   color: #f56C6C;
+    color: #fab6b6;
+  }
+  .el-icon-remove{
+    cursor: pointer ;
+  }
+  .el-icon-remove:hover{
+    font-size: 16px;
+    color: #f56C6C;
   }
 
 </style>
