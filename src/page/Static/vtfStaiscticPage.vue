@@ -4,12 +4,17 @@
     <div slot="header">header</div>
     <div slot="aside"><navi></navi></div>
     <div slot="main">
+      <el-row :span="24">
+        <singleSelect v-model="formValue.station"></singleSelect>
+      </el-row>
+      <el-row :span="24">
       <chartForm
         :targetOptions="targetOptions"
         v-model="formValue"
         @Click="onClick"
         v-loading="loading"></chartForm>
       <charts class="testchart" id="1"  :chartMeta="chartMetaData"></charts>
+      </el-row>
     </div>
   </BasePage>
 </template>
@@ -21,15 +26,17 @@ import navi from '../../components/layout/navi'
 import BasePage from '../../components/BasePage'
 import chartForm from '../../components/echart/vtfChartForm'
 import {getVTFData, getVFTIndex} from '../../model/data'
+import singleSelect from '../../components/multiSelect/singleSelect'
 
 export default {
-  components: {charts, navi, BasePage, chartForm},
+  components: {charts, navi, BasePage, chartForm, singleSelect},
   name: 'vtfStaiscticPage',
   data () {
     return {
       loading: false,
       targetOptions: [],
       formValue: {
+        station: '奥林匹克',
         index: [],
         selectedType: 'a',
         model: 'mean',
@@ -77,7 +84,7 @@ export default {
       let data = {xAxis: {data: []}, series: [{name: 'co2_flux', type: 'bar', data: []}]}
       getVTFData({'index': this.formValue.index[1],
         domain: '通量数据',
-        station: '盐池_1',
+        station: this.formValue.station,
         classification: '气象',
         start_time: this.formValue.start_time,
         end_time: this.formValue.end_time,

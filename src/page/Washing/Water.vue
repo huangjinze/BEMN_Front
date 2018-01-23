@@ -30,7 +30,7 @@
           <el-button type="primary" size="small" @click="onAddVarClick" icon="el-icon-plus" id="plus">增加</el-button>
           <el-button type="danger" size="small" @click="onDeleteVarClick" icon="el-icon-delete" >删除</el-button>
         </el-col>
-          <el-row :span="24" v-for="(item,index) in form.variables">
+          <el-row :span="24" v-for="(item,index) in form.variables" :key="index+'varfor'">
             <el-col :span="8">
               因变量:
               <el-select v-model="item.independent_var">
