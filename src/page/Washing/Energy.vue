@@ -63,7 +63,7 @@
             </el-col>
             <el-col :span="8">
               插补方法选择 ：
-              <el-select v-model="item.interpolation">
+              <el-select v-model="item.method">
                 <el-option
                         v-for="item in interpolationOptions"
                         :key="item.label"
@@ -121,7 +121,7 @@
           indexes: [],
           range: [],
           u: 4,
-          variables: [{independent_var: '', dependent_var: '', interpolation: ''}]
+          variables: [{independent_var: '', dependent_var: '', method: ''}]
         },
         interpolationOptions: [{label: '内插', value: '内插'}, {label: '外插', value: '外插'}],
         chartMetaData: {
@@ -280,7 +280,7 @@
           })
       },
       onAddVarClick () {
-        this.form.variables.push({independent_var: '', dependent_var: '', interpolation: ''})
+        this.form.variables.push({independent_var: '', dependent_var: '', method: ''})
       },
       onDeleteVarClick () {
         this.form.variables.pop()

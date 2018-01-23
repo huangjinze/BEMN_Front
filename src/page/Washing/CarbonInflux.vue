@@ -49,7 +49,7 @@
 
     <div v-if="step === 4">
       插补方法选择 ：
-      <el-select v-model="form.interpolation">
+      <el-select v-model="form.variables[0].method">
         <el-option
                 v-for="item in interpolationOptions"
                 :key="item.label"
@@ -100,12 +100,13 @@
         loading: false,
         form: {
           z: 4,
-          interpolation: ' ',
+          method: ' ',
           range: [],
-          u: 0.18
+          u: 0.18,
+          variables: [{method: ''}]
         },
         m_indexes: this.indexes,
-        interpolationOptions: [{label: '内插', value: '内插'}, {label: '外插', value: '外插'}],
+        interpolationOptions: [{label: '平均昼夜模型', value: 'MDT'}, {label: '光温度相应模型', value: 'lr_tr'}],
         chartUMetaData: {
           title: {
             text: 'U*数据'
@@ -245,7 +246,8 @@
             'year': this.washing_form.year,
             'station': this.washing_form.station,
             'user_mail': '1103232282@qq.com',
-            'type': '碳通量'
+            'type': '碳通量',
+            'method': this.method
           }).then((resp) => {
             this.loading = false
             if (resp.data.status === 'success') {
