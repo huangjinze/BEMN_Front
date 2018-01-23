@@ -25,42 +25,46 @@
     <el-col :span="24" v-show="step === 2" id="methodSelect">
 
       <div>
-        <div>因变量自变量选择</div>
-        <div>
-          <el-button type="primary" size="small" @click="onAddVarClick">增加</el-button>
-          <el-button type="danger" size="small" @click="onDeleteVarClick">删除</el-button>
-        </div>
-        <div>
-          <div v-for="(item,index) in form.variables">
-            因变量:
-          <el-select v-model="item.independent_var">
-            <el-option
-              v-for="item in form.range"
-              :key="item.name+'independent'"
-              :label="item.name"
-              :value="item.name">
-            </el-option>
-          </el-select>
-          自变量:
-          <el-select v-model="item.dependent_var">
-            <el-option
-              v-for="item in form.range"
-              :key="item.name+'ubd'"
-              :label="item.name"
-              :value="item.name">
-            </el-option>
-          </el-select>
-        插补方法选择 ：
-        <el-select v-model="item.interpolation">
-          <el-option
-            v-for="item in interpolationOptions"
-            :key="item.label"
-            :label="item.label"
-            :value="item.value">
-          </el-option>
-        </el-select>
-          </div>
-        </div>
+        <el-col class="select">
+          请选择因变量自变量
+          <el-button type="primary" size="small" @click="onAddVarClick" icon="el-icon-plus" id="plus">增加</el-button>
+          <el-button type="danger" size="small" @click="onDeleteVarClick" icon="el-icon-delete" >删除</el-button>
+        </el-col>
+          <el-row :span="24" v-for="(item,index) in form.variables">
+            <el-col :span="8">
+              因变量:
+              <el-select v-model="item.independent_var">
+                <el-option
+                        v-for="item in form.range"
+                        :key="item.name+'independent'"
+                        :label="item.name"
+                        :value="item.name">
+                </el-option>
+              </el-select>
+            </el-col>
+            <el-col :span="8">
+              自变量:
+              <el-select v-model="item.dependent_var">
+                <el-option
+                        v-for="item in form.range"
+                        :key="item.name+'ubd'"
+                        :label="item.name"
+                        :value="item.name">
+                </el-option>
+              </el-select>
+            </el-col>
+            <el-col :span="8">
+              插补方法选择 ：
+              <el-select v-model="item.interpolation">
+                <el-option
+                        v-for="item in interpolationOptions"
+                        :key="item.label"
+                        :label="item.label"
+                        :value="item.value">
+                </el-option>
+              </el-select>
+            </el-col>
+          </el-row>
       </div>
 
 
@@ -245,7 +249,13 @@
   }
   #methodSelect{
     text-align: center;
-    margin-top: 30px;
+    margin: 30px 0;
+  }
+  .select{
+    margin-bottom: 30px;
+  }
+  #plus{
+    margin-left: 10px;
   }
 
 </style>
