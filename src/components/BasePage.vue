@@ -15,7 +15,7 @@
       </el-dropdown>
     </el-header>
     <el-container>
-      <el-aside width="200px"><slot name="aside"><nav></nav></slot></el-aside>
+      <el-aside width="200px"><slot name="aside"></slot></el-aside>
       <el-main><slot name="main"></slot></el-main>
     </el-container>
     <el-footer>
@@ -29,6 +29,7 @@
   import {mapGetters} from 'vuex'
   import {logoutUser} from '../model/user'
   export default {
+
     created: function () {
 
     },
@@ -49,9 +50,7 @@
       },
       logout () {
         logoutUser().then(resp => {
-//          console.log('delinfo', resp)
           if (resp.data.status === 'success') {
-//            this.$alert('退出成功', {confirmButtonText: 'ok'})
             this.$router.push({path: '/index'})
           } else {
             alert('退出失败')

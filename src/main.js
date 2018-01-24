@@ -154,7 +154,7 @@ router.beforeEach((to, from, next) => {
   console.log('router before')
   let info = ''
   var email = []
-  if (to.path === '/login') {
+  if (to.path === '/login' || to.path === '/index') {
     next()
     return
   }

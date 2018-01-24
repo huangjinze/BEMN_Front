@@ -22,10 +22,6 @@ const user = {
       console.log('vuex login')
       return loginUser(form).then(function (resp) {
         console.log('vuex log', resp.data.data[0])
-        // console.log(resp.data.status)
-        window.sessionStorage.clear()
-        sessionStorage.setItem('userInfo', JSON.stringify(resp.data.data))
-        // console.log('qwe', localStorage.getItem('userInfo'))
         if (resp.data.status === 'failed' && resp.data.reason === 'captcha error!') {
           alert('验证码错误')
           document.location.reload()
