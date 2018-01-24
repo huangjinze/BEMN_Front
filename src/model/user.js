@@ -12,3 +12,5 @@ export const Info = params => { return axios.post(host + '/users/info', params) 
 export const ChangePersonalInfo = params => { return axios.post(host + '/users/changepersonalinfo', params) }
 export const ResetPwd = params => { return axios.post(host + '/users/resetpwd', params) }
 export const logoutUser = () => { return axios.post(host + '/logout') }
+export const currentUser = () => { return axios.get(host + '/users/currentuser') }
+export const currentInfo = params => { return axios.post(host + '/users/currentinfo', params) }

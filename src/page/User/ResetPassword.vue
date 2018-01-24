@@ -33,13 +33,6 @@
   import {ResetPwd} from '../../model/user'
   export default {
     components: {navi, BasePage},
-    created: function () {
-      if (!this.msg) {
-        console.log('vuex no info')
-        this.$store.commit('SET_STATUS', JSON.parse(sessionStorage.getItem('userInfo')))
-      }
-//      console.log('created', this.add())
-    },
     computed: {
       ...mapGetters({
         msg: 'GET_MSG'
@@ -90,10 +83,8 @@
       },
       confirm () {
         this.formLabelAlign.email = this.msg[0][0].email
-//        console.log('aferf', this.formLabelAlign)
         if (this.formLabelAlign.newpwd === this.formLabelAlign.confirmpwd) {
           ResetPwd(this.formLabelAlign).then(resp => {
-//            console.log('info', resp.data.status)
             if (resp.data.status === 'success') {
               this.$alert('修改成功', {confirmButtonText: 'ok'})
             } else if (resp.data.status === 'fail') {

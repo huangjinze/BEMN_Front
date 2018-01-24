@@ -5,7 +5,7 @@ const user = {
     name: '',
     mail: '',
     token: '',
-    roles: '',
+    roles: '0',
     status: ''
   },
   mutations: {
@@ -13,6 +13,7 @@ const user = {
       state.name = name
     },
     SET_STATUS: (state, status) => {
+      console.log('e2')
       state.status = status
     }
   },
@@ -21,10 +22,6 @@ const user = {
       console.log('vuex login')
       return loginUser(form).then(function (resp) {
         console.log('vuex log', resp.data.data[0])
-        // console.log(resp.data.status)
-        window.sessionStorage.clear()
-        sessionStorage.setItem('userInfo', JSON.stringify(resp.data.data))
-        // console.log('qwe', localStorage.getItem('userInfo'))
         if (resp.data.status === 'failed' && resp.data.reason === 'captcha error!') {
           alert('验证码错误')
           document.location.reload()
@@ -44,7 +41,7 @@ const user = {
   },
   getters: {
     'GET_MSG': function (state) {
-      console.log('获取', state.status)
+      // console.log('获取', state.status)
       return state.status
     }
   }
