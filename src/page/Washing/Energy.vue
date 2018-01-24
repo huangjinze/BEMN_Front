@@ -128,6 +128,9 @@
           title: {
             text: '回归图'
           },
+          tooltip: {
+            trigger: 'axis'
+          },
           xAxis: {},
           yAxis: {},
           series: []}

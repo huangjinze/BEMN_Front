@@ -111,13 +111,27 @@
           title: {
             text: 'U*数据'
           },
-          xAxis: {},
+          tooltip: {
+            trigger: 'axis'
+          },
+          dataZoom: [{show: true, type: 'inside'}],
+          animationEasing: 'elasticOut',
+          animationDelayUpdate: function (idx) {
+            return idx * 5
+          },
+          xAxis: {type: 'value'},
           yAxis: {},
           series: []
         },
         chartMetaDataUAdjust: {
           title: {
             text: 'U*调整数据'
+          },
+          dataZoom: [
+            {show: true, type: 'inside'}
+          ],
+          tooltip: {
+            trigger: 'axis'
           },
           xAxis: {},
           yAxis: {},
@@ -135,7 +149,7 @@
       },
       step: function (newValue) {
         if (newValue === 3) {
-          let data = {xAxis: {data: []}, series: [{name: 'co2_flux', type: 'bar', data: []}]}
+          let data = {xAxis: { data: [] }, series: [{name: 'co2_flux', type: 'bar', data: []}]}
           this.loading = true
           UStar({
             'domain': '通量数据',

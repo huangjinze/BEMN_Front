@@ -19,6 +19,7 @@ import ResetPassword from '@/page/User/ResetPassword.vue'
 import PersonalInfo from '@/page/User/PersonalInfo.vue'
 import vtfStation from '@/page/Station/vtfStation.vue'
 import tifStation from '@/page/Station/tifStation.vue'
+import OneChartPage from '@/page/Static/OneChartPage.vue'
 
 Vue.use(Router)
 
@@ -30,7 +31,7 @@ export default new Router({
       component: HomePage
     },
     {
-      path: '/vtf/staisctic',
+      path: '/vtf/staisctic', // 水保图表
       name: 'vtfstaisctic',
       component: vtfStaiscticPage
     },
@@ -118,6 +119,11 @@ export default new Router({
       path: '/resetpassword',  //  修改密码-陆旻祎
       name: 'resetpassword',
       component: ResetPassword
+    },
+    {
+      path: '/one_chart_page',
+      name: 'OneChartPage',
+      component: OneChartPage
     }
   ]
 

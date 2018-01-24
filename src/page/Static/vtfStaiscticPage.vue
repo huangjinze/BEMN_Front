@@ -48,6 +48,12 @@ export default {
         title: {
           text: '通量数据'
         },
+        dataZoom: [
+          {show: true, type: 'inside'}
+        ],
+        tooltip: {
+          trigger: 'axis'
+        },
         xAxis: {},
         yAxis: {},
         series: []
