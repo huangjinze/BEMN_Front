@@ -72,11 +72,11 @@
     },
     data () {
       return {
+        totalSize: 0,
         navs: [{
           label: 'A',
           mcols: [],
-          tableData: [],
-          totalSize: 0
+          tableData: []
         }, {
           label: 'B',
           mcols: [],

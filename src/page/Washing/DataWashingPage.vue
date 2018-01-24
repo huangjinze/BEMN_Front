@@ -2,7 +2,7 @@
   <BasePage>
     <div slot="aside"><navi></navi></div>
     <div slot="main" >
-      <div class="top ">
+      <div class="top " v-loading="loading">
         <washingForm v-model="form"
                      @StationChange="getIndexes"></washingForm>
       </div>
@@ -10,22 +10,22 @@
 
       <div class="content-form" >
 
-        <el-col :span="24"  v-if="form.classification == 'co2'">
+        <el-col :span="24"  v-if="form.classification === 'co2'">
           <CarbonInflux :washing_form="form" :indexes="indexes">
           </CarbonInflux>
         </el-col>
 
-        <div  v-if="form.classification == 'water'">
-        <Water>
+        <div  v-if="form.classification === 'water'">
+        <Water :washing_form="form" :indexes="indexes">
         </Water>
         </div>
 
-        <div  v-if="form.classification == 'weather'">
-          <Weather></Weather>
+        <div  v-if="form.classification === 'weather'">
+          <Weather :washing_form="form" :indexes="indexes"></Weather>
         </div>
 
-        <div  v-if="form.classification == 'energy'">
-          <Energy></Energy>
+        <div  v-if="form.classification === 'energy'">
+          <Energy :washing_form="form" :indexes="indexes"></Energy>
         </div>
 
       </div>
@@ -63,32 +63,27 @@
     data () {
       return {
         form: {},
-        indexes: []
+        indexes: [],
+        loading: false
+      }
+    },
+    watch: {
+      form: {
+        handler: function (val) {
+          this.loading = true
+          this.getIndexes()
+        },
+        deep: true
       }
     },
     mounted () {
-      getWashingIndexAndRange(
-        {
-          domain: '通量数据',
-          station: this.form.station,
-          classification: '通量'}).then(resp => {
-            this.loading = true
-            resp.data.data.map(item => {
-              let index = {
-                name: item.name,
-                max_default_value: isNaN(parseFloat(item.max_default_value)) ? 0 : parseFloat(item.max_default_value),
-                min_default_value: isNaN(parseFloat(item.min_default_value)) ? 0 : parseFloat(item.min_default_value),
-                isShow: true
-              }
-              console.log(index)
-              this.indexes.push(index)
-            })
-            this.loading = false
-          })
+      this.getIndexes()
     },
     methods: {
       getIndexes () {
-        getWashingIndexAndRange(
+        this.loading = true
+        this.indexes.splice(0, this.indexes.length)
+        return getWashingIndexAndRange(
           {
             domain: '通量数据',
             station: this.form.station,
@@ -101,7 +96,6 @@
                   min_default_value: isNaN(parseFloat(item.min_default_value)) ? 0 : parseFloat(item.min_default_value),
                   isShow: true
                 }
-                console.log(index)
                 this.indexes.push(index)
               })
               this.loading = false
