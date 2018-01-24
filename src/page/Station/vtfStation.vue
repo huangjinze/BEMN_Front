@@ -137,6 +137,7 @@
                         </el-form-item>
                         <el-form-item label="备注" :label-width="formLabelWidth" prop="remarks">
                             <el-input v-model="formadd.remarks" auto-complete="off"></el-input>
+                            <p style="color: red">带星号的为必填项</p>
                         </el-form-item>
                     </el-form>
                     <div slot="footer" class="dialog-footer">
@@ -189,6 +190,7 @@
                         </el-form-item>
                         <el-form-item label="备注" :label-width="formLabelWidth" prop="remarks">
                             <el-input v-model="formchange.remarks" auto-complete="off"></el-input>
+                            <p style="color: red">带星号的为必填项</p>
                         </el-form-item>
                     </el-form>
                     <div slot="footer" class="dialog-footer">
@@ -203,7 +205,7 @@
 
 <script>
   //  import {store} from '../store/index'
-  import {mapState, mapGetters} from 'vuex'
+  import {mapGetters} from 'vuex'
   import navi from '../../components/layout/navi'
   import BasePage from '../../components/BasePage'
   import {vtfStationInfo, DeletevtfStation, AddvtfStation, ChangevtfInfo, FindUserId} from '../../model/station'
@@ -303,8 +305,6 @@
         this.PermissionChangeAdmin = false
       }
       vtfStationInfo(this.msg[0][0]).then(resp => {
-//        console.log('tifStationInfo', resp.data.data)
-//        console.log('userinfo', resp.data.data[0].length)
         for (let i = 0; i < resp.data.data[0].length; i++) {
           this.tableData.push({
             'station_name': resp.data.data[0][i].station_name,
@@ -332,9 +332,6 @@
       })
     },
     computed: {
-      ...mapState([
-        'status'
-      ]),
       ...mapGetters({
         msg: 'GET_MSG'
       })
@@ -379,7 +376,6 @@
         }
       },
       handleDelete (index, row) {
-//        console.log(index, row.email)
         var info = []
         info.push({
           'name': row.name,

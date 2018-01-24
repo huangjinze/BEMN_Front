@@ -29,11 +29,9 @@
   import {mapGetters} from 'vuex'
   import {logoutUser} from '../model/user'
   export default {
+
     created: function () {
-      if (!this.msg) {
-        this.$store.commit('SET_STATUS', JSON.parse(sessionStorage.getItem('userInfo')))
-      }
-//      console.log('created', this.add())
+
     },
     computed: {
       ...mapGetters({
@@ -52,9 +50,7 @@
       },
       logout () {
         logoutUser().then(resp => {
-//          console.log('delinfo', resp)
           if (resp.data.status === 'success') {
-//            this.$alert('退出成功', {confirmButtonText: 'ok'})
             this.$router.push({path: '/index'})
           } else {
             alert('退出失败')

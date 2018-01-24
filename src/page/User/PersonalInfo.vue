@@ -43,13 +43,6 @@
   import {ChangePersonalInfo, Info} from '../../model/user'
   export default {
     components: {navi, BasePage},
-    created: function () {
-      if (!this.msg) {
-        console.log('vuex no info')
-        this.$store.commit('SET_STATUS', JSON.parse(sessionStorage.getItem('userInfo')))
-      }
-//      console.log('created', this.add())
-    },
     computed: {
       ...mapGetters({
         msg: 'GET_MSG'
@@ -90,7 +83,6 @@
         'email': this.msg[0][0].email
       })
       Info(email[0]).then(resp => {
-        console.log('info', resp.data.status)
         if (resp.data.status === 'success') {
           this.formLabelAlign.name = resp.data.data[0][0].name
           this.formLabelAlign.email = resp.data.data[0][0].email
@@ -106,7 +98,6 @@
     },
     methods: {
       changeInfo () {
-//        console.log(this.changeinfo)
         this.changeinfo = false
       },
       cancel () {
@@ -114,7 +105,6 @@
       },
       confirm () {
         ChangePersonalInfo(this.formLabelAlign).then(resp => {
-//          console.log('addinfo', resp.data.status)
           if (resp.data.status === 'success') {
             this.$alert('修改成功', {confirmButtonText: 'ok'})
             document.location.reload()

@@ -83,6 +83,7 @@
                                     size="mini">
                                 <el-checkbox v-for="item in permissions" :label="item.value" :key="item.value" border>{{item.lable}}</el-checkbox>
                             </el-checkbox-group>
+                            <p style="color: red">带星号的为必填项</p>
                         </el-form-item>
                     </el-form>
                     <div slot="footer" class="dialog-footer">
@@ -108,6 +109,7 @@
                                     size="mini">
                                 <el-checkbox v-for="item in permissions" :label="item.value" :key="item.value" border>{{item.lable}}</el-checkbox>
                             </el-checkbox-group>
+                            <p style="color: red">带星号的为必填项</p>
                         </el-form-item>
                     </el-form>
                     <div slot="footer" class="dialog-footer">
@@ -208,17 +210,7 @@
         }
       }
     },
-    created: function () {
-      if (!this.msg) {
-        this.$store.commit('SET_STATUS', JSON.parse(sessionStorage.getItem('userInfo')))
-      }
-//      console.log('created', this.add())
-    },
     mounted: function () {
-//      console.log('aaa', this.msg)
-//      this.add()
-//      console.log('created', this.add())
-//      console.log('status', this.info)
       if (addPermission(this.msg) === true) {
         this.PermissionAdd = true
       } else {
@@ -235,24 +227,19 @@
         this.PermissionDelete = false
       }
       RoleInfo().then(resp => {
-//        console.log('roles', resp.data.data[0])
-//        console.log('userinfo', resp.data.data[0].length)
         for (let i = 0; i < resp.data.data[0].length; i++) {
           this.tableData.push({
             'name': resp.data.data[0][i].name,
             'display_name': resp.data.data[0][i].display_name,
             'description': resp.data.data[0][i].description
           })
-//          console.log(this.tableData)
         }
-//        console.log('permission', resp.data.data[1])
         for (let i = 0; i < resp.data.data[1].length; i++) {
           this.permissions.push({
             'lable': resp.data.data[1][i].display_name,
             'value': resp.data.data[1][i].id
           })
         }
-//        console.log('permission', this.permissions)
       }).catch(resp => {
         this.$alert('网络差', '失败', {confirmButtonText: 'ok'})
       })
@@ -270,7 +257,6 @@
         console.log(this.multipleSelection)
       },
       handleEdit (index, row) {
-//        console.log(index, row)
         this.Changeinfo = true
         this.formchange.display_name = row.display_name
         this.formchange.name = row.name
@@ -281,26 +267,22 @@
           'display_name': row.display_name
         })
         FindRolePermission(name[0]).then(resp => {
-//          console.log('addinfo', resp)
           for (let i = 0; i < resp.data.data[0].length; i++) {
             this.formchange.permission.push(
               resp.data.data[0][i].permission_id
             )
           }
-//          console.log(this.formchange.permission)
         }).catch(resp => {
           this.$alert('网络差', '失败', {confirmButtonText: 'ok'})
         })
       },
       showinfo (index, row) {
-//        console.log(index, row)
         this.Showinfo = true
         var name = []
         name.push({
           'display_name': row.display_name
         })
         FindRolePermissionName(name[0]).then(resp => {
-//          console.log('addinfo', resp)
           this.forminfo.display_name = row.display_name
           this.forminfo.name = row.name
           this.forminfo.description = row.description
@@ -311,20 +293,17 @@
               'type': 'success'
             })
           }
-//          console.log(this.tags)
         }).catch(resp => {
           this.$alert('网络差', '失败', {confirmButtonText: 'ok'})
         })
       },
       handleDelete (index, row) {
-//        console.log(index, row.email)
         var name = []
         name.push({
           'display_name': row.display_name
         })
         console.log(name)
         DeleteRole(name[0]).then(resp => {
-//          console.log('addinfo', resp)
           if (resp.data.status === 'success') {
             alert('删除成功')
             document.location.reload()
@@ -336,7 +315,6 @@
         })
       },
       confirminfo () {
-//        console.log(this.formadd)
         AddRole(this.formadd).then(resp => {
 //          console.log('addinfo', resp)
           if (resp.data.status === 'success') {
@@ -350,12 +328,9 @@
         })
       },
       changeinfo () {
-//        console.log(this.formchange.permission)
         ChangeRole(this.formchange).then(resp => {
-//          console.log('changeinfo', resp)
           if (resp.data.status === 'success') {
             this.$alert('修改成功', {confirmButtonText: 'ok'})
-//            document.location.reload()
           } else {
             this.$alert('修改失败', {confirmButtonText: 'ok'})
           }
