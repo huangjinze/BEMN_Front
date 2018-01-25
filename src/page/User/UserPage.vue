@@ -23,7 +23,7 @@
                 <div class="table-scrollable" style="">
                     <el-table
                             ref="multipleTable"
-                            :data="tableData"
+                            :data="tableData.slice((currentPage-1)*pagesize,currentPage*pagesize)"
                             tooltip-effect="dark"
                             stripe
                             style="width: 100%">
@@ -152,6 +152,16 @@
                     </div>
                 </el-dialog>
             </div>
+            <el-pagination
+                    align="center"
+                    @size-change="handleSizeChange"
+                    @current-change="handleCurrentChange"
+                    :current-page="currentPage"
+                    :page-sizes="[5, 10, 20, 50, 100]"
+                    :page-size="pagesize"
+                    layout="total, sizes, prev, pager, next, jumper"
+                    :total="tableData.length">
+            </el-pagination>
         </div>
     </BasePage>
 </template>
@@ -167,6 +177,8 @@
     data () {
       return {
         tableData: [],
+        currentPage: 1,
+        pagesize: 5,
         Addinfo: false,
         Changeinfo: false,
         PermissionAdd: false,
@@ -332,6 +344,12 @@
         }).catch(resp => {
           this.$alert('网络差', '失败', {confirmButtonText: 'ok'})
         })
+      },
+      handleSizeChange: function (size) {
+        this.pagesize = size
+      },
+      handleCurrentChange: function (currentPage) {
+        this.currentPage = currentPage
       }
     }
   }

@@ -1,6 +1,5 @@
 <template>
   <BasePage>
-    <div slot="header">header</div>
     <div slot="aside">
       <navi></navi>
     </div>
@@ -84,7 +83,7 @@
           this.tab = tab
         }
         getNewsTitle({category: this.tab}).then(resp => {
-          console.log(resp)
+          console.log('data', resp)
           this.news.splice(0, this.news.length)
           this.totalSize = resp.data.data.length
           for (let k in resp.data.data) {

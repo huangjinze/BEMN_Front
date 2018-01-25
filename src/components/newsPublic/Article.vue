@@ -20,7 +20,7 @@
                   </el-button>
                 </el-col>
               </el-row>
-              <el-row class="new-row" v-for="index in news.splice((currentPage-1)*pageSize,currentPage*pageSize)" :key="index.no">
+              <el-row class="new-row" v-for="index in news.slice((currentPage-1)*pageSize,currentPage*pageSize)" :key="index.no">
                 <el-col :span="20" class="new-title">{{index.title}}</el-col>
                 <span style="float:right;">
                   <el-button type="danger" icon="el-icon-delete" @click="deleteNew(index.no)">
@@ -124,11 +124,11 @@ export default {
       this.flage = 'true'
     },
     editNew (id) {
-      this.flage = 'flase'
+      this.flage = 'false'
       this.$emit('edit', id)
     },
     edit () {
-      this.flage = 'flase'
+      this.flage = 'false'
       this.newContents = {}
     },
     onSubmit () {
