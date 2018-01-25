@@ -6,7 +6,7 @@
                 <el-row>
                     <el-col :span="24">
                         <div id="demo1" class="grid-content bg-purple-dark">
-                            <h3 class="title" style="display:inline;padding-left: 0px;padding-right: 6px;font-weight: bold;">水土保持领域</h3>
+                            <h3 class="title" style="display:inline;padding-left: 0px;padding-right: 6px;font-weight: bold;">通量数据</h3>
                         </div>
                     </el-col>
                 </el-row>
@@ -14,7 +14,7 @@
             </div>
             <!--按钮-->
             <div class="button" style="margin-right: 15px; float:right;">
-                <el-button type="primary" v-on:click="Addinfo = true">添加</el-button>
+                <el-button type="primary" v-on:click="Addinfo = true"  v-if="PermissionAdd === true">添加</el-button>
                 <!--<el-button type="primary" v-on:click="DeleteInfo">删除</el-button>-->
                 <!--<el-button type="primary" v-on:click="ResetPwd">重置密码</el-button>-->
             </div>
@@ -86,8 +86,8 @@
                                 label="操作"
                                 width="150">
                             <template slot-scope="scope">
-                                <el-button type="primary" size="small" @click="handleEdit(scope.$index, scope.row)">编辑</el-button>
-                                <el-button type="warning" size="small" @click="handleDelete(scope.$index, scope.row)">删除</el-button>
+                                <el-button type="primary" size="small" v-if="PermissionChange === true" @click="handleEdit(scope.$index, scope.row)">编辑</el-button>
+                                <el-button type="warning" size="small" v-if="PermissionDelete === true" @click="handleDelete(scope.$index, scope.row)">删除</el-button>
                             </template>
                         </el-table-column>
                     </el-table>
@@ -100,7 +100,7 @@
                         <el-form-item label="站点名称" :label-width="formLabelWidth"  prop="station_name">
                             <el-input v-model="formadd.station_name" auto-complete="off"></el-input>
                         </el-form-item>
-                        <el-form-item label="管理员" :label-width="formLabelWidth">
+                        <el-form-item label="管理员" :label-width="formLabelWidth" v-show="PerMissionAddAdmin === true">
                             <el-select v-model="formadd.admin" placeholder="请选择">
                                 <el-option label="无" value=""></el-option>
                                 <el-option
@@ -137,6 +137,7 @@
                         </el-form-item>
                         <el-form-item label="备注" :label-width="formLabelWidth" prop="remarks">
                             <el-input v-model="formadd.remarks" auto-complete="off"></el-input>
+                            <p style="color: red">带星号的为必填项</p>
                         </el-form-item>
                     </el-form>
                     <div slot="footer" class="dialog-footer">
@@ -152,7 +153,7 @@
                         <el-form-item label="站点名称" :label-width="formLabelWidth"  prop="station_name">
                             <el-input v-model="formchange.station_name" auto-complete="off" :disabled="true"></el-input>
                         </el-form-item>
-                        <el-form-item label="管理员" :label-width="formLabelWidth">
+                        <el-form-item label="管理员" :label-width="formLabelWidth"  v-show="PermissionChangeAdmin">
                             <el-select v-model="formchange.admin" placeholder="请选择">
                                 <el-option label="无" value=""></el-option>
                                 <el-option
@@ -189,6 +190,7 @@
                         </el-form-item>
                         <el-form-item label="备注" :label-width="formLabelWidth" prop="remarks">
                             <el-input v-model="formchange.remarks" auto-complete="off"></el-input>
+                            <p style="color: red">带星号的为必填项</p>
                         </el-form-item>
                     </el-form>
                     <div slot="footer" class="dialog-footer">
@@ -203,10 +205,11 @@
 
 <script>
   //  import {store} from '../store/index'
-  import {mapState, mapGetters} from 'vuex'
+  import {mapGetters} from 'vuex'
   import navi from '../../components/layout/navi'
   import BasePage from '../../components/BasePage'
   import {vtfStationInfo, DeletevtfStation, AddvtfStation, ChangevtfInfo, FindUserId} from '../../model/station'
+  import {addTowerPermission, changeTowerPermission, addAdminPermission, changeAdminPermission, deleteAdminPermission, deleteTowerPermission} from '../../Permission/vtfStationPermission'
   export default {
     components: {navi, BasePage},
     data () {
@@ -214,8 +217,13 @@
         tableData: [],
         Addinfo: false,
         Changeinfo: false,
+        PermissionAdd: false,
+        PerMissionAddAdmin: false,
+        PermissionChange: false,
+        PermissionDelete: false,
+        PermissionChangeAdmin: false,
         formadd: {
-          domain: '水土保持',
+          domain: '通量数据',
           station_name: '',
           admin: '',
           station_coding: '',
@@ -229,7 +237,7 @@
           remarks: ''
         },
         formchange: {
-          domain: '水土保持',
+          domain: '通量数据',
           station_name: '',
           admin: '',
           station_coding: '',
@@ -271,9 +279,32 @@
       }
     },
     mounted: function () {
-      vtfStationInfo().then(resp => {
-        console.log('tifStationInfo', resp.data.data)
-//        console.log('userinfo', resp.data.data[0].length)
+      if (addTowerPermission(this.msg) === true) {
+        this.PermissionAdd = true
+      } else {
+        this.PermissionAdd = false
+      }
+      if (addAdminPermission(this.msg) === true) {
+        this.PerMissionAddAdmin = true
+      } else {
+        this.PerMissionAddAdmin = false
+      }
+      if (changeTowerPermission(this.msg) === true || addAdminPermission(this.msg) === true || changeAdminPermission(this.msg) === true || deleteAdminPermission(this.msg) === true) {
+        this.PermissionChange = true
+      } else {
+        this.PermissionChange = false
+      }
+      if (deleteTowerPermission(this.msg) === true) {
+        this.PermissionDelete = true
+      } else {
+        this.PermissionDelete = false
+      }
+      if (addAdminPermission(this.msg) === true || changeAdminPermission(this.msg) === true || deleteAdminPermission(this.msg) === true) {
+        this.PermissionChangeAdmin = true
+      } else {
+        this.PermissionChangeAdmin = false
+      }
+      vtfStationInfo(this.msg[0][0]).then(resp => {
         for (let i = 0; i < resp.data.data[0].length; i++) {
           this.tableData.push({
             'station_name': resp.data.data[0][i].station_name,
@@ -289,7 +320,7 @@
             'remarks': resp.data.data[0][i].remarks
           })
         }
-        console.log('asd', this.tableData[1]['stations_longitude'])
+        console.log('asd', resp.data.data[1])
         for (let i = 0; i < resp.data.data[1].length; i++) {
           this.options.push({
             'value': resp.data.data[1][i].id,
@@ -301,9 +332,6 @@
       })
     },
     computed: {
-      ...mapState([
-        'status'
-      ]),
       ...mapGetters({
         msg: 'GET_MSG'
       })
@@ -348,7 +376,6 @@
         }
       },
       handleDelete (index, row) {
-//        console.log(index, row.email)
         var info = []
         info.push({
           'name': row.name,

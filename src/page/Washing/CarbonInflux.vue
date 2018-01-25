@@ -1,5 +1,5 @@
 <template>
-  <div  v-loading="loading" id="dataWashing">
+  <div  v-loading.fullscreen.lock="loading" id="dataWashing">
     <el-col :span="24">
       <el-steps :active="step" finish-status="success" simple>
         <el-step title="1 范围检查"></el-step>
@@ -128,14 +128,16 @@
     watch: {
       m_indexes: function (newValue) {
         console.log('test')
-        this.form.range.splice(0, this.form.range.length)
+        if (typeof (this.form.range) !== 'undefined') {
+          this.form.range.splice(0, this.form.range.length)
+        }
       },
       step: function (newValue) {
         if (newValue === 3) {
           let data = {xAxis: {data: []}, series: [{name: 'co2_flux', type: 'bar', data: []}]}
           this.loading = true
           UStar({
-            'domain': '水土保持',
+            'domain': '通量数据',
             'year': this.washing_form.year,
             'station': this.washing_form.station,
             'user_mail': '1103232282@qq.com',
@@ -187,7 +189,7 @@
         if (this.step === 1) {
           despiking({
             'data': this.form.range,
-            'domain': '水土保持',
+            'domain': '通量数据',
             'year': this.washing_form.year,
             'station': this.washing_form.station,
             'classification': '通量',
@@ -200,9 +202,11 @@
               console.log(resp)
               alert(resp.data.data)
             } else {
+              this.step = this.step - 1
               alert(resp.data.reason)
             }
           }).catch(() => {
+            this.step = this.step - 1
             this.loading = false
             alert('网络差')
           })
@@ -210,7 +214,7 @@
 
         if (this.step === 2) {
           CStore({
-            'domain': '水土保持',
+            'domain': '通量数据',
             'year': this.washing_form.year,
             'station': this.washing_form.station,
             'user_mail': '1103232282@qq.com',
@@ -222,10 +226,12 @@
               alert(resp.data.data[0])
             } else {
               alert(resp.data.reason)
+              this.step = this.step - 1
             }
           }).catch(() => {
             this.loading = false
             alert('网络差')
+            this.step = this.step - 1
           })
         }
 
@@ -234,9 +240,8 @@
         }
 
         if (this.step === 4) {
-          this.loading = false
           Gapfill({
-            'domain': '水土保持',
+            'domain': '通量数据',
             'year': this.washing_form.year,
             'station': this.washing_form.station,
             'user_mail': '1103232282@qq.com',
@@ -248,10 +253,12 @@
               alert(resp.data.data[0])
             } else {
               alert(resp.data.reason)
+              this.step = this.step - 1
             }
           }).catch(() => {
             this.loading = false
             alert('网络差')
+            this.step = this.step - 1
           })
         }
 
@@ -275,7 +282,7 @@
         let data = {xAxis: {data: []}, series: [{name: 'co2_flux', type: 'bar', data: []}]}
         this.loading = true
         UStar({
-          'domain': '水土保持',
+          'domain': '通量数据',
           'year': this.washing_form.year,
           'station': this.washing_form.station,
           'user_mail': '1103232282@qq.com',
@@ -285,6 +292,7 @@
           this.loading = false
           console.log('net', resp)
           if (resp.data.status !== 'success') {
+            this.step = this.step - 1
             this.$alert(resp.data.reason, '失败', {confirmButtonText: 'ok'})
           } else {
             if (resp.data.data.length !== 0) {
@@ -305,6 +313,7 @@
           }
         }).catch(() => {
           this.loading = false
+          this.step = this.step - 1
           alert('网络差')
         })
         this.adjustChartShow = true
@@ -315,7 +324,7 @@
           {
             'type': '碳通量',
             'data': this.form.range,
-            'domain': '水土保持',
+            'domain': '通量数据',
             'year': this.washing_form.year,
             'station': this.washing_form.station,
             'classification': '通量',
@@ -325,9 +334,12 @@
               console.log(resp)
               alert(resp.data.data[0])
             } else {
+              this.step = this.step - 1
               alert(resp.data.reason)
             }
           }).catch(() => {
+            this.loading = false
+            this.step = this.step - 1
             alert('网络差')
           })
       }

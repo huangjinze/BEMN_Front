@@ -30,7 +30,7 @@
         console.log('dataExport Click')
       },
       dataSource () {
-        getDataManager({station: '奥林匹克', classification: '通量', domain: '水土保持', category: 'A', page: 1}).then(resp => {
+        getDataManager({station: '奥林匹克', classification: '通量', domain: '通量数据', category: 'A', page: 1}).then(resp => {
           console.log(resp)
         }).catch(resp => {
           this.$alert('网络差', '失败', {confirmButtonText: 'ok'})

@@ -37,7 +37,7 @@ export default {
     }
   },
   mounted: function () {
-    getStation({domain: '水土保持'}).then(resp => {
+    getStation({domain: '通量数据'}).then(resp => {
       let data = resp.data.data
       console.log(data)
       this.index.splice(0, this.index.length)

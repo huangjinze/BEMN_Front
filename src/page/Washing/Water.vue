@@ -1,34 +1,73 @@
 <template>
-  <div  v-loading="loading">
+  <div  v-loading.fullscreen.lock="loading">
     <el-steps :active="step" finish-status="success" simple>
       <el-step title="1 范围检查"></el-step>
       <el-step title="2 去除峰值"></el-step>
       <el-step title="3 插补缺失"></el-step>
     </el-steps>
 
-    <el-col v-if="step === 0">
+    <el-col v-show="step === 0">
       <el-col id="rangeCheck">
-          <rangeCheck :indexes="form.indexes" v-model="form.range"></rangeCheck>
+        <rangeCheck
+          :indexes="indexes"
+          v-model="form.range">
+        </rangeCheck>
       </el-col>
     </el-col>
 
-    <el-col v-if="step === 1"  id="zValue">
+    <el-col v-show="step === 1"  id="zValue">
       z值：
       <el-input-number v-model="form.z">
 
       </el-input-number>
     </el-col>
 
-    <el-col :span="24" v-if="step === 2" id="methodSelect">
-      插补方法选择 ：
-      <el-select v-model="form.interpolation">
-        <el-option
-          v-for="item in interpolationOptions"
-          :key="item.label"
-          :label="item.label"
-          :value="item.value">
-        </el-option>
-      </el-select>
+    <el-col :span="24" v-show="step === 2" id="methodSelect">
+
+      <div>
+        <el-col class="select">
+          请选择因变量自变量
+          <el-button type="primary" size="small" @click="onAddVarClick" icon="el-icon-plus" id="plus">增加</el-button>
+          <el-button type="danger" size="small" @click="onDeleteVarClick" icon="el-icon-delete" >删除</el-button>
+        </el-col>
+          <el-row :span="24" v-for="(item,index) in form.variables">
+            <el-col :span="8">
+              因变量:
+              <el-select v-model="item.independent_var">
+                <el-option
+                        v-for="item in form.range"
+                        :key="item.name+'independent'"
+                        :label="item.name"
+                        :value="item.name">
+                </el-option>
+              </el-select>
+            </el-col>
+            <el-col :span="8">
+              自变量:
+              <el-select v-model="item.dependent_var">
+                <el-option
+                        v-for="item in form.range"
+                        :key="item.name+'ubd'"
+                        :label="item.name"
+                        :value="item.name">
+                </el-option>
+              </el-select>
+            </el-col>
+            <el-col :span="8">
+              插补方法选择 ：
+              <el-select v-model="item.interpolation">
+                <el-option
+                        v-for="item in interpolationOptions"
+                        :key="item.label"
+                        :label="item.label"
+                        :value="item.value">
+                </el-option>
+              </el-select>
+            </el-col>
+          </el-row>
+      </div>
+
+
     </el-col>
 
     <div class="bottom-op">
@@ -41,19 +80,25 @@
 </template>
 
 <script>
-  import {getWashingIndexAndRange} from '../../model/data'
+  import {checkWashingIndexRange, despiking, Gapfill} from '../../model/data'
   import rangeCheck from '../../components/datawashing/rangeCheck'
   import BasePage from '../../components/BasePage'
   import navi from '../../components/layout/navi'
   import washingForm from '../../components/datawashing/washingForm'
+  import ElButton from 'element-ui/packages/button/src/button'
 
   export default {
     components: {
+      ElButton,
       rangeCheck,
       BasePage,
       navi,
       washingForm},
     name: 'Water',
+    props: {
+      washing_form: {type: Object},
+      indexes: {type: Array}
+    },
     data () {
       return {
         step: 0,
@@ -62,24 +107,86 @@
         loading: false,
         form: {
           z: 4,
-          interpolation: ' ',
           indexes: [],
-          range: []
+          variables: [{independent_var: '', dependent_var: '', interpolation: ''}]
         },
+        m_indexes: this.indexes,
         interpolationOptions: [{label: '内插', value: '内插'}, {label: '外插', value: '外插'}]
+      }
+    },
+    watch: {
+      m_indexes: function (newValue) {
+        console.log('test')
+        if (typeof (this.form.range) !== 'undefined') {
+          this.form.range.splice(0, this.form.range.length)
+        }
       }
     },
     methods: {
       onNextClick () {
         this.loading = true
 
-        this.step = this.step + 1
+        if (this.step === 0) {
+          this.postIndexes().then(
+            () => {
+              this.loading = false
+            })
+        }
+
+        if (this.step === 1) {
+          despiking({
+            'data': this.form.range,
+            'domain': '通量数据',
+            'year': this.washing_form.year,
+            'station': this.washing_form.station,
+            'user_mail': '1103232282@qq.com',
+            'z': this.form.z,
+            'type': '水'
+          }).then((resp) => {
+            this.loading = false
+            if (resp.data.status === 'success') {
+              console.log(resp)
+              alert(resp.data.data)
+            } else {
+              this.step = this.step - 1
+              alert(resp.data.reason)
+            }
+          }).catch(() => {
+            this.step = this.step - 1
+            this.loading = false
+            alert('网络差')
+          })
+        }
+
+        if (this.step === 2) {
+          Gapfill({
+            'domain': '通量数据',
+            'year': this.washing_form.year,
+            'station': this.washing_form.station,
+            'user_mail': '1103232282@qq.com',
+            'type': '水'
+          }).then((resp) => {
+            this.loading = false
+            if (resp.data.status === 'success') {
+              console.log(resp)
+              alert(resp.data.data[0])
+            } else {
+              this.step = this.step - 1
+              alert(resp.data.reason)
+            }
+          }).catch(() => {
+            this.loading = false
+            this.step = this.step - 1
+            alert('网络差')
+          })
+        }
+
         if (this.step >= 2) {
           this.nextDisable = true
         }
         this.preDisable = false
 
-        this.loading = false
+        this.step = this.step + 1
       },
       onPreClick () {
         this.loading = true
@@ -92,27 +199,37 @@
         this.nextDisable = false
 
         this.loading = false
-      }
-    },
-    mounted () {
-      getWashingIndexAndRange(
-        {
-          domain: '水土保持',
-          station: '盐池_1',
-          classification: '通量'}).then(resp => {
-            this.loading = true
-            resp.data.data.map(item => {
-              let index = {
-                name: item.name,
-                high: isNaN(parseFloat(item.max_default_value)) ? 0 : parseFloat(item.max_default_value),
-                low: isNaN(parseFloat(item.min_default_value)) ? 0 : parseFloat(item.min_default_value),
-                isShow: true
-              }
-              console.log(index)
-              this.form.indexes.push(index)
-            })
+      },
+      postIndexes () {
+        this.loading = true
+        return checkWashingIndexRange(
+          {
+            'type': '水',
+            'data': this.form.range,
+            'domain': '通量数据',
+            'year': this.washing_form.year,
+            'station': this.washing_form.station,
+            'user_mail': '1103232282@qq.com'
+          }).then((resp) => {
+            if (resp.data.status === 'success') {
+              console.log(resp)
+              alert(resp.data.data[0])
+            } else {
+              this.step = this.step - 1
+              alert(resp.data.reason)
+            }
+          }).catch(() => {
+            this.step = this.step - 1
             this.loading = false
+            alert('网络差')
           })
+      },
+      onAddVarClick () {
+        this.form.variables.push({independent_var: '', dependent_var: '', interpolation: ''})
+      },
+      onDeleteVarClick () {
+        this.form.variables.pop()
+      }
     }
   }
 </script>
@@ -131,7 +248,13 @@
   }
   #methodSelect{
     text-align: center;
-    margin-top: 30px;
+    margin: 30px 0;
+  }
+  .select{
+    margin-bottom: 30px;
+  }
+  #plus{
+    margin-left: 10px;
   }
 
 </style>
