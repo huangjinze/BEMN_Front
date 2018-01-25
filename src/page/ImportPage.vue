@@ -21,7 +21,7 @@
 //  import headGuider from '../components/headGuider'
   import BasePage from '../components/BasePage'
   import moment from 'moment'
-  import {getStation, getClass, submitTwoSelect} from '../model/vftData'
+  import {getStation, getClass, submitTwoSelect, showExport} from '../model/vftData'
   import {getVFTIndex} from '../model/data'
 //  import { host } from '../model/data'
   export default {
@@ -46,7 +46,7 @@
       }
     },
     mounted: function () {
-      getStation({domain: '水土保持'}).then(resp => {
+      getStation({domain: '通量数据'}).then(resp => {
         let data = resp.data.data
         console.log(data)
         this.index.splice(0, this.index.length)
@@ -62,7 +62,7 @@
     methods: {
       parentStationListen (id) {
         let temp = this.stations.find(function (value, index, stations) { return value.id === id })
-        getClass({domain: '水土保持', station: temp.text}).then(resp => {
+        getClass({domain: '通量数据', station: temp.text}).then(resp => {
           //  console.log(resp)
           let data = resp.data.data
           console.log(resp.data)
@@ -80,7 +80,7 @@
       },
       parentClassListen (id) {
         let temp = this.indexTags.find(function (value, index, classes) { return value.id === id })
-        getVFTIndex({station: this.stationName[0], classification: temp.text, domain: '水土保持'}).then(resp => {
+        getVFTIndex({station: this.stationName[0], classification: temp.text, domain: '通量数据'}).then(resp => {
           let data = resp.data.data[0]
           let i = 0
           this.index.splice(0, this.index.length)
@@ -127,23 +127,41 @@
         if (DataTable[0] && DataTable[1] && topTag) {
           let startDate = moment(DataTable[0]).format('YYYY-MM-DD')
           let endDate = moment(DataTable[1]).format('YYYY-MM-DD')
-          let domain = '水土保持'
+          let domain = '通量数据'
           let stationName = this.stationName[0]
           let className = this.className[0]
           let indexName = this.indexName[0]
-//          showExport({domain: domain,
-//            station_name: stationName,
-//            clickIndex: indexName,
-//            startTime: startDate,
-//            endTime: endDate,
-//            dataType: 'clean',
-//            class_name: className})
-          window.open('http://127.0.0.1/excel/vft/showExport?domain=' + domain +
-                  '&station_name=' + stationName +
-                  '&clickIndex=' + indexName +
-                  '&startTime=' + startDate +
-                  '&endTime=' + endDate +
-                  '&dataType=clean&class_name=' + className)
+          showExport({domain: domain,
+            station_name: stationName,
+            clickIndex: indexName,
+            startTime: startDate,
+            endTime: endDate,
+            dataType: 'clean',
+            class_name: className}).then(resp => {
+              const content = resp
+              console.log(content)
+              const blob = new Blob([content])
+              const fileName = '测试表格123.xls'
+              if ('download' in document.createElement('a')) { // 非IE下载
+                const elink = document.createElement('a')
+                elink.download = fileName
+                elink.style.display = 'none'
+                elink.href = URL.createObjectURL(blob)
+                console.log(elink.href)
+                document.body.appendChild(elink)
+                elink.click()
+                URL.revokeObjectURL(elink.href) // 释放URL 对象
+                document.body.removeChild(elink)
+              } else { // IE10+下载
+                navigator.msSaveBlob(blob, fileName)
+              }
+            })
+//          window.open('http://127.0.0.1/excel/vft/showExport?domain=' + domain +
+//                  '&station_name=' + stationName +
+//                  '&clickIndex=' + indexName +
+//                  '&startTime=' + startDate +
+//                  '&endTime=' + endDate +
+//                  '&dataType=clean&class_name=' + className)
         } else if (!topTag) {
           this.$message({
             message: '请先选择指标',
@@ -161,7 +179,7 @@
         if (MonthTable[0] && MonthTable[1] && topTag) {
           let startDate = MonthTable[0]
           let endDate = MonthTable[1]
-          let domain = '水土保持'
+          let domain = '通量数据'
           let stationName = this.stationName[0]
           let className = this.className[0]
           let indexName = this.indexName[0]
@@ -183,7 +201,7 @@
         if (DataValue[0] && DataValue[1] && topTag) {
           let startDate = moment(DataValue[0]).format('YYYY-MM-DD')
           let endDate = moment(DataValue[1]).format('YYYY-MM-DD')
-          let domain = '水土保持'
+          let domain = '通量数据'
           let stationName = this.stationName[0]
           let className = this.className[0]
           let indexName = this.indexName[0]
@@ -205,7 +223,7 @@
         if (MonthValue[0] && MonthValue[1] && topTag) {
           let startDate = MonthValue[0]
           let endDate = MonthValue[1]
-          let domain = '水土保持'
+          let domain = '通量数据'
           let stationName = this.stationName[0]
           let className = this.className[0]
           let indexName = this.indexName[0]
@@ -224,7 +242,7 @@
       },
       select_station (stationId) {
         let temp = this.stations.find(function (value, index, stations) { return value.id === stationId })
-        getClass({domain: '水土保持', station: temp.text}).then(resp => {
+        getClass({domain: '通量数据', station: temp.text}).then(resp => {
           //  console.log(resp)
           let data = resp.data.data
           console.log(resp.data)
@@ -241,7 +259,7 @@
         var j = uploadForm.get('class')
         var stationName = this.stations.find(function (value) { return value.id === Number(i) })
         var className = this.dataImport_classList.find(function (value) { return value.id === Number(j) })
-        submitTwoSelect({'station': stationName.text, 'class': className.text, 'domain': '水土保持', 'path': uploadForm.get('path')}).then(resp => {
+        submitTwoSelect({'station': stationName.text, 'class': className.text, 'domain': '通量数据', 'path': uploadForm.get('path')}).then(resp => {
           console.log(resp)
         }).catch(resp => {
           this.$alert('上传失败', '失败', {confirmButtonText: 'ok'})

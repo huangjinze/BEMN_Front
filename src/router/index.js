@@ -17,13 +17,14 @@ import UserPage from '@/page/User/UserPage.vue'
 import RolesPage from '@/page/User/RolesPage.vue'
 import vtfStation from '@/page/Station/vtfStation.vue'
 import tifStation from '@/page/Station/tifStation.vue'
+import devicePage from '@/page/Device/devicePage'
 
 Vue.use(Router)
 
 export default new Router({
   routes: [
     {
-      path: '/',
+      path: '/', // 领域计数展示功能，负责人雷答
       name: 'home',
       component: HomePage
     },
@@ -48,7 +49,7 @@ export default new Router({
       component: vftList
     },
     {
-      path: '/vtf/Importpage',
+      path: '/vtf/Importpage', // 水保领域导入导出页面 负责人雷答
       name: 'vtfImportpage',
       component: ImportPage
     },
@@ -63,7 +64,7 @@ export default new Router({
       component: Article
     },
     {
-      path: '/tif/forestAreaAll',
+      path: '/tif/forestAreaAll', // 森林领域计数展示页面 负责人雷答
       name: 'forestAreaAll',
       component: tifForestAreaAllPage
     },
@@ -73,7 +74,7 @@ export default new Router({
       component: forestDominPage
     },
     {
-      path: '/vft/dataShow',
+      path: '/vft/dataShow', //  水保领域数据表格展示页面 负责人雷答
       name: 'dataShow',
       component: vftDataShowPage
     },
@@ -106,6 +107,11 @@ export default new Router({
       path: '/tifstation',
       name: 'tifstation',
       component: tifStation
+    },
+    {
+      path: '/deviceManage', //  设备管理页面，负责人雷答
+      name: devicePage,
+      component: devicePage
     }
   ]
 
