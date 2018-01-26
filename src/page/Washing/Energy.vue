@@ -25,7 +25,7 @@
 
     <div v-show="step === 2" id="regression">
       <el-col :span="24" id="charts">
-        <charts v-show="closeChartShow" class="testchart" id="chart_1" :chartMeta="chartMetaData"></charts>
+        <echart v-show="closeChartShow"  :options="chartMetaData"></echart>
       </el-col>
       <el-col :span="24" id="drawGraph">
         <el-button @click="onUValueDraw" type="primary">生成回归图</el-button>
@@ -93,20 +93,20 @@
   import BasePage from '../../components/BasePage'
   import navi from '../../components/layout/navi'
   import washingForm from '../../components/datawashing/washingForm'
-  import charts from '../../components/echart/charts'
+  import echart from 'vue-echarts'
   import ElButton from 'element-ui/packages/button/src/button'
   import ElInputNumber from 'element-ui/packages/input-number/src/input-number'
   import {checkWashingIndexRange, despiking, pca, Gapfill} from '../../model/data'
 
   export default {
     components: {
+      echart,
       ElInputNumber,
       ElButton,
       rangeCheck,
       BasePage,
       navi,
-      washingForm,
-      charts},
+      washingForm},
     name: 'Energy',
     props: {
       washing_form: {type: Object},
