@@ -5,7 +5,7 @@
     <div slot="aside"><navi></navi></div>
     <div slot="main">
       <el-row :span="24">
-        <singleSelect v-model="formValue.station"></singleSelect>
+        <singleSelect v-model="station"></singleSelect>
       </el-row>
       <el-row :span="24">
       <chartForm
@@ -13,7 +13,7 @@
         v-model="formValue"
         @Click="onClick"
         v-loading="loading"></chartForm>
-      <charts class="testchart" id="1"  :chartMeta="chartMetaData"></charts>
+      <echart :options="chartMetaData"></echart>
       </el-row>
     </div>
   </BasePage>
@@ -21,22 +21,22 @@
 
 <script>
 
-import charts from '../../components/echart/charts.vue'
 import navi from '../../components/layout/navi'
 import BasePage from '../../components/BasePage'
 import chartForm from '../../components/echart/vtfChartForm'
 import {getVTFData, getVFTIndex} from '../../model/data'
 import singleSelect from '../../components/multiSelect/singleSelect'
+import echart from 'vue-echarts'
 
 export default {
-  components: {charts, navi, BasePage, chartForm, singleSelect},
+  components: {echart, navi, BasePage, chartForm, singleSelect},
   name: 'vtfStaiscticPage',
   data () {
     return {
       loading: false,
       targetOptions: [],
+      station: '奥林匹克',
       formValue: {
-        station: '奥林匹克',
         index: [],
         selectedType: 'a',
         model: 'mean',
@@ -67,8 +67,28 @@ export default {
       }
     }
   },
+  watch: {
+    station: function (newValue) {
+      this.targetOptions.splice(0, this.targetOptions.length)
+      console.log('station_change', newValue)
+      getVFTIndex({station: this.station, classification: '气象', domain: '通量数据'}).then(resp => {
+        console.log('get_vft_index', resp)
+        let data = resp.data.data[0]
+        for (let k in data) {
+          let child = data[k].map(item => {
+            return {'label': item, 'value': item}
+          })
+          console.log('get_vft_index_child', child)
+          this.targetOptions.push({'label': k, 'value': k, 'children': child})
+        }
+        console.log('get_vft_index_finish', this.targetOptions)
+      }).catch(resp => {
+        this.$alert('网络差', '失败', {confirmButtonText: 'ok'})
+      })
+    }
+  },
   mounted: function () {
-    getVFTIndex({station: '盐池_1', classification: '气象', domain: '通量数据'}).then(resp => {
+    getVFTIndex({station: this.station, classification: '气象', domain: '通量数据'}).then(resp => {
       console.log('get_vft_index', resp)
       let data = resp.data.data[0]
       for (let k in data) {
@@ -90,7 +110,7 @@ export default {
       let data = {xAxis: {data: []}, series: [{name: 'co2_flux', type: 'bar', data: []}]}
       getVTFData({'index': this.formValue.index[1],
         domain: '通量数据',
-        station: this.formValue.station,
+        station: this.station,
         classification: '气象',
         start_time: this.formValue.start_time,
         end_time: this.formValue.end_time,

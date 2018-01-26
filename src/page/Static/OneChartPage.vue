@@ -1,52 +1,130 @@
 <template>
 <div v-loading.fullscreen.lock="loading">
-
-  <el-row>
+<div v-if="showChart">
+  <el-row v-for="(item, index) in chartMetaList" :key="'chart_key'+index">
     <el-col :span="18" :offset="3">
-      <charts class="test" id="echart-1" :chartMeta="chartMetaData"></charts>
+      <echart :options="item"></echart>
     </el-col>
   </el-row>
 
   <el-row>
-   <el-col :span="1" :offset="10">
+    <el-col :span="1" :offset="10">
       <el-button type="primary">确认</el-button>
     </el-col>
     <el-col :span="1" :offset="1">
-        <el-button type="danger">放弃</el-button>
-      </el-col>
-    </el-row>
+      <el-button type="danger">放弃</el-button>
+    </el-col>
+  </el-row>
+</div>
+
   </div>
 </template>
 
 <script>
-  import charts from '../../components/echart/charts'
+  import {gapfillRes} from '../../model/data'
+  import echart from 'vue-echarts'
 
   export default {
-    components: {
-      charts},
+    components: {echart},
     name: 'one-chart-page',
     data () {
       return {
-        table: '',
         loading: false,
-        chartMetaData: {
-          title: {
-            text: '数据'
-          },
-          dataZoom: [
-            {show: true, type: 'inside'}
-          ],
-          tooltip: {
-            trigger: 'axis'
-          },
-          xAxis: {},
-          yAxis: {},
-          series: []
-        }
+        showChart: false,
+        chartMetaList: [
+          {
+            title: {
+              text: '数据'
+            },
+            dataZoom: [
+              {show: true, type: 'inside'}
+            ],
+            tooltip: {
+              trigger: 'axis'
+            },
+            xAxis: {},
+            yAxis: {},
+            series: []
+          }
+        ],
+        station: '',
+        year: '',
+        fill_table: '',
+        gap_table: '',
+        data: []
       }
     },
     mounted: function () {
-      this.table = this.$route.query.table
+      this.station = this.$route.query.station
+      this.year = this.$route.query.year
+      this.fill_table = this.$route.query.fill_table
+      this.gap_table = this.$route.query.gap_table
+      this.data = this.$route.query.data
+      this.loading = true
+      gapfillRes({
+        station: this.station,
+        year: this.year,
+        fill_table: this.fill_table,
+        gap_table: this.gap_table,
+        data: this.data
+      }).then((resp) => {
+        this.chartMetaList = resp.data.data.map((perIndex) => {
+          let meta = {
+            title: {
+              text: perIndex.index + '数据'
+            },
+            grid: {
+              left: '3%',
+              right: '4%',
+              bottom: '3%',
+              containLabel: true
+            },
+            legend: {
+              data: []
+            },
+            dataZoom: [
+              {show: true, type: 'inside'}
+            ],
+            tooltip: {
+              trigger: 'axis'
+            },
+            xAxis: [{
+              boundaryGap: false,
+              data: []
+            }],
+            yAxis: [{ type: 'value' }],
+            series: []
+          }
+          meta.xAxis.data = perIndex.raw_data.map((perData) => { return perData.x })
+
+          meta.series.push({
+            name: '原始数据',
+            type: 'line',
+            data: perIndex.raw_data.map((dataItem) => { return dataItem.y })
+          })
+          meta.legend.data.push('原始数据')
+
+          meta.series.push({
+            name: '清洗后数据',
+            type: 'line',
+            data: perIndex.gap_data.map((dataItem) => { return dataItem.y })
+          })
+          meta.legend.data.push('清洗后数据')
+
+          meta.series.push({
+            name: '填充后数据',
+            type: 'line',
+            data: perIndex.fill_data.map((dataItem) => { return dataItem.y })
+          })
+          meta.legend.data.push('填充后数据')
+
+          return meta
+        })
+
+        console.log('list :', this.chartMetaList)
+        this.loading = false
+        this.showChart = true
+      })
     },
     methods: {
       onConfirmClick: function () {

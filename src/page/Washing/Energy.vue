@@ -75,6 +75,10 @@
           </el-row>
     </el-col>
 
+    <div v-if="step === 3">
+      <i class="el-icon-success">数据QAQC完成</i>
+    </div>
+
     <div class="bottom-op">
       <el-button-group>
         <el-button type="primary" @click="onPreClick" :disabled="preDisable">前一步</el-button>

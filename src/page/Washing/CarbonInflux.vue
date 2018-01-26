@@ -37,12 +37,11 @@
 
     <el-col :span="24" v-if="step === 3">
 
-      <charts class="testchart" id="chart_1" :chartMeta="chartUMetaData"></charts>
-      请输入u*值：<el-input-number  v-model="form.u" :step="0.1"></el-input-number>
+      <echart :options="chartUMetaData"></echart>
       <el-button @click="onUAdjustValueDraw" type="primary">确认</el-button>
 
       <div v-if="adjustChartShow" v-loading="loading">
-        <charts class="chartAdjust" id="chart_2"  :chartMeta="chartMetaDataUAdjust"></charts>
+        <echart :options="chartMetaDataUAdjust"></echart>
       </div>
 
     </el-col>
@@ -59,6 +58,10 @@
       </el-select>
     </div>
 
+    <div v-if="step === 5">
+      <i class="el-icon-success">数据QAQC完成</i>
+    </div>
+
     <div class="bottom-op">
       <el-button-group>
         <el-button type="primary" @click="onPreClick" :disabled="preDisable">前一步</el-button>
@@ -73,10 +76,10 @@
   import BasePage from '../../components/BasePage'
   import navi from '../../components/layout/navi'
   import washingForm from '../../components/datawashing/washingForm'
-  import charts from '../../components/echart/charts'
   import ElButton from 'element-ui/packages/button/src/button'
   import ElInputNumber from 'element-ui/packages/input-number/src/input-number'
   import {checkWashingIndexRange, despiking, CStore, UStar, Gapfill} from '../../model/data'
+  import echart from 'vue-echarts'
 
   export default {
     components: {
@@ -86,7 +89,7 @@
       BasePage,
       navi,
       washingForm,
-      charts},
+      echart},
     name: 'carbonInflux',
     props: {
       washing_form: {type: Object},

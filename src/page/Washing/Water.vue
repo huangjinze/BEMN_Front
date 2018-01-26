@@ -67,8 +67,11 @@
           </el-row>
       </div>
 
-
     </el-col>
+
+    <div v-if="step === 3">
+      <i class="el-icon-success">数据QAQC完成</i>
+    </div>
 
     <div class="bottom-op">
       <el-button-group>
