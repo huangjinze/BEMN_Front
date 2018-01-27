@@ -24,10 +24,10 @@ const user = {
         console.log('vuex log', resp.data.data[0])
         if (resp.data.status === 'failed' && resp.data.reason === 'captcha error!') {
           alert('验证码错误')
-          document.location.reload()
+          return resp.data
         } else if (resp.data.status === 'failed' && resp.data.reason === 'username/password error！') {
           alert('用户名或密码错误')
-          document.location.reload()
+          return resp.data
         } else if (resp.data.status === 'success') {
           alert('登录成功')
           commit('SET_NAME', resp.data.data[0].name)
