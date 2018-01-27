@@ -28,7 +28,7 @@
           <el-button type="primary" size="small" @click="onAddVarClick" icon="el-icon-plus" id="plus">增加</el-button>
           <el-button type="danger" size="small" @click="onDeleteVarClick"  icon="el-icon-delete">删除</el-button>
         </el-col>
-          <el-row :span="24" v-for="(item,index) in form.variables">
+          <el-row :span="24" v-for="(item,index) in form.variables" :key="index+'varfor'">
             <el-col :span="8">
               因变量:
               <el-select v-model="item.independent_var">
@@ -53,7 +53,7 @@
             </el-col>
             <el-col :span="8">
               插补方法选择 ：
-              <el-select v-model="item.interpolation">
+              <el-select v-model="item.method">
                 <el-option
                         v-for="item in interpolationOptions"
                         :key="item.label"
@@ -63,6 +63,10 @@
               </el-select>
             </el-col>
           </el-row>
+    </div>
+
+    <div v-if="step === 3">
+      <i class="el-icon-success">数据QAQC完成</i>
     </div>
 
     <div class="bottom-op">
@@ -100,10 +104,9 @@
         loading: false,
         form: {
           z: 4,
-          interpolation: ' ',
           indexes: [],
           range: [],
-          variables: [{independent_var: '', dependent_var: '', interpolation: ''}]
+          variables: [{independent_var: '', dependent_var: '', method: ''}]
         },
         m_indexes: this.indexes,
         interpolationOptions: [{label: '内插', value: '内插'}, {label: '外插', value: '外插'}]
@@ -159,7 +162,8 @@
             'year': this.washing_form.year,
             'station': this.washing_form.station,
             'user_mail': '1103232282@qq.com',
-            'type': '气象'
+            'type': '气象',
+            'variables': this.form.variables
           }).then((resp) => {
             this.loading = false
             if (resp.data.status === 'success') {
@@ -220,7 +224,7 @@
           })
       },
       onAddVarClick () {
-        this.form.variables.push({independent_var: '', dependent_var: '', interpolation: ''})
+        this.form.variables.push({independent_var: '', dependent_var: '', method: ''})
       },
       onDeleteVarClick () {
         this.form.variables.pop()
