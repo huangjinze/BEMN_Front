@@ -30,7 +30,7 @@
     data () {
       return {
         loading: false,
-        showChart: false,
+        showChart: true,
         chartMetaList: [
           {
             title: {
@@ -82,48 +82,56 @@
             legend: {
               data: []
             },
-            dataZoom: [
-              {show: true, type: 'inside'}
-            ],
+            animation: false,
+            dataZoom: [{
+              type: 'inside'
+            }, {
+              type: 'slider'
+            }],
             tooltip: {
               trigger: 'axis'
             },
             xAxis: [{
-              boundaryGap: false,
-              data: []
+              boundaryGap: false
             }],
             yAxis: [{ type: 'value' }],
             series: []
           }
-          meta.xAxis.data = perIndex.raw_data.map((perData) => { return perData.x })
+          meta.xAxis[0].data = perIndex.raw_data.map((perData) => { return perData.x })
 
           meta.series.push({
             name: '原始数据',
-            type: 'line',
+            symbolSize: 3,
+            type: 'scatter',
+            large: true,
             data: perIndex.raw_data.map((dataItem) => { return dataItem.y })
           })
           meta.legend.data.push('原始数据')
 
           meta.series.push({
             name: '清洗后数据',
-            type: 'line',
+            symbolSize: 3,
+            large: true,
+            type: 'scatter',
             data: perIndex.gap_data.map((dataItem) => { return dataItem.y })
           })
           meta.legend.data.push('清洗后数据')
 
           meta.series.push({
             name: '填充后数据',
-            type: 'line',
+            symbolSize: 3,
+            large: true,
+            type: 'scatter',
             data: perIndex.fill_data.map((dataItem) => { return dataItem.y })
           })
           meta.legend.data.push('填充后数据')
+          console.log('填充', meta.xAxis)
 
           return meta
         })
 
         console.log('list :', this.chartMetaList)
         this.loading = false
-        this.showChart = true
       })
     },
     methods: {

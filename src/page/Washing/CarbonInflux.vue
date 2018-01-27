@@ -24,6 +24,13 @@
       <el-input-number v-model="form.z">
 
       </el-input-number>
+
+      <el-row v-for="(item, index) in chartIndexesMetaList" :key="'chart_key'+index">
+        <el-col :span="18" :offset="3">
+          <echart :options="item"></echart>
+        </el-col>
+      </el-row>
+
     </el-col>
 
     <el-col :span="24" v-if="step === 2" id="storage">
@@ -33,6 +40,12 @@
           跳过
         </el-button>
       </el-col>
+ASDFSADFSDF
+      <el-row v-for="(item, index) in chartIndexesMetaList" :key="'chart_key'+index">
+        <el-col :span="18" :offset="3">
+          <echart :options="item"></echart>
+        </el-col>
+      </el-row>
     </el-col>
 
     <el-col :span="24" v-if="step === 3">
@@ -43,6 +56,12 @@
       <div v-if="adjustChartShow" v-loading="loading">
         <echart :options="chartMetaDataUAdjust"></echart>
       </div>
+
+      <el-row v-for="(item, index) in chartIndexesMetaList" :key="'chart_key'+index">
+        <el-col :span="18" :offset="3">
+          <echart :options="item"></echart>
+        </el-col>
+      </el-row>
 
     </el-col>
 
@@ -56,6 +75,12 @@
                 :value="item.value">
         </el-option>
       </el-select>
+
+      <el-row v-for="(item, index) in chartIndexesMetaList" :key="'chart_key'+index">
+        <el-col :span="18" :offset="3">
+          <echart :options="item"></echart>
+        </el-col>
+      </el-row>
     </div>
 
     <div v-if="step === 5">
@@ -140,6 +165,7 @@
           yAxis: {},
           series: []
         },
+        chartIndexesMetaList: [],
         adjustChartShow: false
       }
     },
@@ -179,6 +205,47 @@
                       return dataItem.y
                     })}
                 })
+                this.chartIndexesMetaList.splice(0, this.chartIndexesMetaList.length)
+                this.chartIndexesMetaList = resp.data.data.map((perIndex) => {
+                  let meta = {
+                    title: {
+                      text: perIndex.index + '数据'
+                    },
+                    grid: {
+                      left: '3%',
+                      right: '4%',
+                      bottom: '3%',
+                      containLabel: true
+                    },
+                    legend: {
+                      data: []
+                    },
+                    animation: false,
+                    dataZoom: [
+                      {show: true, type: 'inside'}
+                    ],
+                    tooltip: {
+                      trigger: 'axis'
+                    },
+                    xAxis: [{
+                      boundaryGap: false
+                    }],
+                    yAxis: [{ type: 'value' }],
+                    series: []
+                  }
+                  meta.xAxis[0].data = perIndex.data.map((perData) => { return perData.x })
+
+                  meta.series.push({
+                    name: '原始数据',
+                    type: 'scatter',
+                    data: perIndex.data.map((dataItem) => { return dataItem.y })
+                  })
+                  meta.legend.data.push('原始数据')
+
+                  console.log('填充', meta.xAxis)
+
+                  return meta
+                })
                 console.log('chart', data)
               }
               this.chartUMetaData = Object.assign(this.chartUMetaData, data)
@@ -199,7 +266,49 @@
 
         if (this.step === 0) {
           this.postIndexes().then(
-            () => {
+            (resp) => {
+              console.log('indexess', resp)
+              this.chartIndexesMetaList.splice(0, this.chartIndexesMetaList.length)
+              this.chartIndexesMetaList = resp.data.data.map((perIndex) => {
+                let meta = {
+                  title: {
+                    text: perIndex.index + '数据'
+                  },
+                  grid: {
+                    left: '3%',
+                    right: '4%',
+                    bottom: '3%',
+                    containLabel: true
+                  },
+                  legend: {
+                    data: []
+                  },
+                  animation: false,
+                  dataZoom: [
+                    {show: true, type: 'inside'}
+                  ],
+                  tooltip: {
+                    trigger: 'axis'
+                  },
+                  xAxis: [{
+                    boundaryGap: false
+                  }],
+                  yAxis: [{ type: 'value' }],
+                  series: []
+                }
+                meta.xAxis[0].data = perIndex.data.map((perData) => { return perData.x })
+
+                meta.series.push({
+                  name: '原始数据',
+                  type: 'scatter',
+                  data: perIndex.data.map((dataItem) => { return dataItem.y })
+                })
+                meta.legend.data.push('原始数据')
+
+                console.log('填充', meta.xAxis)
+
+                return meta
+              })
               this.loading = false
             })
         }
@@ -215,14 +324,54 @@
             'z': this.form.z,
             'type': '碳通量'
           }).then((resp) => {
-            this.loading = false
             if (resp.data.status === 'success') {
               console.log(resp)
-              alert(resp.data.data)
+              this.chartIndexesMetaList.splice(0, this.chartIndexesMetaList.length)
+              this.chartIndexesMetaList = resp.data.data.map((perIndex) => {
+                let meta = {
+                  title: {
+                    text: perIndex.index + '数据'
+                  },
+                  grid: {
+                    left: '3%',
+                    right: '4%',
+                    bottom: '3%',
+                    containLabel: true
+                  },
+                  legend: {
+                    data: []
+                  },
+                  animation: false,
+                  dataZoom: [
+                    {show: true, type: 'inside'}
+                  ],
+                  tooltip: {
+                    trigger: 'axis'
+                  },
+                  xAxis: [{
+                    boundaryGap: false
+                  }],
+                  yAxis: [{ type: 'value' }],
+                  series: []
+                }
+                meta.xAxis[0].data = perIndex.data.map((perData) => { return perData.x })
+
+                meta.series.push({
+                  name: '原始数据',
+                  type: 'scatter',
+                  data: perIndex.data.map((dataItem) => { return dataItem.y })
+                })
+                meta.legend.data.push('原始数据')
+
+                console.log('填充', meta.xAxis)
+
+                return meta
+              })
             } else {
               this.step = this.step - 1
               alert(resp.data.reason)
             }
+            this.loading = false
           }).catch(() => {
             this.step = this.step - 1
             this.loading = false
@@ -231,6 +380,7 @@
         }
 
         if (this.step === 2) {
+          this.chartIndexesMetaList.splice(0, this.chartIndexesMetaList.length)
           CStore({
             'domain': '通量数据',
             'year': this.washing_form.year,
@@ -241,7 +391,47 @@
             this.loading = false
             if (resp.data.status === 'success') {
               console.log(resp)
-              alert(resp.data.data[0])
+              this.chartIndexesMetaList.splice(0, this.chartIndexesMetaList.length)
+              this.chartIndexesMetaList = resp.data.data.map((perIndex) => {
+                let meta = {
+                  title: {
+                    text: perIndex.index + '数据'
+                  },
+                  grid: {
+                    left: '3%',
+                    right: '4%',
+                    bottom: '3%',
+                    containLabel: true
+                  },
+                  legend: {
+                    data: []
+                  },
+                  animation: false,
+                  dataZoom: [
+                    {show: true, type: 'inside'}
+                  ],
+                  tooltip: {
+                    trigger: 'axis'
+                  },
+                  xAxis: [{
+                    boundaryGap: false
+                  }],
+                  yAxis: [{ type: 'value' }],
+                  series: []
+                }
+                meta.xAxis[0].data = perIndex.data.map((perData) => { return perData.x })
+
+                meta.series.push({
+                  name: '原始数据',
+                  type: 'scatter',
+                  data: perIndex.data.map((dataItem) => { return dataItem.y })
+                })
+                meta.legend.data.push('原始数据')
+
+                console.log('填充', meta.xAxis)
+
+                return meta
+              })
             } else {
               alert(resp.data.reason)
               this.step = this.step - 1
@@ -351,7 +541,7 @@
           }).then((resp) => {
             if (resp.data.status === 'success') {
               console.log(resp)
-              alert(resp.data.data[0])
+              return resp
             } else {
               this.step = this.step - 1
               alert(resp.data.reason)
