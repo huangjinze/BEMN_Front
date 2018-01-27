@@ -2,48 +2,46 @@
 <template >
     <div :class="className" :id="id">
         <el-dialog  :title="dialogName" :visible.sync="dialogVisible">
-            <el-form id="addDevDialogForm" :model="form" ref="form" :inline="true" label-width="80px" v-bind:rules="Rules">
+            <el-form id="editDevDialogForm" :model="form" ref="form" :inline="true" label-width="80px" v-bind:rules="Rules">
 
                 <el-form-item prop="stationSelect" label="站点" >
-                        <el-select v-model="form.stationSelect" clearable placeholder="请选择站点" @change="clickSelectStation">
-                            <el-option
-                                    v-for="item in stationList"
-                                    :key="item.id"
-                                    :label="item.text"
-                                    :value="item.id">
-                            </el-option>
-                        </el-select>
+                    <el-select v-model="form.stationSelect" clearable placeholder="请选择站点" @change="clickSelectStation">
+                        <el-option
+                                v-for="item in stationList"
+                                :key="item.id"
+                                :label="item.text"
+                                :value="item.id">
+                        </el-option>
+                    </el-select>
                 </el-form-item>
                 <el-form-item prop="classSelect" label="类别" >
-                        <el-select v-model="form.classSelect" clearable filterable allow-create default-first-option :disabled="isDisabled" placeholder="请选择类型" >
-                            <el-option
-                                    v-for="item in classList"
-                                    :key="item.id"
-                                    :label="item.text"
-                                    :value="item.id">
-                            </el-option>
-                        </el-select>
+                    <el-select v-model="form.classSelect" multiple clearable filterable allow-create default-first-option placeholder="请选择类型" >
+                        <el-option
+                                v-for="item in classList"
+                                :key="item.id"
+                                :label="item.text"
+                                :value="item.id">
+                        </el-option>
+                    </el-select>
                 </el-form-item>
                 <el-form-item prop="devName" label="设备名" >
                     <el-input v-model="form.devName" placeholder="设备名"></el-input>
                 </el-form-item>
                 <el-form-item prop="factorTags" style="display: block" label="检测指标">
-                    <el-tag
+                    <el-button
                             :key="tag"
                             v-for="tag in tagsArray"
-                            closable
-                            :disable-transitions="false"
-                            @close="handleTagClose(tag)">
+                            size="mini">
                         {{tag}}
-                    </el-tag>
+                    </el-button>
                     <el-input style="width: 90px;padding: 0"
-                            class="input-new-tag"
-                            v-if="tagInputVisible"
-                            v-model="tagInputValue"
-                            ref="saveTagInput"
-                            size="small"
-                            @keyup.enter.native="tagInputConfirm"
-                            @blur="tagInputConfirm"
+                              class="input-new-tag"
+                              v-if="tagInputVisible"
+                              v-model="tagInputValue"
+                              ref="saveTagInput"
+                              size="small"
+                              @keyup.enter.native="tagInputConfirm"
+                              @blur="tagInputConfirm"
                     >
                     </el-input>
                     <el-button v-else class="button-new-tag" size="small" @click="showTagInput">+ 添加指标</el-button>
@@ -130,30 +128,21 @@
       props: {
         className: String,
         id: String,
-        dialogAddingVisible: {type: Boolean, default: false},
+        dialogEditingVisible: {type: Boolean, default: false},
         stationList: {type: Array},
         classList: {type: Array},
+        editInfo: {type: Object},
+        tags: {type: Array},
         dialogClose: {type: Function},
         selectStation: {type: Function}
       },
       data () {
         return {
-          dialogVisible: this.dialogAddingVisible,
+          dialogVisible: this.dialogEditingVisible,
           innerVisible: false,
           isDisabled: true,
-          dialogName: '添加设备',
-          form: {
-            stationSelect: '',
-            classSelect: '',
-            devName: '',
-            factorTags: {},
-            facturer: '',
-            price: '',
-            number: '',
-            telephone: '',
-            place_introduction: '',
-            introduction: ''
-          },
+          dialogName: '修改设备信息',
+          form: this.editInfo,
           innerForm: {
             academic_name: '',
             expression: '',
@@ -177,11 +166,12 @@
             }]
           },
           tagInfoDialogTitle: '',
-          tagsArray: []
+          tagsArray: this.tags
         }
       },
       watch: {
-        dialogAddingVisible (val) {
+        dialogEditingVisible (val) {
+          console.log(val)
           this.dialogVisible = val
         },
         dialogVisible (val) {
@@ -190,7 +180,7 @@
       },
       methods: {
         addClass (event) {
-          console.log(event)
+           console.log(event)
         },
         clickSelectStation (value) {
           if (value) {
@@ -213,7 +203,7 @@
         },
         tagInputConfirm () {
           let inputValue = this.tagInputValue
-        //  this.form.factorTags = {}
+                //  this.form.factorTags = {}
           if (inputValue) {
             this.tagsArray.push(inputValue)
             this.form.factorTags[inputValue] = ''
@@ -245,12 +235,12 @@
               console.log(this.form.factorTags)
             } else {
               this.$message({
-              message: '表单验证未通过',
-              type: 'warning'
-            })
-            return false
-          }
-        })
+                message: '表单验证未通过',
+                type: 'warning'
+              })
+              return false
+            }
+          })
         },
         formReset (formName) {
           this.$refs[formName].resetFields()
@@ -259,14 +249,14 @@
           }
         }
       },
-      name: 'addDevDialog'
+      name: 'editDevDialog'
     }
 </script>
 <style>
-    #addDevDialogForm>div>div>.el-tag {
+    #editDevDialogForm>div>div>.el-tag {
         margin: 5px;
     }
-    #addDevDialogForm>div>div>.el-input,.el-date-editor.el-input {
+    #editDevDialogForm>div>div>.el-input,.el-date-editor.el-input {
         width: 226px;
     }
     .addDevTextAreaItem>div {
