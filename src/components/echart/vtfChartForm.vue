@@ -37,22 +37,6 @@
              </span>
               </el-form-item>
             </el-col>
-            <el-col :span="8">
-              <el-form-item>
-                <span>
-                  计算方法：
-                  <el-select v-model="form.model" placeholder="请选择"  >
-                  <el-option
-                    class="optionCenter"
-                    v-for="item in wayOptions"
-                    :key="item.value"
-                    :label="item.label"
-                    :value="item.value">
-                  </el-option>
-                </el-select>
-                </span>
-              </el-form-item>
-            </el-col>
           </el-row>
 
           <el-row :gutter="20" v-if="(form.selectedType =='a') ">
@@ -79,6 +63,22 @@
                     placeholder="选择日期"
                     value-format="yyyy-MM-dd">
                 </el-date-picker>
+                </span>
+              </el-form-item>
+            </el-col>
+            <el-col :span="8">
+              <el-form-item>
+                <span>
+                  计算方法：
+                  <el-select v-model="form.model" placeholder="请选择"  >
+                  <el-option
+                    class="optionCenter"
+                    v-for="item in wayOptions"
+                    :key="item.value"
+                    :label="item.label"
+                    :value="item.value">
+                  </el-option>
+                </el-select>
                 </span>
               </el-form-item>
             </el-col>
@@ -227,6 +227,23 @@
                 </el-form-item>
               </el-col>
             </el-col>
+
+            <el-col :span="8">
+              <el-form-item>
+                <span>
+                  计算方法：
+                  <el-select v-model="form.model" placeholder="请选择"  >
+                  <el-option
+                    class="optionCenter"
+                    v-for="item in wayOptions"
+                    :key="item.value"
+                    :label="item.label"
+                    :value="item.value">
+                  </el-option>
+                </el-select>
+                </span>
+              </el-form-item>
+            </el-col>
           </el-row>
 
           <el-row :gutter="20" v-else-if="(form.selectedType =='d') ">
@@ -345,6 +362,24 @@
                 </el-form-item>
               </el-col>
             </el-col>
+
+            <el-col :span="8">
+              <el-form-item>
+                <span>
+                  计算方法：
+                  <el-select v-model="form.model" placeholder="请选择"  >
+                  <el-option
+                    class="optionCenter"
+                    v-for="item in wayOptions"
+                    :key="item.value"
+                    :label="item.label"
+                    :value="item.value">
+                  </el-option>
+                </el-select>
+                </span>
+              </el-form-item>
+            </el-col>
+
           </el-row>
 
           <el-row :gutter="20" v-else-if="(form.selectedType =='e') ">
@@ -374,6 +409,7 @@
                 </span>
               </el-form-item>
             </el-col>
+
           </el-row>
 
           <el-row type="flex" class="row-bg" justify="space-around">

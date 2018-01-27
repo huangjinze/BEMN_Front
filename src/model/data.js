@@ -40,3 +40,7 @@ export const pca = params => {
 export const gapfillRes = params => {
   return axios.post(host + '/dataProcess/vft/gapfillRes', params, {headers: {'Content-Type': 'application/json'}})
 }
+
+export const ustarRes = params => {
+  return axios.get(host + '/dataProcess/vft/ustarRes', {'params': params})
+}

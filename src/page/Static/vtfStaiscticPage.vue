@@ -13,7 +13,11 @@
         v-model="formValue"
         @Click="onClick"
         v-loading="loading"></chartForm>
-      <echart :options="chartMetaData"></echart>
+        <el-row v-for="(item, index) in chartMetaData" :key="'chart_key'+index">
+          <el-col :span="18" :offset="3">
+            <echart :options="item"></echart>
+          </el-col>
+        </el-row>
       </el-row>
     </div>
   </BasePage>
@@ -44,20 +48,7 @@ export default {
         start_time: '',
         end_time: ''
       },
-      chartMetaData: {
-        title: {
-          text: '通量数据'
-        },
-        dataZoom: [
-          {show: true, type: 'inside'}
-        ],
-        tooltip: {
-          trigger: 'axis'
-        },
-        xAxis: {},
-        yAxis: {},
-        series: []
-      },
+      chartMetaData: [],
       chart_value2kind: {
         a: 'scatter',
         b: 'scatter',
@@ -107,7 +98,6 @@ export default {
     onClick: function () {
       console.log('Button Click')
       this.loading = true
-      let data = {xAxis: {data: []}, series: [{name: 'co2_flux', type: 'bar', data: []}]}
       getVTFData({'index': this.formValue.index[1],
         domain: '通量数据',
         station: this.station,
@@ -116,20 +106,44 @@ export default {
         end_time: this.formValue.end_time,
         time_interval: this.formValue.time_interval,
         model: this.formValue.model}).then(resp => {
-          console.log('net', resp)
-          console.log(data)
-          if (resp.data.status !== 'success') {
-            this.$alert(resp.data.reason, '失败', {confirmButtonText: 'ok'})
-            return
-          }
-          let series = resp.data.data[0]
-          for (let k in series) {
-            data.xAxis.data.push(k)
-            data.series[0].data.push(series[k])
-            data.series[0].type = this.chart_value2kind[this.formValue.selectedType]
-          }
-          console.log('net finish', resp.data.data)
-          this.chartMetaData = Object.assign(this.chartMetaData, data)
+          this.chartMetaData.splice(0, this.chartMetaData.length)
+          this.chartMetaData = resp.data.data.map((perIndex) => {
+            let meta = {
+              title: {
+                text: perIndex.index + '数据'
+              },
+              grid: {
+                left: '3%',
+                right: '4%',
+                bottom: '3%',
+                containLabel: true
+              },
+              legend: {
+                data: []
+              },
+              animation: false,
+              dataZoom: [
+                {show: true, type: 'inside'}
+              ],
+              tooltip: {
+                trigger: 'axis'
+              },
+              xAxis: [{
+                boundaryGap: false
+              }],
+              yAxis: [{ type: 'value' }],
+              series: []
+            }
+            meta.xAxis[0].data = perIndex.data.map((perData) => { return perData.x })
+            meta.series.push({
+              name: perIndex.index + '数据',
+              type: this.chart_value2kind[this.selectedType],
+              data: perIndex.data.map((dataItem) => { return dataItem.y })
+            })
+            meta.legend.data.push(perIndex.index + '数据')
+            console.log('填充', meta.xAxis)
+            return meta
+          })
           this.loading = false
         }).catch(resp => {
           this.$alert('网络错误', '失败', {confirmButtonText: 'ok'}).then(aciton => {
