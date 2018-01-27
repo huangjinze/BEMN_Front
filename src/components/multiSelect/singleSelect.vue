@@ -6,21 +6,21 @@ import topIndexSelect from './topIndexSelect'
 import {getStation} from '../../model/vftData'
 export default {
   components: {topIndexSelect},
+  props: {
+    value: {type: String, default: ''}
+  },
   data () {
     return {
       stationName: [
         '奥林匹克'
       ],
-      className: [],
+      className: [null],
       indexName: [],
       stations: [],
       classes: [],
       index: [],
       indexTags: []
     }
-  },
-  props: {
-    station: {type: String, default: ''}
   },
   mounted: function () {
     getStation({domain: '通量数据'}).then(resp => {
@@ -38,7 +38,7 @@ export default {
   methods: {
     parentStationListen (id) {
       var temp = this.stations.find(function (value) { return value.id === id })
-      this.station = temp.text
+      this.$emit('input', temp.text)
       this.$refs.profile.flag = 4
     },
     parentClassListen (id) {},

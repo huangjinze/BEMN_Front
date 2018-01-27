@@ -25,7 +25,7 @@
 
     <div v-show="step === 2" id="regression">
       <el-col :span="24" id="charts">
-        <charts v-show="closeChartShow" class="testchart" id="chart_1" :chartMeta="chartMetaData"></charts>
+        <echart v-show="closeChartShow"  :options="chartMetaData"></echart>
       </el-col>
       <el-col :span="24" id="drawGraph">
         <el-button @click="onUValueDraw" type="primary">生成回归图</el-button>
@@ -38,7 +38,7 @@
           <el-button type="primary" size="small" @click="onAddVarClick" icon="el-icon-plus" id="plus">增加</el-button>
           <el-button type="danger" size="small" @click="onDeleteVarClick" icon="el-icon-delete">删除</el-button>
         </el-col>
-          <el-row :span="24" v-for="(item,index) in form.variables">
+          <el-row :span="24" v-for="(item,index) in form.variables" :key="index+'varfor'">
             <el-col :span="8">
               因变量:
               <el-select v-model="item.independent_var">
@@ -63,7 +63,7 @@
             </el-col>
             <el-col :span="8">
               插补方法选择 ：
-              <el-select v-model="item.interpolation">
+              <el-select v-model="item.method">
                 <el-option
                         v-for="item in interpolationOptions"
                         :key="item.label"
@@ -74,6 +74,10 @@
             </el-col>
           </el-row>
     </el-col>
+
+    <div v-if="step === 3">
+      <i class="el-icon-success">数据QAQC完成</i>
+    </div>
 
     <div class="bottom-op">
       <el-button-group>
@@ -89,20 +93,20 @@
   import BasePage from '../../components/BasePage'
   import navi from '../../components/layout/navi'
   import washingForm from '../../components/datawashing/washingForm'
-  import charts from '../../components/echart/charts'
+  import echart from 'vue-echarts'
   import ElButton from 'element-ui/packages/button/src/button'
   import ElInputNumber from 'element-ui/packages/input-number/src/input-number'
   import {checkWashingIndexRange, despiking, pca, Gapfill} from '../../model/data'
 
   export default {
     components: {
+      echart,
       ElInputNumber,
       ElButton,
       rangeCheck,
       BasePage,
       navi,
-      washingForm,
-      charts},
+      washingForm},
     name: 'Energy',
     props: {
       washing_form: {type: Object},
@@ -121,12 +125,15 @@
           indexes: [],
           range: [],
           u: 4,
-          variables: [{independent_var: '', dependent_var: '', interpolation: ''}]
+          variables: [{independent_var: '', dependent_var: '', method: ''}]
         },
         interpolationOptions: [{label: '内插', value: '内插'}, {label: '外插', value: '外插'}],
         chartMetaData: {
           title: {
             text: '回归图'
+          },
+          tooltip: {
+            trigger: 'axis'
           },
           xAxis: {},
           yAxis: {},
@@ -213,7 +220,8 @@
             'year': this.washing_form.year,
             'station': this.washing_form.station,
             'user_mail': '1103232282@qq.com',
-            'type': '能量'
+            'type': '能量',
+            'variables': this.form.variables
           }).then((resp) => {
             this.loading = false
             if (resp.data.status === 'success') {
@@ -279,7 +287,7 @@
           })
       },
       onAddVarClick () {
-        this.form.variables.push({independent_var: '', dependent_var: '', interpolation: ''})
+        this.form.variables.push({independent_var: '', dependent_var: '', method: ''})
       },
       onDeleteVarClick () {
         this.form.variables.pop()

@@ -24,6 +24,13 @@
       <el-input-number v-model="form.z">
 
       </el-input-number>
+
+      <el-row v-for="(item, index) in chartIndexesMetaList" :key="'chart_key'+index">
+        <el-col :span="18" :offset="3">
+          <echart :options="item"></echart>
+        </el-col>
+      </el-row>
+
     </el-col>
 
     <el-col :span="24" v-if="step === 2" id="storage">
@@ -33,23 +40,34 @@
           跳过
         </el-button>
       </el-col>
+ASDFSADFSDF
+      <el-row v-for="(item, index) in chartIndexesMetaList" :key="'chart_key'+index">
+        <el-col :span="18" :offset="3">
+          <echart :options="item"></echart>
+        </el-col>
+      </el-row>
     </el-col>
 
     <el-col :span="24" v-if="step === 3">
 
-      <charts class="testchart" id="chart_1" :chartMeta="chartUMetaData"></charts>
-      请输入u*值：<el-input-number  v-model="form.u" :step="0.1"></el-input-number>
+      <echart :options="chartUMetaData"></echart>
       <el-button @click="onUAdjustValueDraw" type="primary">确认</el-button>
 
       <div v-if="adjustChartShow" v-loading="loading">
-        <charts class="chartAdjust" id="chart_2"  :chartMeta="chartMetaDataUAdjust"></charts>
+        <echart :options="chartMetaDataUAdjust"></echart>
       </div>
+
+      <el-row v-for="(item, index) in chartIndexesMetaList" :key="'chart_key'+index">
+        <el-col :span="18" :offset="3">
+          <echart :options="item"></echart>
+        </el-col>
+      </el-row>
 
     </el-col>
 
     <div v-if="step === 4">
       插补方法选择 ：
-      <el-select v-model="form.interpolation">
+      <el-select v-model="form.variables[0].method">
         <el-option
                 v-for="item in interpolationOptions"
                 :key="item.label"
@@ -57,6 +75,16 @@
                 :value="item.value">
         </el-option>
       </el-select>
+
+      <el-row v-for="(item, index) in chartIndexesMetaList" :key="'chart_key'+index">
+        <el-col :span="18" :offset="3">
+          <echart :options="item"></echart>
+        </el-col>
+      </el-row>
+    </div>
+
+    <div v-if="step === 5">
+      <i class="el-icon-success">数据QAQC完成</i>
     </div>
 
     <div class="bottom-op">
@@ -73,10 +101,10 @@
   import BasePage from '../../components/BasePage'
   import navi from '../../components/layout/navi'
   import washingForm from '../../components/datawashing/washingForm'
-  import charts from '../../components/echart/charts'
   import ElButton from 'element-ui/packages/button/src/button'
   import ElInputNumber from 'element-ui/packages/input-number/src/input-number'
   import {checkWashingIndexRange, despiking, CStore, UStar, Gapfill} from '../../model/data'
+  import echart from 'vue-echarts'
 
   export default {
     components: {
@@ -86,7 +114,7 @@
       BasePage,
       navi,
       washingForm,
-      charts},
+      echart},
     name: 'carbonInflux',
     props: {
       washing_form: {type: Object},
@@ -100,17 +128,26 @@
         loading: false,
         form: {
           z: 4,
-          interpolation: ' ',
+          method: ' ',
           range: [],
-          u: 0.18
+          u: 0.18,
+          variables: [{method: ''}]
         },
         m_indexes: this.indexes,
-        interpolationOptions: [{label: '内插', value: '内插'}, {label: '外插', value: '外插'}],
+        interpolationOptions: [{label: '平均昼夜模型', value: 'MDT'}, {label: '光温度相应模型', value: 'lr_tr'}],
         chartUMetaData: {
           title: {
             text: 'U*数据'
           },
-          xAxis: {},
+          tooltip: {
+            trigger: 'axis'
+          },
+          dataZoom: [{show: true, type: 'inside'}],
+          animationEasing: 'elasticOut',
+          animationDelayUpdate: function (idx) {
+            return idx * 5
+          },
+          xAxis: {type: 'value'},
           yAxis: {},
           series: []
         },
@@ -118,10 +155,17 @@
           title: {
             text: 'U*调整数据'
           },
+          dataZoom: [
+            {show: true, type: 'inside'}
+          ],
+          tooltip: {
+            trigger: 'axis'
+          },
           xAxis: {},
           yAxis: {},
           series: []
         },
+        chartIndexesMetaList: [],
         adjustChartShow: false
       }
     },
@@ -134,7 +178,7 @@
       },
       step: function (newValue) {
         if (newValue === 3) {
-          let data = {xAxis: {data: []}, series: [{name: 'co2_flux', type: 'bar', data: []}]}
+          let data = {xAxis: { data: [] }, series: [{name: 'co2_flux', type: 'bar', data: []}]}
           this.loading = true
           UStar({
             'domain': '通量数据',
@@ -161,6 +205,47 @@
                       return dataItem.y
                     })}
                 })
+                this.chartIndexesMetaList.splice(0, this.chartIndexesMetaList.length)
+                this.chartIndexesMetaList = resp.data.data.map((perIndex) => {
+                  let meta = {
+                    title: {
+                      text: perIndex.index + '数据'
+                    },
+                    grid: {
+                      left: '3%',
+                      right: '4%',
+                      bottom: '3%',
+                      containLabel: true
+                    },
+                    legend: {
+                      data: []
+                    },
+                    animation: false,
+                    dataZoom: [
+                      {show: true, type: 'inside'}
+                    ],
+                    tooltip: {
+                      trigger: 'axis'
+                    },
+                    xAxis: [{
+                      boundaryGap: false
+                    }],
+                    yAxis: [{ type: 'value' }],
+                    series: []
+                  }
+                  meta.xAxis[0].data = perIndex.data.map((perData) => { return perData.x })
+
+                  meta.series.push({
+                    name: '原始数据',
+                    type: 'scatter',
+                    data: perIndex.data.map((dataItem) => { return dataItem.y })
+                  })
+                  meta.legend.data.push('原始数据')
+
+                  console.log('填充', meta.xAxis)
+
+                  return meta
+                })
                 console.log('chart', data)
               }
               this.chartUMetaData = Object.assign(this.chartUMetaData, data)
@@ -181,7 +266,49 @@
 
         if (this.step === 0) {
           this.postIndexes().then(
-            () => {
+            (resp) => {
+              console.log('indexess', resp)
+              this.chartIndexesMetaList.splice(0, this.chartIndexesMetaList.length)
+              this.chartIndexesMetaList = resp.data.data.map((perIndex) => {
+                let meta = {
+                  title: {
+                    text: perIndex.index + '数据'
+                  },
+                  grid: {
+                    left: '3%',
+                    right: '4%',
+                    bottom: '3%',
+                    containLabel: true
+                  },
+                  legend: {
+                    data: []
+                  },
+                  animation: false,
+                  dataZoom: [
+                    {show: true, type: 'inside'}
+                  ],
+                  tooltip: {
+                    trigger: 'axis'
+                  },
+                  xAxis: [{
+                    boundaryGap: false
+                  }],
+                  yAxis: [{ type: 'value' }],
+                  series: []
+                }
+                meta.xAxis[0].data = perIndex.data.map((perData) => { return perData.x })
+
+                meta.series.push({
+                  name: '原始数据',
+                  type: 'scatter',
+                  data: perIndex.data.map((dataItem) => { return dataItem.y })
+                })
+                meta.legend.data.push('原始数据')
+
+                console.log('填充', meta.xAxis)
+
+                return meta
+              })
               this.loading = false
             })
         }
@@ -197,14 +324,54 @@
             'z': this.form.z,
             'type': '碳通量'
           }).then((resp) => {
-            this.loading = false
             if (resp.data.status === 'success') {
               console.log(resp)
-              alert(resp.data.data)
+              this.chartIndexesMetaList.splice(0, this.chartIndexesMetaList.length)
+              this.chartIndexesMetaList = resp.data.data.map((perIndex) => {
+                let meta = {
+                  title: {
+                    text: perIndex.index + '数据'
+                  },
+                  grid: {
+                    left: '3%',
+                    right: '4%',
+                    bottom: '3%',
+                    containLabel: true
+                  },
+                  legend: {
+                    data: []
+                  },
+                  animation: false,
+                  dataZoom: [
+                    {show: true, type: 'inside'}
+                  ],
+                  tooltip: {
+                    trigger: 'axis'
+                  },
+                  xAxis: [{
+                    boundaryGap: false
+                  }],
+                  yAxis: [{ type: 'value' }],
+                  series: []
+                }
+                meta.xAxis[0].data = perIndex.data.map((perData) => { return perData.x })
+
+                meta.series.push({
+                  name: '原始数据',
+                  type: 'scatter',
+                  data: perIndex.data.map((dataItem) => { return dataItem.y })
+                })
+                meta.legend.data.push('原始数据')
+
+                console.log('填充', meta.xAxis)
+
+                return meta
+              })
             } else {
               this.step = this.step - 1
               alert(resp.data.reason)
             }
+            this.loading = false
           }).catch(() => {
             this.step = this.step - 1
             this.loading = false
@@ -213,6 +380,7 @@
         }
 
         if (this.step === 2) {
+          this.chartIndexesMetaList.splice(0, this.chartIndexesMetaList.length)
           CStore({
             'domain': '通量数据',
             'year': this.washing_form.year,
@@ -223,7 +391,47 @@
             this.loading = false
             if (resp.data.status === 'success') {
               console.log(resp)
-              alert(resp.data.data[0])
+              this.chartIndexesMetaList.splice(0, this.chartIndexesMetaList.length)
+              this.chartIndexesMetaList = resp.data.data.map((perIndex) => {
+                let meta = {
+                  title: {
+                    text: perIndex.index + '数据'
+                  },
+                  grid: {
+                    left: '3%',
+                    right: '4%',
+                    bottom: '3%',
+                    containLabel: true
+                  },
+                  legend: {
+                    data: []
+                  },
+                  animation: false,
+                  dataZoom: [
+                    {show: true, type: 'inside'}
+                  ],
+                  tooltip: {
+                    trigger: 'axis'
+                  },
+                  xAxis: [{
+                    boundaryGap: false
+                  }],
+                  yAxis: [{ type: 'value' }],
+                  series: []
+                }
+                meta.xAxis[0].data = perIndex.data.map((perData) => { return perData.x })
+
+                meta.series.push({
+                  name: '原始数据',
+                  type: 'scatter',
+                  data: perIndex.data.map((dataItem) => { return dataItem.y })
+                })
+                meta.legend.data.push('原始数据')
+
+                console.log('填充', meta.xAxis)
+
+                return meta
+              })
             } else {
               alert(resp.data.reason)
               this.step = this.step - 1
@@ -245,7 +453,8 @@
             'year': this.washing_form.year,
             'station': this.washing_form.station,
             'user_mail': '1103232282@qq.com',
-            'type': '碳通量'
+            'type': '碳通量',
+            'method': this.method
           }).then((resp) => {
             this.loading = false
             if (resp.data.status === 'success') {
@@ -332,7 +541,7 @@
           }).then((resp) => {
             if (resp.data.status === 'success') {
               console.log(resp)
-              alert(resp.data.data[0])
+              return resp
             } else {
               this.step = this.step - 1
               alert(resp.data.reason)
