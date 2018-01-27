@@ -19,28 +19,29 @@ import ResetPassword from '@/page/User/ResetPassword.vue'
 import PersonalInfo from '@/page/User/PersonalInfo.vue'
 import vtfStation from '@/page/Station/vtfStation.vue'
 import tifStation from '@/page/Station/tifStation.vue'
+import devicePage from '@/page/Device/devicePage'
 
 Vue.use(Router)
 
 export default new Router({
   routes: [
     {
-      path: '/',
+      path: '/', // 领域计数展示功能，负责人雷答
       name: 'home',
       component: HomePage
     },
     {
-      path: '/vtf/staisctic',
+      path: '/vtf/staisctic', // 水土保持领域图表,负责人苏畅
       name: 'vtfstaisctic',
       component: vtfStaiscticPage
     },
     {
-      path: '/tif/staisctic',
+      path: '/tif/staisctic', // 森林领域图表,负责人苏畅
       name: 'tifstaisctic',
       component: tifStaiscticPage
     },
     {
-      path: '/dataManager', // 森林生态样地信息 负责人陈宇捷
+      path: '/dataManager', // 森林领域样地信息 负责人陈宇捷
       name: 'dataManager',
       component: dataManager
     },
@@ -50,7 +51,7 @@ export default new Router({
       component: vtfList
     },
     {
-      path: '/vtf/Importpage',
+      path: '/vtf/Importpage', // 水保领域导入导出页面 负责人雷答
       name: 'vtfImportpage',
       component: ImportPage
     },
@@ -65,7 +66,7 @@ export default new Router({
       component: Article
     },
     {
-      path: '/tif/forestAreaAll',
+      path: '/tif/forestAreaAll', // 森林领域计数展示页面 负责人雷答
       name: 'forestAreaAll',
       component: tifForestAreaAllPage
     },
@@ -75,7 +76,7 @@ export default new Router({
       component: forestDominPage
     },
     {
-      path: '/vft/dataShow',
+      path: '/vft/dataShow', //  水保领域数据表格展示页面 负责人雷答
       name: 'dataShow',
       component: vftDataShowPage
     },
@@ -108,6 +109,11 @@ export default new Router({
       path: '/tifstation',  //  tif站点信息-陆旻祎
       name: 'tifstation',
       component: tifStation
+    },
+    {
+      path: '/deviceManage', //  设备管理页面，负责人雷答
+      name: devicePage,
+      component: devicePage
     },
     {
       path: '/personalinfo',  //  个人信息及修改-陆旻祎
