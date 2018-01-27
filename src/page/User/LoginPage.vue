@@ -55,7 +55,11 @@
         console.log('on login')
         this.LoginUser(this.loginForm).then((resp) => {
           console.log('after', resp)
-          if (resp.status === 'success') {
+          if (resp.status === 'failed' && resp.reason === 'captcha error!') {
+            this.codeUrl = host + '/captcha/mews?r=' + Math.random()
+          } else if (resp.status === 'failed' && resp.reason === 'username/password error！') {
+            this.codeUrl = host + '/captcha/mews?r=' + Math.random()
+          } else if (resp.status === 'success') {
 //            this.$store.commit('SET_STATUS', resp)
             this.$router.push({path: '/'})
           }

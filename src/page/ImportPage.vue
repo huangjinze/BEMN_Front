@@ -21,7 +21,7 @@
 //  import headGuider from '../components/headGuider'
   import BasePage from '../components/BasePage'
   import moment from 'moment'
-  import {getStation, getClass, submitTwoSelect} from '../model/vftData'
+  import {getStation, getClass, submitTwoSelect, showExport} from '../model/vftData'
   import {getVFTIndex} from '../model/data'
 //  import { host } from '../model/data'
   export default {
@@ -131,19 +131,37 @@
           let stationName = this.stationName[0]
           let className = this.className[0]
           let indexName = this.indexName[0]
-//          showExport({domain: domain,
-//            station_name: stationName,
-//            clickIndex: indexName,
-//            startTime: startDate,
-//            endTime: endDate,
-//            dataType: 'clean',
-//            class_name: className})
-          window.open('http://127.0.0.1/excel/vft/showExport?domain=' + domain +
-                  '&station_name=' + stationName +
-                  '&clickIndex=' + indexName +
-                  '&startTime=' + startDate +
-                  '&endTime=' + endDate +
-                  '&dataType=clean&class_name=' + className)
+          showExport({domain: domain,
+            station_name: stationName,
+            clickIndex: indexName,
+            startTime: startDate,
+            endTime: endDate,
+            dataType: 'clean',
+            class_name: className}).then(resp => {
+              const content = resp
+              console.log(content)
+              const blob = new Blob([content])
+              const fileName = '测试表格123.xls'
+              if ('download' in document.createElement('a')) { // 非IE下载
+                const elink = document.createElement('a')
+                elink.download = fileName
+                elink.style.display = 'none'
+                elink.href = URL.createObjectURL(blob)
+                console.log(elink.href)
+                document.body.appendChild(elink)
+                elink.click()
+                URL.revokeObjectURL(elink.href) // 释放URL 对象
+                document.body.removeChild(elink)
+              } else { // IE10+下载
+                navigator.msSaveBlob(blob, fileName)
+              }
+            })
+//          window.open('http://127.0.0.1/excel/vft/showExport?domain=' + domain +
+//                  '&station_name=' + stationName +
+//                  '&clickIndex=' + indexName +
+//                  '&startTime=' + startDate +
+//                  '&endTime=' + endDate +
+//                  '&dataType=clean&class_name=' + className)
         } else if (!topTag) {
           this.$message({
             message: '请先选择指标',
