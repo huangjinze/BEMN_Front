@@ -140,7 +140,7 @@
             class_name: className}).then(resp => {
               if (resp.headers && (resp.headers['content-type'] === 'application/x-msdownload' || resp.headers['content-type'] === 'application/vnd.ms-excel')) {
                 downloadUrl(resp.request.responseURL)
-                return
+                return 0
               }
             })
         } else if (!topTag) {
@@ -173,7 +173,7 @@
             class_name: className}).then(resp => {
               if (resp.headers && (resp.headers['content-type'] === 'application/x-msdownload' || resp.headers['content-type'] === 'application/vnd.ms-excel')) {
                 downloadUrl(resp.request.responseURL)
-                return
+                return 0
               }
             })
         } else if (!topTag) {
@@ -206,7 +206,7 @@
             class_name: className}).then(resp => {
               if (resp.headers && (resp.headers['content-type'] === 'application/x-msdownload' || resp.headers['content-type'] === 'application/vnd.ms-excel')) {
                 downloadUrl(resp.request.responseURL)
-                return
+                return 0
               }
             })
         } else if (!topTag) {
@@ -239,7 +239,7 @@
             class_name: className}).then(resp => {
               if (resp.headers && (resp.headers['content-type'] === 'application/x-msdownload' || resp.headers['content-type'] === 'application/vnd.ms-excel')) {
                 downloadUrl(resp.request.responseURL)
-                return
+                return 0
               }
             })
         } else if (!topTag) {

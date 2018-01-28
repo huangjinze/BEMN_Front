@@ -52,6 +52,13 @@
                     prop="className"
                     label="类别名"
                     width="300">
+                <template slot-scope="scope">
+                    <el-tag
+                            :key="item"
+                            v-for="item in scope.row.className"
+                            type="info"
+                            close-transition>{{item}}</el-tag>
+                </template>
             </el-table-column>
             <el-table-column
                     prop="status"
@@ -87,13 +94,12 @@
       },
       methods: {
         handleEdit (row) {
-          console.log(row)
           this.$emit('editClick', row.device_id)
         },
         cellStyle (cell) {
           if (cell.row.status === '异常' && cell.columnIndex === 3) {
             return { 'color': '#F56C6C', 'cursor': 'pointer', 'font-weight': '800' }
-          }else if (cell.row.status === '正常' && cell.columnIndex === 3) {
+          } else if (cell.row.status === '正常' && cell.columnIndex === 3) {
             return { 'color': '#67C23A', 'font-weight': '800' }
           }
         },

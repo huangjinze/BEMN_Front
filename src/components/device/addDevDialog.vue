@@ -125,7 +125,7 @@
     </div>
 </template>
 <script>
-    import moment from 'moment'
+  //  import moment from 'moment'
     export default {
       props: {
         className: String,
@@ -245,16 +245,16 @@
               console.log(this.form.factorTags)
             } else {
               this.$message({
-              message: '表单验证未通过',
-              type: 'warning'
-            })
-            return false
-          }
-        })
+                message: '表单验证未通过',
+                type: 'warning'
+              })
+              return false
+            }
+          })
         },
         formReset (formName) {
           this.$refs[formName].resetFields()
-          if(formName === 'form'){
+          if (formName === 'form') {
             this.tagsArray.splice(0, this.tagsArray.length)
           }
         }

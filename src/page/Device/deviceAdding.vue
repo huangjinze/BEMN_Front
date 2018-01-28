@@ -59,7 +59,7 @@ export default {
       formData.classSelect = this.classList[j].text
       addDeviceInfo(formData).then(resp => {
         this.dialogVisible = false
-        if(resp.data.status === 'success'){
+        if (resp.data.status === 'success') {
           this.$message({
             message: '添加成功！',
             type: 'success'

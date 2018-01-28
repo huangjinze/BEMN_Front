@@ -15,13 +15,13 @@ export const compareExport = params => { return axios.get('http://127.0.0.1/exce
 export const compareStatistics = params => { return axios.get('http://127.0.0.1/excel/vft/compareStatistics', {'params': params}) }
 // download Url
 export const downloadUrl = url => {
-    let iframe = document.createElement('iframe')
-    iframe.style.display = 'none'
-    iframe.src = url,
-        iframe.onload = function () {
-            document.body.removeChild(iframe)
-        }
-    document.body.appendChild(iframe)
+  let iframe = document.createElement('iframe')
+  iframe.style.display = 'none'
+  iframe.src = url
+  iframe.onload = function () {
+    document.body.removeChild(iframe)
+  }
+  document.body.appendChild(iframe)
 }
 // 获取表格数据
 export const getIndexTableData = params => { return axios.get(host + '/fluxdata/origindata/show', {'params': params}) }
@@ -32,10 +32,14 @@ export const submitTwoSelect = params => { return axios.get('http://127.0.0.1/ex
 // 获取设备信息
 export const getDevice = params => { return axios.get('http://127.0.0.1/device/getDevice', {'params': params}) }
 // 根据设备获取指标
-// export const getIndexByDevice = params => { return axios.get('http://127.0.0.1/device/getIndexByDevice', {'params': params}) }
+export const getIndexByDevice = params => { return axios.get('http://127.0.0.1/device/getIndexByDevice', {'params': params}) }
 // 添加设备操作
 export const addDeviceInfo = params => { return axios.post('http://127.0.0.1/device/addDeviceInfo', params, {headers: {'Content-Type': 'application/json'}}) }
 // 获取设备故障信息
 export const getDeviceErrorInfo = params => { return axios.get('http://127.0.0.1/device/getErrorInfo', {'params': params}) }
 // 根据时间获取设备故障信息
 export const getDeviceErrorInfoByTime = params => { return axios.get('http://127.0.0.1/device/getErrorInfoByTime', {'params': params}) }
+// 修改设备信息
+export const updateDeviceInfo = params => { return axios.post('http://127.0.0.1/device/updateInfo', params, {headers: {'Content-Type': 'application/json'}}) }
+// 删除指标
+export const deleteFactor = params => { return axios.get('http://127.0.0.1/device/deleteFactor', {'params': params}) }
