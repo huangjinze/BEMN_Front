@@ -4,14 +4,14 @@
             <table>
                 <tr style="height: 150px">
                     <td width="100px"><h2>展示</h2></td>
-                    <td ><h3>开始日</h3></td>
-                    <td ><el-date-picker
+                    <td><h3>开始日</h3></td>
+                    <td><el-date-picker
                             v-model="StartDate"
                             type="date"
                             placeholder="选择日期">
                     </el-date-picker></td>
-                    <td ><h3>结束日</h3></td>
-                    <td ><el-date-picker
+                    <td><h3>结束日</h3></td>
+                    <td><el-date-picker
                             v-model="EndDate"
                             type="date"
                             placeholder="选择日期">

@@ -27,11 +27,11 @@
                             通量数据
                         </template>
                         <el-menu-item-group>
-                            <el-menu-item index="/vtf/list">
+                            <el-menu-item index="/vft/dataShow">
                                 <i class="fa fa-table" aria-hidden="true"></i>
                                 数据展示
                             </el-menu-item>
-                            <el-menu-item index="2-1-2">
+                            <el-menu-item index="/vtf/Importpage">
                                 <i class="fa fa-download" aria-hidden="true"></i>
                                 数据导入导出
                             </el-menu-item>
@@ -86,7 +86,7 @@
                     </el-menu-item>
                 </el-submenu>
 
-                <el-menu-item index="5">
+                <el-menu-item index="/deviceManage">
                     <i class="fa fa-desktop" aria-hidden="true"></i>
                     <span slot="title">设备管理</span>
                 </el-menu-item>
