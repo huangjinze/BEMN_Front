@@ -1,7 +1,6 @@
 <!--数据导出页面，具体内容通过dataImport/dataImport.vue导入-->
 <template>
   <BasePage>
-    <div slot="header">header</div>
     <div slot="aside"><navi></navi></div>
     <div slot="main">
       <!--<headGuider :initTopPartTags="stationName" :initTopSiteTags="className" ref="profile" :partTags="stations" :siteTags="classes" @ClickPart="parentStationListen" @ClickSite="parentClassListen" @CloseIndex="closeIndexListen"></headGuider>-->
@@ -124,9 +123,10 @@
       onClickDataTable (DataTable) {
         console.log(DataTable)
         let topTag = this.$refs.profile.topIndexTags[0]
-        if (DataTable[0] && DataTable[1] && topTag) {
+        if (DataTable[0] && DataTable[1] && topTag && DataTable[2]) {
           let startDate = moment(DataTable[0]).format('YYYY-MM-DD')
           let endDate = moment(DataTable[1]).format('YYYY-MM-DD')
+          let dataType = DataTable[2]
           let domain = '通量数据'
           let stationName = this.stationName[0]
           let className = this.className[0]
@@ -136,7 +136,7 @@
             clickIndex: indexName,
             startTime: startDate,
             endTime: endDate,
-            dataType: 'clean',
+            dataType: dataType,
             class_name: className}).then(resp => {
               const content = resp
               console.log(content)
@@ -176,14 +176,15 @@
       },
       onClickMonthTable (MonthTable) {
         let topTag = this.$refs.profile.topIndexTags[0]
-        if (MonthTable[0] && MonthTable[1] && topTag) {
+        if (MonthTable[0] && MonthTable[1] && topTag && MonthTable[2]) {
           let startDate = MonthTable[0]
           let endDate = MonthTable[1]
+          let dataType = MonthTable[2]
           let domain = '通量数据'
           let stationName = this.stationName[0]
           let className = this.className[0]
           let indexName = this.indexName[0]
-          window.open('http://127.0.0.1/excel/vft/compareExport?domain=' + domain + '&station_name=' + stationName + '&clickIndex=' + indexName + '&startTime=' + startDate + '&endTime=' + endDate + '&dataType=clean&class_name=' + className)
+          window.open('http://bemnwork/excel/vft/compareExport?domain=' + domain + '&station_name=' + stationName + '&clickIndex=' + indexName + '&startTime=' + startDate + '&endTime=' + endDate + '&dataType=' + dataType + '&class_name=' + className)
         } else if (!topTag) {
           this.$message({
             message: '请先选择指标',
