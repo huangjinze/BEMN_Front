@@ -17,7 +17,7 @@
                             placeholder="选择日期">
                     </el-date-picker></td>
                     <td><h3>数据类型</h3></td>
-                    <td>
+                    <td width="150px">
                         <el-select v-model="dataType1">
                             <el-option
                                     v-for="item in options"
