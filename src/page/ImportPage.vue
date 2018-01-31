@@ -200,14 +200,15 @@
       },
       onClickDataValue (DataValue) {
         let topTag = this.$refs.profile.topIndexTags[0]
-        if (DataValue[0] && DataValue[1] && topTag) {
+        if (DataValue[0] && DataValue[1] && topTag && DataValue[2]) {
           let startDate = moment(DataValue[0]).format('YYYY-MM-DD')
           let endDate = moment(DataValue[1]).format('YYYY-MM-DD')
+          let dataType = DataValue[2]
           let domain = '通量数据'
           let stationName = this.stationName[0]
           let className = this.className[0]
           let indexName = this.indexName[0]
-          window.open('http://127.0.0.1/excel/vft/showStatistics?domain=' + domain + '&station_name=' + stationName + '&clickIndex=' + indexName + '&startTime=' + startDate + '&endTime=' + endDate + '&dataType=clean&class_name=' + className)
+          window.open('http://bemnwork/excel/vft/showStatistics?domain=' + domain + '&station_name=' + stationName + '&clickIndex=' + indexName + '&startTime=' + startDate + '&endTime=' + endDate + '&dataType=' + dataType + '&class_name=' + className)
         } else if (!topTag) {
           this.$message({
             message: '请先选择指标',
@@ -222,14 +223,15 @@
       },
       onClickMonthValue (MonthValue) {
         let topTag = this.$refs.profile.topIndexTags[0]
-        if (MonthValue[0] && MonthValue[1] && topTag) {
+        if (MonthValue[0] && MonthValue[1] && topTag && MonthValue[2]) {
           let startDate = MonthValue[0]
           let endDate = MonthValue[1]
+          let dataType = MonthValue[2]
           let domain = '通量数据'
           let stationName = this.stationName[0]
           let className = this.className[0]
           let indexName = this.indexName[0]
-          window.open('http://127.0.0.1/excel/vft/compareStatistics?domain=' + domain + '&station_name=' + stationName + '&clickIndex=' + indexName + '&startTime=' + startDate + '&endTime=' + endDate + '&dataType=clean&class_name=' + className)
+          window.open('http://bemnwork/excel/vft/compareStatistics?domain=' + domain + '&station_name=' + stationName + '&clickIndex=' + indexName + '&startTime=' + startDate + '&endTime=' + endDate + '&dataType=' + dataType + '&class_name=' + className)
         } else if (!topTag) {
           this.$message({
             message: '请先选择指标',
