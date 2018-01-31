@@ -27,10 +27,14 @@
                             通量数据
                         </template>
                         <el-menu-item-group>
-                            <el-menu-item index="/vtf/list">
+                            <el-menu-item index="/vft/dataShow">
                                 <i class="fa fa-table" aria-hidden="true"></i>
                                 数据展示
                             </el-menu-item>
+                            <!--<el-menu-item index="/vtf/list">-->
+                                <!--<i class="fa fa-table" aria-hidden="true"></i>-->
+                                <!--数据展示-->
+                            <!--</el-menu-item>-->
                             <el-menu-item index="2-1-2">
                                 <i class="fa fa-download" aria-hidden="true"></i>
                                 数据导入导出
