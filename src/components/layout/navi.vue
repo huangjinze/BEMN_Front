@@ -115,14 +115,14 @@
 </template>
 <script>
   import {mapState, mapGetters} from 'vuex'
-  import {userListPermission, userCreatePermission, userEditPermission, userDeletePermission,
-    roleListPermission, roleCreatePermission, roleEditPermission, roleDeletePermission,
-    stationAddUserPermission, stationDeleteUserPermission, stationShowUserPermission, stationChangeUserPermission,
-    stationAddPermission, stationDeletePermission, stationShowPermission, stationChangePermission,
-    towerAddUserPermission, towerDeleteUserPermission, towerShowUserPermission, towerChangeUserPermission,
-    towerAddPermission, towerDeletePermission, towerShowPermission, towerChangePermission,
-    textAddPermission, textDeletePermission, textShowPermission, textOperationPermission,
-    dataAddPermission, dataDeletePermission, dataShowPermission, dataOperationPermission} from '../../Permission/NaviPermission'
+  // import {userListPermission, userCreatePermission, userEditPermission, userDeletePermission,
+  //   roleListPermission, roleCreatePermission, roleEditPermission, roleDeletePermission,
+  //   stationAddUserPermission, stationDeleteUserPermission, stationShowUserPermission, stationChangeUserPermission,
+  //   stationAddPermission, stationDeletePermission, stationShowPermission, stationChangePermission,
+  //   towerAddUserPermission, towerDeleteUserPermission, towerShowUserPermission, towerChangeUserPermission,
+  //   towerAddPermission, towerDeletePermission, towerShowPermission, towerChangePermission,
+  //   textAddPermission, textDeletePermission, textShowPermission, textOperationPermission,
+  //   dataAddPermission, dataDeletePermission, dataShowPermission, dataOperationPermission} from '../../Permission/NaviPermission'
   export default {
     data () {
       return {
@@ -147,69 +147,69 @@
     created: function () {
 //      this.$store.commit('SET_STATUS', JSON.parse(sessionStorage.getItem('userInfo')))
     },
-    mounted: function () {
-//      console.log(this.msg)
-      if (userListPermission(this.msg) === true || userCreatePermission(this.msg) === true ||
-        userEditPermission(this.msg) === true || userDeletePermission(this.msg) === true ||
-        roleListPermission(this.msg) === true || roleCreatePermission(this.msg) === true ||
-        roleEditPermission(this.msg) === true || roleDeletePermission(this.msg) === true) {
-        this.UserRole = true
-      } else {
-        this.UserRole = false
-      }
-      if (userListPermission(this.msg) === true || userCreatePermission(this.msg) === true ||
-        userEditPermission(this.msg) === true || userDeletePermission(this.msg) === true) {
-        this.User = true
-      } else {
-        this.User = false
-      }
-      if (roleListPermission(this.msg) === true || roleCreatePermission(this.msg) === true ||
-        roleEditPermission(this.msg) === true || roleDeletePermission(this.msg) === true) {
-        this.Role = true
-      } else {
-        this.Role = false
-      }
-      if (stationAddUserPermission(this.msg) === true || stationDeleteUserPermission(this.msg) === true ||
-        stationShowUserPermission(this.msg) === true || stationChangeUserPermission(this.msg) === true ||
-        stationAddPermission(this.msg) === true || stationDeletePermission(this.msg) === true ||
-        stationShowPermission(this.msg) === true || stationChangePermission(this.msg) === true ||
-        towerAddUserPermission(this.msg) === true || towerDeleteUserPermission(this.msg) === true ||
-        towerShowUserPermission(this.msg) === true || towerChangeUserPermission(this.msg) === true ||
-        towerAddPermission(this.msg) === true || towerDeletePermission(this.msg) === true ||
-        towerShowPermission(this.msg) === true || towerChangePermission(this.msg) === true) {
-        this.StationTower = true
-      } else {
-        this.StationTower = false
-      }
-      if (stationAddUserPermission(this.msg) === true || stationDeleteUserPermission(this.msg) === true ||
-        stationShowUserPermission(this.msg) === true || stationChangeUserPermission(this.msg) === true ||
-        stationAddPermission(this.msg) === true || stationDeletePermission(this.msg) === true ||
-        stationShowPermission(this.msg) === true || stationChangePermission(this.msg) === true) {
-        this.Station = true
-      } else {
-        this.Station = false
-      }
-      if (towerAddUserPermission(this.msg) === true || towerDeleteUserPermission(this.msg) === true ||
-        towerShowUserPermission(this.msg) === true || towerChangeUserPermission(this.msg) === true ||
-        towerAddPermission(this.msg) === true || towerDeletePermission(this.msg) === true ||
-        towerShowPermission(this.msg) === true || towerChangePermission(this.msg) === true) {
-        this.Tower = true
-      } else {
-        this.Tower = false
-      }
-      if (textAddPermission(this.msg) === true || textDeletePermission(this.msg) === true ||
-        textShowPermission(this.msg) === true || textOperationPermission(this.msg) === true) {
-        this.Text = true
-      } else {
-        this.Text = false
-      }
-      if (dataAddPermission(this.msg) === true || dataDeletePermission(this.msg) === true ||
-        dataShowPermission(this.msg) === true || dataOperationPermission(this.msg) === true) {
-        this.Data = true
-      } else {
-        this.Data = false
-      }
-    },
+//     mounted: function () {
+// //      console.log(this.msg)
+//       if (userListPermission(this.msg) === true || userCreatePermission(this.msg) === true ||
+//         userEditPermission(this.msg) === true || userDeletePermission(this.msg) === true ||
+//         roleListPermission(this.msg) === true || roleCreatePermission(this.msg) === true ||
+//         roleEditPermission(this.msg) === true || roleDeletePermission(this.msg) === true) {
+//         this.UserRole = true
+//       } else {
+//         this.UserRole = false
+//       }
+//       if (userListPermission(this.msg) === true || userCreatePermission(this.msg) === true ||
+//         userEditPermission(this.msg) === true || userDeletePermission(this.msg) === true) {
+//         this.User = true
+//       } else {
+//         this.User = false
+//       }
+//       if (roleListPermission(this.msg) === true || roleCreatePermission(this.msg) === true ||
+//         roleEditPermission(this.msg) === true || roleDeletePermission(this.msg) === true) {
+//         this.Role = true
+//       } else {
+//         this.Role = false
+//       }
+//       if (stationAddUserPermission(this.msg) === true || stationDeleteUserPermission(this.msg) === true ||
+//         stationShowUserPermission(this.msg) === true || stationChangeUserPermission(this.msg) === true ||
+//         stationAddPermission(this.msg) === true || stationDeletePermission(this.msg) === true ||
+//         stationShowPermission(this.msg) === true || stationChangePermission(this.msg) === true ||
+//         towerAddUserPermission(this.msg) === true || towerDeleteUserPermission(this.msg) === true ||
+//         towerShowUserPermission(this.msg) === true || towerChangeUserPermission(this.msg) === true ||
+//         towerAddPermission(this.msg) === true || towerDeletePermission(this.msg) === true ||
+//         towerShowPermission(this.msg) === true || towerChangePermission(this.msg) === true) {
+//         this.StationTower = true
+//       } else {
+//         this.StationTower = false
+//       }
+//       if (stationAddUserPermission(this.msg) === true || stationDeleteUserPermission(this.msg) === true ||
+//         stationShowUserPermission(this.msg) === true || stationChangeUserPermission(this.msg) === true ||
+//         stationAddPermission(this.msg) === true || stationDeletePermission(this.msg) === true ||
+//         stationShowPermission(this.msg) === true || stationChangePermission(this.msg) === true) {
+//         this.Station = true
+//       } else {
+//         this.Station = false
+//       }
+//       if (towerAddUserPermission(this.msg) === true || towerDeleteUserPermission(this.msg) === true ||
+//         towerShowUserPermission(this.msg) === true || towerChangeUserPermission(this.msg) === true ||
+//         towerAddPermission(this.msg) === true || towerDeletePermission(this.msg) === true ||
+//         towerShowPermission(this.msg) === true || towerChangePermission(this.msg) === true) {
+//         this.Tower = true
+//       } else {
+//         this.Tower = false
+//       }
+//       if (textAddPermission(this.msg) === true || textDeletePermission(this.msg) === true ||
+//         textShowPermission(this.msg) === true || textOperationPermission(this.msg) === true) {
+//         this.Text = true
+//       } else {
+//         this.Text = false
+//       }
+//       if (dataAddPermission(this.msg) === true || dataDeletePermission(this.msg) === true ||
+//         dataShowPermission(this.msg) === true || dataOperationPermission(this.msg) === true) {
+//         this.Data = true
+//       } else {
+//         this.Data = false
+//       }
+//     },
     methods: {
       handleOpen (key, keyPath) {
         console.log(key, keyPath)

@@ -3,19 +3,18 @@
   <BasePage>
     <div slot="header">header</div>
     <div slot="aside"><navi></navi></div>
-    <div slot="main">
+    <div slot="main" v-loading="loading">
       <el-row :span="24">
         <singleSelect v-model="station"></singleSelect>
       </el-row>
       <el-row :span="24">
       <chartForm
-        :targetOptions="targetOptions"
-        v-model="formValue"
-        @Click="onClick"
-        v-loading="loading"></chartForm>
-        <el-row v-for="(item, index) in chartMetaData" :key="'chart_key'+index">
+        :indexesOptions="indexesOptions"
+        v-model="formValue"></chartForm>
+        <el-button @click="onDrawClick" type="primary" icon="el-icon-edit">绘制</el-button>
+        <el-row>
           <el-col :span="18" :offset="3">
-            <echart :options="item"></echart>
+            <echart :options="chartMeta"></echart>
           </el-col>
         </el-row>
       </el-row>
@@ -33,124 +32,150 @@ import singleSelect from '../../components/multiSelect/singleSelect'
 import echart from 'vue-echarts'
 
 export default {
-  components: {echart, navi, BasePage, chartForm, singleSelect},
+  components: {
+    echart, navi, BasePage, chartForm, singleSelect},
   name: 'vtfStaiscticPage',
   data () {
     return {
       loading: false,
-      targetOptions: [],
-      station: '奥林匹克',
       formValue: {
-        index: [],
-        selectedType: 'a',
-        model: 'mean',
-        time_interval: 'day',
-        start_time: '',
-        end_time: ''
+        index: '',
+        type: '',
+        startTime: '',
+        endTime: '',
+        timeInterval: '',
+        intervalUnit: '',
+        model: ''
       },
-      chartMetaData: [],
-      chart_value2kind: {
-        a: 'scatter',
-        b: 'scatter',
-        c: 'bar',
-        d: 'boxplot',
-        e: 'scatter'
-      }
+      station: '',
+      chartMeta: {},
+      indexesOptions: []
     }
   },
   watch: {
-    station: function (newValue) {
-      this.targetOptions.splice(0, this.targetOptions.length)
-      console.log('station_change', newValue)
-      getVFTIndex({station: this.station, classification: '气象', domain: '通量数据'}).then(resp => {
-        console.log('get_vft_index', resp)
-        let data = resp.data.data[0]
-        for (let k in data) {
-          let child = data[k].map(item => {
-            return {'label': item, 'value': item}
-          })
-          console.log('get_vft_index_child', child)
-          this.targetOptions.push({'label': k, 'value': k, 'children': child})
-        }
-        console.log('get_vft_index_finish', this.targetOptions)
-      }).catch(resp => {
-        this.$alert('网络差', '失败', {confirmButtonText: 'ok'})
-      })
+    station: {
+      handler: function (val) {
+        this.getIndexes()
+      }
     }
   },
-  mounted: function () {
-    getVFTIndex({station: this.station, classification: '气象', domain: '通量数据'}).then(resp => {
-      console.log('get_vft_index', resp)
-      let data = resp.data.data[0]
-      for (let k in data) {
-        let child = data[k].map(item => {
-          return {'label': item, 'value': item}
-        })
-        console.log('get_vft_index_child', child)
-        this.targetOptions.push({'label': k, 'value': k, 'children': child})
-      }
-      console.log('get_vft_index_finish', this.targetOptions)
-    }).catch(resp => {
-      this.$alert('网络差', '失败', {confirmButtonText: 'ok'})
-    })
+  mounted () {
+    // this.getIndexes()
   },
   methods: {
-    onClick: function () {
-      console.log('Button Click')
+    getIndexes: function () {
       this.loading = true
-      getVTFData({'index': this.formValue.index[1],
+      getVFTIndex({
+        domain: '通量数据',
+        station_name: this.station,
+        classification_name: '通量',
+        index: this.formValue.index,
+        num: this.formValue.timeInterval,
+        time_interval: this.formValue.intervalUnit,
+        model: this.formValue.model,
+        draw_type: this.formValue.type
+      }).then((resp) => {
+        if (resp.data.status !== 'success') {
+          alert('ail')
+          return
+        }
+        let data = resp.data.data
+        this.indexesOptions = data.map((item) => {
+          return {
+            value: item.type,
+            label: item.type,
+            children: item.indexes.map((perIndex) => {
+              return {
+                value: perIndex,
+                label: perIndex
+              }
+            })
+          }
+        })
+      }).catch(() => {
+        this.loading = false
+        alert('网络错误')
+      })
+    },
+    onDrawClick: function () {
+      this.loading = true
+      getVTFData({
         domain: '通量数据',
         station: this.station,
-        classification: '气象',
-        start_time: this.formValue.start_time,
-        end_time: this.formValue.end_time,
-        time_interval: this.formValue.time_interval,
-        model: this.formValue.model}).then(resp => {
-          this.chartMetaData.splice(0, this.chartMetaData.length)
-          this.chartMetaData = resp.data.data.map((perIndex) => {
-            let meta = {
-              title: {
-                text: perIndex.index + '数据'
-              },
-              grid: {
-                left: '3%',
-                right: '4%',
-                bottom: '3%',
-                containLabel: true
-              },
-              legend: {
-                data: []
-              },
-              animation: false,
-              dataZoom: [
-                {show: true, type: 'inside'}
-              ],
-              tooltip: {
-                trigger: 'axis'
-              },
-              xAxis: [{
-                boundaryGap: false
-              }],
-              yAxis: [{ type: 'value' }],
-              series: []
-            }
-            meta.xAxis[0].data = perIndex.data.map((perData) => { return perData.x })
-            meta.series.push({
-              name: perIndex.index + '数据',
-              type: this.chart_value2kind[this.selectedType],
-              data: perIndex.data.map((dataItem) => { return dataItem.y })
-            })
-            meta.legend.data.push(perIndex.index + '数据')
-            console.log('填充', meta.xAxis)
-            return meta
-          })
-          this.loading = false
-        }).catch(resp => {
-          this.$alert('网络错误', '失败', {confirmButtonText: 'ok'}).then(aciton => {
-            this.loading = false
-            console.log(aciton)
-          })
+        classification: '通量',
+        index: this.formValue.index,
+        start_time: this.formValue.startTime,
+        end_time: this.formValue.endTime,
+        time_interval: this.formValue.intervalUnit,
+        model: this.formValue.model,
+        draw_type: this.formValue.model
+      }).then((resp) => {
+        if (resp.data.status !== 'success') {
+          alert(resp.data.reason)
+          return
+        }
+        let data = resp.data.data
+        let meta = {
+          title: {
+            text: data[0].name + '数据'
+          },
+          grid: {
+            left: '3%',
+            right: '4%',
+            bottom: '3%',
+            containLabel: true
+          },
+          legend: {
+            data: []
+          },
+          animation: false,
+          dataZoom: [
+            {show: true, type: 'inside'}
+          ],
+          tooltip: {
+            trigger: 'axis'
+          },
+          xAxis: [{
+            boundaryGap: false
+          }],
+          yAxis: [{ type: 'value' }],
+          series: []
+        }
+        meta.xAxis[0].data = data[0].data.map((item) => {
+          return item.x
         })
+        meta.series = data.map((perIndex) => {
+          if (this.formValue.type === 'scatter') {
+            return {
+              name: perIndex.year + perIndex.name,
+              symbolSize: 3,
+              large: true,
+              type: 'scatter',
+              data: perIndex.data.map((dataItem) => { return dataItem.y })
+            }
+          } else if (this.formValue.type === 'compare') {
+            return {
+              name: perIndex.year + perIndex.name,
+              symbolSize: 3,
+              large: true,
+              type: 'scatter',
+              data: perIndex.data.map((dataItem) => { return dataItem.y })
+            }
+          } else {
+            return {
+              name: perIndex.year + perIndex.name,
+              type: this.formValue.type,
+              data: perIndex.data.map((dataItem) => { return dataItem.y })
+            }
+          }
+        })
+
+        this.chartMeta = meta
+        this.loading = false
+      }).catch(() => {
+        this.loading = false
+        alert('网络错误')
+      })
     }
   }
 }
