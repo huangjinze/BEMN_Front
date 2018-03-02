@@ -6,7 +6,7 @@
       <slot name="header">北京城市副中心核心区林地绿地大数据平台</slot>
       <el-dropdown style="float: right">
         <el-button type="text"  style="font-size: 16px;color: white">
-          欢迎您！<i class="el-icon-arrow-down el-icon--right"></i>
+          欢迎您！{{ msg[0][0].name }}<i class="el-icon-arrow-down el-icon--right"></i>
         </el-button>
         <el-dropdown-menu slot="dropdown">
           <el-dropdown-item><el-button type="text" @click="info">个人信息</el-button></el-dropdown-item>
@@ -81,4 +81,3 @@
     padding-top: 22px;
   }
 </style>
-

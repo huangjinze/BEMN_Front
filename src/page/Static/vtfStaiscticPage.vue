@@ -47,7 +47,7 @@ export default {
         intervalUnit: '',
         model: ''
       },
-      station: '',
+      station: '奥林匹克  ',
       chartMeta: {},
       indexesOptions: []
     }
@@ -60,20 +60,15 @@ export default {
     }
   },
   mounted () {
-    // this.getIndexes()
+    this.getIndexes()
   },
   methods: {
     getIndexes: function () {
       this.loading = true
       getVFTIndex({
         domain: '通量数据',
-        station_name: this.station,
-        classification_name: '通量',
-        index: this.formValue.index,
-        num: this.formValue.timeInterval,
-        time_interval: this.formValue.intervalUnit,
-        model: this.formValue.model,
-        draw_type: this.formValue.type
+        station: this.station,
+        classification: '通量'
       }).then((resp) => {
         if (resp.data.status !== 'success') {
           alert('ail')
@@ -82,9 +77,9 @@ export default {
         let data = resp.data.data
         this.indexesOptions = data.map((item) => {
           return {
-            value: item.type,
-            label: item.type,
-            children: item.indexes.map((perIndex) => {
+            value: item.category,
+            label: item.category,
+            children: item.index.map((perIndex) => {
               return {
                 value: perIndex,
                 label: perIndex
@@ -92,9 +87,10 @@ export default {
             })
           }
         })
-      }).catch(() => {
         this.loading = false
-        alert('网络错误')
+      }).catch((e) => {
+        this.loading = false
+        alert(e)
       })
     },
     onDrawClick: function () {
@@ -106,9 +102,10 @@ export default {
         index: this.formValue.index,
         start_time: this.formValue.startTime,
         end_time: this.formValue.endTime,
+        num: this.formValue.timeInterval,
         time_interval: this.formValue.intervalUnit,
         model: this.formValue.model,
-        draw_type: this.formValue.model
+        draw_type: this.formValue.type
       }).then((resp) => {
         if (resp.data.status !== 'success') {
           alert(resp.data.reason)

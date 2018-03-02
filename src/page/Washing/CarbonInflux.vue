@@ -40,7 +40,7 @@
           跳过
         </el-button>
       </el-col>
-ASDFSADFSDF
+      <br /> <br /> <br />
       <el-row v-for="(item, index) in chartIndexesMetaList" :key="'chart_key'+index">
         <el-col :span="18" :offset="3">
           <echart :options="item"></echart>

@@ -4,7 +4,7 @@ import App from './App.vue'
 import router from './router/index'
 import Vue from 'vue'
 import store from './store/index'
-// import {currentUser, currentInfo} from './model/user'
+import {currentUser, currentInfo} from './model/user'
 import {
   Pagination,
   Dialog,
@@ -150,32 +150,32 @@ Vue.config.productionTip = false
 
 // }
 
-// router.beforeEach((to, from, next) => {
-//   console.log('router before')
-//   let info = ''
-//   var email = []
-//   if (to.path === '/login' || to.path === '/index') {
-//     next()
-//     return
-//   }
-//   currentUser().then(resp => {
-//     console.log('currentemail', resp.data.data[0])
-//     info = resp.data.data[0]
-//     email.push({
-//       'email': info
-//     })
-//     return currentInfo(email[0]).then(resp => {
-//       console.log('currentinfo', resp)
-//       console.log(store.commit('SET_STATUS', resp.data.data))
-//       console.log('e')
-//       next()
-//     })
-//   }).catch(resp => {
-//     MessageBox.alert('请重新登录', {confirmButtonText: 'ok'})
-//     next({path: '/login'})
-//   })
-//   console.log('email', email)
-// })
+router.beforeEach((to, from, next) => {
+  console.log('router before')
+  let info = ''
+  var email = []
+  if (to.path === '/login' || to.path === '/index') {
+    next()
+    return
+  }
+  currentUser().then(resp => {
+    console.log('currentemail', resp.data.data[0])
+    info = resp.data.data[0]
+    email.push({
+      'email': info
+    })
+    return currentInfo(email[0]).then(resp => {
+      console.log('currentinfo', resp)
+      console.log(store.commit('SET_STATUS', resp.data.data))
+      console.log('e')
+      next()
+    })
+  }).catch(resp => {
+    MessageBox.alert('请重新登录', {confirmButtonText: 'ok'})
+    next({path: '/login'})
+  })
+  console.log('email', email)
+})
 
 /* eslint-disable no-new */
 new Vue({
