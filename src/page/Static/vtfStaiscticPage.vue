@@ -112,6 +112,7 @@ export default {
           return
         }
         let data = resp.data.data
+
         let meta = {
           title: {
             text: data[0].name + '数据'
@@ -138,40 +139,49 @@ export default {
           yAxis: [{ type: 'value' }],
           series: []
         }
-        meta.xAxis[0].data = data[0].data.map((item) => {
+        meta.xAxis[0].data = data[0].datai.map((item) => {
           return item.x
         })
-        meta.series = data.map((perIndex) => {
+        console.log(data)
+        meta.series = data.map((perData) => {
+          console.log(perData.data)
           if (this.formValue.type === 'scatter') {
             return {
-              name: perIndex.year + perIndex.name,
+              name: perData.name,
               symbolSize: 3,
               large: true,
               type: 'scatter',
-              data: perIndex.data.map((dataItem) => { return dataItem.y })
+              data: perData.data.map((dataItem) => { return dataItem.y })
             }
           } else if (this.formValue.type === 'compare') {
             return {
-              name: perIndex.year + perIndex.name,
+              name: perData.year + perData.name,
               symbolSize: 3,
               large: true,
               type: 'scatter',
-              data: perIndex.data.map((dataItem) => { return dataItem.y })
+              data: perData.data.map((dataItem) => { return dataItem.y })
+            }
+          } else if (this.formValue.type === 'line_sum') {
+            return {
+              name: perData.name,
+              type: 'line',
+              data: perData.sum_data.map((dataItem) => { return dataItem.y })
             }
           } else {
             return {
-              name: perIndex.year + perIndex.name,
+              name: perData.name,
               type: this.formValue.type,
-              data: perIndex.data.map((dataItem) => { return dataItem.y })
+              data: perData.data.map((dataItem) => { return dataItem.y })
             }
           }
         })
 
         this.chartMeta = meta
         this.loading = false
-      }).catch(() => {
+      }).catch((e) => {
         this.loading = false
-        alert('网络错误')
+        alert(e)
+        console.log(e)
       })
     }
   }

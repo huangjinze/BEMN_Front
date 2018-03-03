@@ -118,7 +118,7 @@
           value: 'line_sum',
           label: '折线图-累计'
         }, {
-          value: 'line_way',
+          value: 'line',
           label: '折线图-趋势'
         }, {
           value: 'bar',
