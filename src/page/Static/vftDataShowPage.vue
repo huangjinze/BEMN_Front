@@ -76,22 +76,23 @@ export default {
         this.$alert('数据获取失败', '失败', {confirmButtonText: 'ok'})
       })
       getVFTIndex({station: this.stationName[0], classification: temp.text, domain: '通量数据'}).then(resp => {
-        let data = resp.data.data[0]
+        let data = resp.data.data
+        console.log('f', data)
         let i = 0
         this.index.splice(0, this.index.length)
         this.navs.splice(0, this.navs.length)
         this.allIndexTags.clear()
-        for (let k in data) {
-          this.index.push({text: k, id: i + 1, flag: 4})
-          this.navs.push({label: k, mcols: [], tableData: []})
+        for (let k of data) {
+          this.index.push({text: k['category'], id: i + 1, flag: 4})
+          this.navs.push({label: k['category'], mcols: [], tableData: []})
           i++
-          this.allIndexTags.set(k, data[k])
+          this.allIndexTags.set(k['category'], k['index'])
         }
         this.$refs.profile.flag = 4
         this.indexTags.splice(0, this.indexTags.length)
         this.className[0] = temp.text
         this.currentTab[0] = this.index[0].text
-        console.log(this.currentTab)
+      //  console.log(this.currentTab)
         this.getTableData(1)
       }).catch(resp => {
         this.$alert('数据获取失败', '失败', {confirmButtonText: 'ok'})
