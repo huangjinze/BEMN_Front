@@ -26,7 +26,26 @@
         </el-select>
       </el-form-item>
 
-      <el-form-item>
+      <el-form-item v-if="form.type === 'compare'">
+        <div class="block">
+          <span class="demonstration">开始年</span>
+          <el-date-picker
+            v-model="form.startTime"
+            align="right"
+            type="year"
+            placeholder="选择年">
+          </el-date-picker>
+
+          <span class="demonstration">结束年</span>
+          <el-date-picker
+            v-model="form.endTime"
+            align="right"
+            type="year"
+            placeholder="选择年">
+          </el-date-picker>
+        </div>
+      </el-form-item>
+      <el-form-item v-if="form.type !== 'compare'">
         <div class="block">
           <span class="demonstration">选择时间范围</span>
           <el-date-picker
@@ -99,7 +118,7 @@
           value: 'mean',
           label: '平均值'
         }, {
-          value: 'mid',
+          value: 'median',
           label: '中位数'
         }, {
           value: 'std',

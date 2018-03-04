@@ -16,6 +16,9 @@
           <el-col :span="18" :offset="3">
             <echart :options="chartMeta"></echart>
           </el-col>
+          <el-col  :offset="3">
+              <chartGrid :tableData="gridData"></chartGrid>
+          </el-col>
         </el-row>
       </el-row>
     </div>
@@ -30,10 +33,11 @@ import chartForm from '../../components/echart/vtfChartForm'
 import {getVTFData, getVFTIndex} from '../../model/data'
 import singleSelect from '../../components/multiSelect/singleSelect'
 import echart from 'vue-echarts'
+import chartGrid from '../../components/echart/chartGrid'
 
 export default {
   components: {
-    echart, navi, BasePage, chartForm, singleSelect},
+    echart, navi, BasePage, chartForm, singleSelect, chartGrid},
   name: 'vtfStaiscticPage',
   data () {
     return {
@@ -49,7 +53,8 @@ export default {
       },
       station: '奥林匹克  ',
       chartMeta: {},
-      indexesOptions: []
+      indexesOptions: [],
+      gridData: []
     }
   },
   watch: {
@@ -139,12 +144,13 @@ export default {
           yAxis: [{ type: 'value' }],
           series: []
         }
-        meta.xAxis[0].data = data[0].datai.map((item) => {
+        meta.xAxis[0].data = data[0].data.map((item) => {
           return item.x
         })
         console.log(data)
         meta.series = data.map((perData) => {
           console.log(perData.data)
+          this.gridData.push(perData.stats_data)
           if (this.formValue.type === 'scatter') {
             return {
               name: perData.name,
