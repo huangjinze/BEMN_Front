@@ -5,7 +5,7 @@
         <div slot="aside"><navi></navi></div>
         <div slot="main">
             <topIndexSelect :initTopPartTags="stationName" :initTopSiteTags="className" ref="profile" :indices="index" :indexTags="indexTags" @ClickIndexClass="parentIndexClassListen" @ClickTower="parentStationListen" @ClickClass="parentClassListen" @ClickIndex="parentIndexListen" @CloseStation="CloseStationListen" @CloseClass="CloseClassListen"></topIndexSelect>
-            <devDataTable :tableData="tableData" :tableName="tableName" :statusControl="faultyList" @errorDialog="errorDialog" @addInfoDialog="addInfoDialog" @addDevice="onAddDevice" @editClick="onEditClick"></devDataTable>
+            <devDataTable :totalSize="totalSize" :tableData="tableData" :tableName="tableName" :statusControl="faultyList" @errorDialog="errorDialog" @addInfoDialog="addInfoDialog" @addDevice="onAddDevice" @editClick="onEditClick" @changePage="onChangePage"></devDataTable>
             <devDialog :faultyDeviceName="faultyDeviceName" :dialogErrorVisible="dialogErrorVisible" :dialogAddVisible="dialogAddVisible" :errorData="errorData" @selectErrorInfoByTime="onSelectErrorByTime" @dialogClose="onErrorInfoDialogClose"></devDialog>
             <deviceAdding :dialogAddingVisible="dialogAddVisible" @dialogClose="onAddingDialogClose"></deviceAdding>
           <editDevDialog :dialogEditingVisible="dialogEditVisible" :editInfo="editInfo" :tags="tagsArray" :stationList="stations" :classList="selectClassList" :valueClass="valueClassList" @dialogClose="onEditDialogClose" @selectStation="onSelectStation" @devEditUpload="onDevEditUpload"></editDevDialog>
@@ -20,7 +20,7 @@ import editDevDialog from '../../components/device/editDevDialog'
 import devDialog from '../../components/device/devDialog'
 import topIndexSelect from '../../components/multiSelect/topIndexSelect'
 import deviceAdding from './deviceAdding'
-import {getStation, getDevice, getClass, getDeviceErrorInfo, getDeviceErrorInfoByTime, getIndexByDevice, updateDeviceInfo} from '../../model/vftData'
+import {getStation, getDevice, getClass, getDeviceErrorInfo, getDeviceErrorInfoByTime, getIndexByDevice, updateDeviceInfo, getDeviceConts} from '../../model/vftData'
 export default {
   components: {navi, BasePage, devDataTable, topIndexSelect, devDialog, deviceAdding, editDevDialog},
   data () {
@@ -67,7 +67,8 @@ export default {
       editInfo: {},
       tagsArray: [],
       selectClassList: [],
-      valueClassList: []
+      valueClassList: [],
+      totalSize: 0
     }
   },
   mounted: function () {
@@ -81,6 +82,11 @@ export default {
       this.stations = Array.from(this.indexTags)
     }).catch(resp => {
       this.$alert('获取失败', '失败', {confirmButtonText: 'ok'})
+    })
+    getDeviceConts({stationName: this.stationName[0], domain: '通量数据'}).then(resp => {
+      this.totalSize = resp.data.data
+    }).catch(resp => {
+      this.$alert('表格行数获取失败', '失败', {confirmButtonText: 'ok'})
     })
     this.getDevice(this.stationName[0], '通量数据')
   },
@@ -117,7 +123,12 @@ export default {
     },
     parentStationListen (id) {
       var temp = this.stations.find(function (value) { return value.id === id })
-      this.getDevice(temp.text, '通量数据')
+      getDeviceConts({stationName: temp.text, domain: '通量数据'}).then(resp => {
+        this.totalSize = resp.data.data
+      }).catch(resp => {
+        this.$alert('表格行数获取失败', '失败', {confirmButtonText: 'ok'})
+      })
+      this.getDevice(temp.text, '通量数据', 1)
       this.$refs.profile.flag = 4
     },
     parentClassListen (id) {},
@@ -197,8 +208,12 @@ export default {
         this.$alert('获取失败', '失败', {confirmButtonText: 'ok'})
       })
     },
-    getDevice (stationName, domainName) {
-      getDevice({station: stationName, domain: domainName}).then(resp => {
+    onChangePage (page) {
+      var currentStation = this.$refs.profile.topPartTags[0].text
+      this.getDevice(currentStation, '通量数据', page)
+    },
+    getDevice (stationName, domainName, page) {
+      getDevice({station: stationName, domain: domainName, page: page}).then(resp => {
         this.tableData = Array.from(resp.data.data)
       }).catch(resp => {
         this.$alert('获取失败', '失败', {confirmButtonText: 'ok'})

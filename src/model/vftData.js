@@ -43,3 +43,5 @@ export const getDeviceErrorInfoByTime = params => { return axios.get(host + '/de
 export const updateDeviceInfo = params => { return axios.post(host + '/device/updateInfo', params, {headers: {'Content-Type': 'application/json'}}) }
 // 删除指标
 export const deleteFactor = params => { return axios.get(host + '/device/deleteFactor', {'params': params}) }
+// 根据站点名获取设备数量，即表格条目数
+export const getDeviceConts = params => { return axios.get(host + '/device/getDeviceCounts', {'params': params}) }

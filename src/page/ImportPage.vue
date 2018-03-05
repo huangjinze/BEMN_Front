@@ -82,23 +82,25 @@
       parentClassListen (id) {
         let temp = this.indexTags.find(function (value, index, classes) { return value.id === id })
         getVFTIndex({station: this.stationName[0], classification: temp.text, domain: '通量数据'}).then(resp => {
-          let data = resp.data.data[0]
+          let data = resp.data.data
+          console.log('f', data)
           let i = 0
           this.index.splice(0, this.index.length)
           this.allIndexTags.clear()
-          for (let k in data) {
-            this.index.push({text: k, id: i + 1, flag: 3})
+          for (let k of data) {
+            this.index.push({text: k['category'], id: i + 1, flag: 3})
             i++
-            this.allIndexTags.set(k, data[k])
+            this.allIndexTags.set(k['category'], k['index'])
           }
           this.indexTags.splice(0, this.indexTags.length)
-          for (var j = 0; j < data[this.index[0].text].length; j++) {
-            this.indexTags.push({ text: data[this.index[0].text][j], id: j + 1 })
+          var tagsArray = this.allIndexTags.get(this.index[0].text)
+          for (var j = 0; j < tagsArray.length; j++) {
+            this.indexTags.push({ text: tagsArray[j], id: j + 1 })
           }
           console.log(this.indexTags)
           this.className[0] = temp.text
         }).catch(resp => {
-          this.$alert('获取失败', '失败', {confirmButtonText: 'ok'})
+          this.$alert('指标获取失败', '失败', {confirmButtonText: 'ok'})
         })
       },
       parentIndexClassListen (id) {

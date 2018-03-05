@@ -41,6 +41,7 @@ export default {
   mounted: function () {
     getStation({domain: '通量数据'}).then(resp => {
       let data = resp.data.data
+      console.log(data)
       this.index.splice(0, this.index.length)
       this.index.push({ text: '选择站点', flag: 1 })
       for (var i = 0; i < data.length; i++) {
@@ -78,22 +79,21 @@ export default {
       })
       getVFTIndex({station: this.stationName[0], classification: temp.text, domain: '通量数据'}).then(resp => {
         let data = resp.data.data[0]
-        console.log('543256434', data)
         let i = 0
         this.index.splice(0, this.index.length)
         this.navs.splice(0, this.navs.length)
         this.allIndexTags.clear()
-        for (let k in data) {
-          this.index.push({text: k, id: i + 1, flag: 4})
-          this.navs.push({label: k, mcols: [], tableData: []})
+        for (let k of data) {
+          this.index.push({text: k['category'], id: i + 1, flag: 4})
+          this.navs.push({label: k['category'], mcols: [], tableData: []})
           i++
-          this.allIndexTags.set(k, data[k])
+          this.allIndexTags.set(k['category'], k['index'])
         }
         this.$refs.profile.flag = 4
         this.indexTags.splice(0, this.indexTags.length)
         this.className[0] = temp.text
         this.currentTab[0] = this.index[0].text
-        console.log(this.currentTab)
+      //  console.log(this.currentTab)
         this.getTableData(1)
       }).catch(resp => {
         this.$alert('数据获取失败', '失败', {confirmButtonText: 'ok'})
@@ -117,7 +117,7 @@ export default {
       this.getTableData(page[0])
     },
     getTableData (page) {
-      getIndexTableData({station: this.stationName[0], classification: this.className[0], domain: '通量数据', category: this.currentTab[0], page: page, dataType: this.Type}).then(resp => {
+      getIndexTableData({station: this.stationName[0], classification: this.className[0], domain: '通量数据', category: this.currentTab[0], page: page}).then(resp => {
         var data = resp.data.data
         var category = this.currentTab[0]
         var cols = []
