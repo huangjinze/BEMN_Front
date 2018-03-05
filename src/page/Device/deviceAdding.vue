@@ -4,7 +4,7 @@
 </template>
 <script>
 import addDevDialog from '../../components/device/addDevDialog'
-import {getStation, getClass} from '../../model/vftData'
+import {getStation, getClass, addDeviceInfo} from '../../model/vftData'
 export default {
   components: {addDevDialog},
   props: {
@@ -57,7 +57,17 @@ export default {
       var j = this.classList.findIndex(function (value) { return value.id === formData.classSelect })
       formData.stationSelect = this.stationList[i].text
       formData.classSelect = this.classList[j].text
-      console.log(formData)//  此处应该将表单数据post到后台
+      addDeviceInfo(formData).then(resp => {
+        this.dialogVisible = false
+        if (resp.data.status === 'success') {
+          this.$message({
+            message: '添加成功！',
+            type: 'success'
+          })
+        }
+      }).catch(resp => {
+        this.$alert('添加失败', '失败', {confirmButtonText: 'ok'})
+      })
     }
   },
   name: 'deviceAdding'

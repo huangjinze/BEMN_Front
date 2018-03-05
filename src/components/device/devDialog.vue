@@ -13,11 +13,11 @@
                 <el-button style="margin-left: 40px" type="primary"  @click="onSelectErrorByTime" plain>筛选</el-button>
             </div>
             <el-table :data="errorData">
-                <el-table-column property="alertName" label="型号强度"></el-table-column>
-                <el-table-column property="deviceClass" label="设备类型"></el-table-column>
-                <el-table-column property="firstBreak" label="第一次故障时间" width="200"></el-table-column>
-                <el-table-column property="lastBreak" label="第二次故障时间" width="200"></el-table-column>
-                <el-table-column property="describe" label="描述"></el-table-column>
+                <el-table-column property="deviceName" label="设备名"></el-table-column>
+                <el-table-column property="status" label="设备状态"></el-table-column>
+                <el-table-column property="alertType" label="警告类型" width="100"></el-table-column>
+                <el-table-column property="occurrence" label="故障时间" width="200"></el-table-column>
+                <el-table-column property="remarks" label="描述"></el-table-column>
             </el-table>
         </el-dialog>
     </div>

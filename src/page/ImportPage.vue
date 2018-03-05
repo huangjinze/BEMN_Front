@@ -1,6 +1,7 @@
 <!--数据导出页面，具体内容通过dataImport/dataImport.vue导入-->
 <template>
   <BasePage>
+    <div slot="header">header</div>
     <div slot="aside"><navi></navi></div>
     <div slot="main">
       <!--<headGuider :initTopPartTags="stationName" :initTopSiteTags="className" ref="profile" :partTags="stations" :siteTags="classes" @ClickPart="parentStationListen" @ClickSite="parentClassListen" @CloseIndex="closeIndexListen"></headGuider>-->
@@ -21,7 +22,7 @@
 //  import headGuider from '../components/headGuider'
   import BasePage from '../components/BasePage'
   import moment from 'moment'
-  import {getStation, getClass, submitTwoSelect, showExport} from '../model/vftData'
+  import {getStation, getClass, submitTwoSelect, showExport, downloadUrl, compareStatistics, compareExport, showStatistics} from '../model/vftData'
   import {getVFTIndex} from '../model/data'
 //  import { host } from '../model/data'
   export default {
@@ -139,30 +140,11 @@
             endTime: endDate,
             dataType: dataType,
             class_name: className}).then(resp => {
-              const content = resp
-              console.log(content)
-              const blob = new Blob([content])
-              const fileName = '测试表格123.xls'
-              if ('download' in document.createElement('a')) { // 非IE下载
-                const elink = document.createElement('a')
-                elink.download = fileName
-                elink.style.display = 'none'
-                elink.href = URL.createObjectURL(blob)
-                console.log(elink.href)
-                document.body.appendChild(elink)
-                elink.click()
-                URL.revokeObjectURL(elink.href) // 释放URL 对象
-                document.body.removeChild(elink)
-              } else { // IE10+下载
-                navigator.msSaveBlob(blob, fileName)
+              if (resp.headers && (resp.headers['content-type'] === 'application/x-msdownload' || resp.headers['content-type'] === 'application/vnd.ms-excel')) {
+                downloadUrl(resp.request.responseURL)
+                return 0
               }
             })
-//          window.open('http://127.0.0.1/excel/vft/showExport?domain=' + domain +
-//                  '&station_name=' + stationName +
-//                  '&clickIndex=' + indexName +
-//                  '&startTime=' + startDate +
-//                  '&endTime=' + endDate +
-//                  '&dataType=clean&class_name=' + className)
         } else if (!topTag) {
           this.$message({
             message: '请先选择指标',
@@ -185,7 +167,18 @@
           let stationName = this.stationName[0]
           let className = this.className[0]
           let indexName = this.indexName[0]
-          window.open('http://bemnwork/excel/vft/compareExport?domain=' + domain + '&station_name=' + stationName + '&clickIndex=' + indexName + '&startTime=' + startDate + '&endTime=' + endDate + '&dataType=' + dataType + '&class_name=' + className)
+          compareExport({domain: domain,
+            station_name: stationName,
+            clickIndex: indexName,
+            startTime: startDate,
+            endTime: endDate,
+            dataType: 'clean',
+            class_name: className}).then(resp => {
+              if (resp.headers && (resp.headers['content-type'] === 'application/x-msdownload' || resp.headers['content-type'] === 'application/vnd.ms-excel')) {
+                downloadUrl(resp.request.responseURL)
+                return 0
+              }
+            })
         } else if (!topTag) {
           this.$message({
             message: '请先选择指标',
@@ -208,7 +201,18 @@
           let stationName = this.stationName[0]
           let className = this.className[0]
           let indexName = this.indexName[0]
-          window.open('http://bemnwork/excel/vft/showStatistics?domain=' + domain + '&station_name=' + stationName + '&clickIndex=' + indexName + '&startTime=' + startDate + '&endTime=' + endDate + '&dataType=' + dataType + '&class_name=' + className)
+          showStatistics({domain: domain,
+            station_name: stationName,
+            clickIndex: indexName,
+            startTime: startDate,
+            endTime: endDate,
+            dataType: 'clean',
+            class_name: className}).then(resp => {
+              if (resp.headers && (resp.headers['content-type'] === 'application/x-msdownload' || resp.headers['content-type'] === 'application/vnd.ms-excel')) {
+                downloadUrl(resp.request.responseURL)
+                return 0
+              }
+            })
         } else if (!topTag) {
           this.$message({
             message: '请先选择指标',
@@ -231,7 +235,18 @@
           let stationName = this.stationName[0]
           let className = this.className[0]
           let indexName = this.indexName[0]
-          window.open('http://bemnwork/excel/vft/compareStatistics?domain=' + domain + '&station_name=' + stationName + '&clickIndex=' + indexName + '&startTime=' + startDate + '&endTime=' + endDate + '&dataType=' + dataType + '&class_name=' + className)
+          compareStatistics({domain: domain,
+            station_name: stationName,
+            clickIndex: indexName,
+            startTime: startDate,
+            endTime: endDate,
+            dataType: 'clean',
+            class_name: className}).then(resp => {
+              if (resp.headers && (resp.headers['content-type'] === 'application/x-msdownload' || resp.headers['content-type'] === 'application/vnd.ms-excel')) {
+                downloadUrl(resp.request.responseURL)
+                return 0
+              }
+            })
         } else if (!topTag) {
           this.$message({
             message: '请先选择指标',

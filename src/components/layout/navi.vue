@@ -86,7 +86,7 @@
                     </el-menu-item>
                 </el-submenu>
 
-                <el-menu-item index="/deviceManage">
+                <el-menu-item index="5">
                     <i class="fa fa-desktop" aria-hidden="true"></i>
                     <span slot="title">设备管理</span>
                 </el-menu-item>
