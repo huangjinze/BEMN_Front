@@ -71,6 +71,14 @@
                 </template>
             </el-table-column>
         </el-table>
+        <div align="center">
+            <el-pagination
+                    @current-change="handleCurrentChange"
+                    :page-size="15"
+                    layout="prev, pager, next, jumper"
+                    :total="totalSize">
+            </el-pagination>
+        </div>
     </el-card>
 
 </template>
@@ -90,9 +98,13 @@
           required: true
         },
         tableName: '',
-        editClick: {type: Function}
+        editClick: {type: Function},
+        totalSize: 0
       },
       methods: {
+        handleCurrentChange (val) {
+          this.$emit('changePage', val)
+        },
         handleEdit (row) {
           this.$emit('editClick', row.device_id)
         },
