@@ -20,6 +20,12 @@
       <el-input-number v-model="form.z">
 
       </el-input-number>
+
+      <el-row v-for="(item, index) in chartIndexesMetaList" :key="'chart_key'+index">
+        <el-col :span="18" :offset="3">
+          <echart :options="item"></echart>
+        </el-col>
+      </el-row>
     </el-col>
 
     <el-col :span="24" v-show="step === 2" id="methodSelect">
@@ -65,6 +71,12 @@
               </el-select>
             </el-col>
           </el-row>
+
+        <el-row v-for="(item, index) in chartIndexesMetaList" :key="'chart_key'+index">
+          <el-col :span="18" :offset="3">
+            <echart :options="item"></echart>
+          </el-col>
+        </el-row>
       </div>
 
     </el-col>
@@ -89,9 +101,11 @@
   import navi from '../../components/layout/navi'
   import washingForm from '../../components/datawashing/washingForm'
   import ElButton from 'element-ui/packages/button/src/button'
+  import echart from 'vue-echarts'
 
   export default {
     components: {
+      echart,
       ElButton,
       rangeCheck,
       BasePage,
@@ -108,6 +122,7 @@
         preDisable: true,
         nextDisable: false,
         loading: false,
+        chartIndexesMetaList: [],
         form: {
           z: 4,
           indexes: [],
@@ -131,7 +146,50 @@
 
         if (this.step === 0) {
           this.postIndexes().then(
-            () => {
+            (resp) => {
+              this.chartIndexesMetaList.splice(0, this.chartIndexesMetaList.length)
+              this.chartIndexesMetaList = resp.data.data.map((perIndex) => {
+                let meta = {
+                  title: {
+                    text: perIndex.index + '数据'
+                  },
+                  grid: {
+                    left: '3%',
+                    right: '4%',
+                    bottom: '3%',
+                    containLabel: true
+                  },
+                  legend: {
+                    data: []
+                  },
+                  animation: false,
+                  dataZoom: [
+                    {show: true, type: 'inside'}
+                  ],
+                  tooltip: {
+                    trigger: 'axis'
+                  },
+                  xAxis: [{
+                    boundaryGap: false
+                  }],
+                  yAxis: [{ type: 'value' }],
+                  series: []
+                }
+                meta.xAxis[0].data = perIndex.data.map((perData) => { return perData.x })
+
+                meta.series.push({
+                  name: '原始数据',
+                  symbolSize: 3,
+                  large: true,
+                  type: 'scatter',
+                  data: perIndex.data.map((dataItem) => { return dataItem.y })
+                })
+                meta.legend.data.push('原始数据')
+
+                console.log('填充', meta.xAxis)
+
+                return meta
+              })
               this.loading = false
             })
         }
@@ -149,7 +207,49 @@
             this.loading = false
             if (resp.data.status === 'success') {
               console.log(resp)
-              alert(resp.data.data)
+              this.chartIndexesMetaList.splice(0, this.chartIndexesMetaList.length)
+              this.chartIndexesMetaList = resp.data.data.map((perIndex) => {
+                let meta = {
+                  title: {
+                    text: perIndex.index + '数据'
+                  },
+                  grid: {
+                    left: '3%',
+                    right: '4%',
+                    bottom: '3%',
+                    containLabel: true
+                  },
+                  legend: {
+                    data: []
+                  },
+                  animation: false,
+                  dataZoom: [
+                    {show: true, type: 'inside'}
+                  ],
+                  tooltip: {
+                    trigger: 'axis'
+                  },
+                  xAxis: [{
+                    boundaryGap: false
+                  }],
+                  yAxis: [{ type: 'value' }],
+                  series: []
+                }
+                meta.xAxis[0].data = perIndex.data.map((perData) => { return perData.x })
+
+                meta.series.push({
+                  name: '原始数据',
+                  symbolSize: 3,
+                  large: true,
+                  type: 'scatter',
+                  data: perIndex.data.map((dataItem) => { return dataItem.y })
+                })
+                meta.legend.data.push('原始数据')
+
+                console.log('填充', meta.xAxis)
+
+                return meta
+              })
             } else {
               this.step = this.step - 1
               alert(resp.data.reason)
@@ -173,7 +273,6 @@
             this.loading = false
             if (resp.data.status === 'success') {
               console.log(resp)
-              alert(resp.data.data[0])
             } else {
               this.step = this.step - 1
               alert(resp.data.reason)
@@ -217,7 +316,7 @@
           }).then((resp) => {
             if (resp.data.status === 'success') {
               console.log(resp)
-              alert(resp.data.data[0])
+              return resp
             } else {
               this.step = this.step - 1
               alert(resp.data.reason)

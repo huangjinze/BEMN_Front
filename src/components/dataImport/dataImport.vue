@@ -2,24 +2,35 @@
 <template>
     <div class="main">
             <table>
-                <tr style="height: 150px">
+                <tr style="height: 100px">
                     <td width="100px"><h2>展示</h2></td>
-                    <td ><h3>开始日</h3></td>
-                    <td ><el-date-picker
+                    <td><h3>开始日</h3></td>
+                    <td><el-date-picker
                             v-model="StartDate"
                             type="date"
                             placeholder="选择日期">
                     </el-date-picker></td>
-                    <td ><h3>结束日</h3></td>
-                    <td ><el-date-picker
+                    <td><h3>结束日</h3></td>
+                    <td><el-date-picker
                             v-model="EndDate"
                             type="date"
                             placeholder="选择日期">
                     </el-date-picker></td>
+                    <td><h3>数据类型</h3></td>
+                    <td width="150px">
+                        <el-select v-model="dataType1">
+                            <el-option
+                                    v-for="item in options"
+                                    :key="item.value"
+                                    :label="item.label"
+                                    :value="item.value">
+                            </el-option>
+                        </el-select>
+                    </td>
                     <td><el-button type="primary" round v-on:click="OuttableDate">导出表格</el-button></td>
                     <td><el-button type="primary" plain v-on:click="OutvalueDate">导出统计值</el-button></td>
                 </tr>
-                <tr style="height: 150px">
+                <tr style="height: 100px">
                     <td><h2>对比</h2></td>
                     <td><h3>开始月</h3></td>
                     <td><el-select v-model="StartMonth" placeholder="请选择">
@@ -39,26 +50,22 @@
                                 :value="item.value">
                         </el-option>
                     </el-select></td>
+                    <td><h3>数据类型</h3></td>
+                    <td>
+                        <el-select v-model="dataType2">
+                            <el-option
+                                    v-for="item in options"
+                                    :key="item.value"
+                                    :label="item.label"
+                                    :value="item.value">
+                            </el-option>
+                        </el-select>
+                    </td>
                     <td><el-button type="primary" round v-on:click="OuttableMonth">导出表格</el-button></td>
                     <td><el-button type="primary" plain v-on:click="OutvalueMonth">导出统计值</el-button></td>
                 </tr>
-                <tr>
-
-                    <!--<td><el-upload-->
-                            <!--class="upload-demo"-->
-                            <!--:action=upLoadUrl-->
-                            <!--:on-preview="handlePreview"-->
-                            <!--:on-remove="handleRemove"-->
-                            <!--multiple-->
-                            <!--:limit="1"-->
-                            <!--:on-exceed="handleExceed"-->
-                            <!--:file-list="fileList">-->
-                        <!--<el-button size="small" type="primary" v-on:click="ChooseFile">选择文件</el-button>-->
-                    <!--</el-upload></td>-->
-                    <!--<td><el-button type="primary" plain v-on:click="InOridata">导入原始数据</el-button></td>-->
-                </tr>
             </table>
-            <el-row>
+            <el-row style="padding-top: 50px;padding-bottom: 75px">
                 <el-col :span="2">
                     <h2 style="margin:0">导入</h2>
                 </el-col>
@@ -106,6 +113,18 @@
         state: '',
         StartDate: '',
         EndDate: '',
+        options: [{
+          value: 'level1',
+          label: 'level1'
+        }, {
+          value: 'level2',
+          label: 'level2'
+        }, {
+          value: 'level3',
+          label: 'level3'
+        }],
+        dataType1: 'level1',
+        dataType2: 'level1',
         optionsMonth: [{
           value: '1',
           label: '1'
@@ -214,24 +233,28 @@
         var DataTable = []
         DataTable.push(this.StartDate)
         DataTable.push(this.EndDate)
+        DataTable.push(this.dataType1)
         this.$emit('ClicktableData', DataTable)
       },
       OuttableMonth () {
         var MonthTable = []
         MonthTable.push(this.StartMonth)
         MonthTable.push(this.EndMonth)
+        MonthTable.push(this.dataType2)
         this.$emit('ClicktableMonth', MonthTable)
       },
       OutvalueDate () {
         var DataValue = []
         DataValue.push(this.StartDate)
         DataValue.push(this.EndDate)
+        DataValue.push(this.dataType1)
         this.$emit('ClickvalueData', DataValue)
       },
       OutvalueMonth () {
         var MonthValue = []
         MonthValue.push(this.StartMonth)
         MonthValue.push(this.EndMonth)
+        MonthValue.push(this.dataType2)
         this.$emit('ClickvalueMonth', MonthValue)
       },
       submitUpload () {
