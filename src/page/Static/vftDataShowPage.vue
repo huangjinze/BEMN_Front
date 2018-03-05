@@ -39,7 +39,6 @@ export default {
   mounted: function () {
     getStation({domain: '通量数据'}).then(resp => {
       let data = resp.data.data
-      console.log(data)
       this.index.splice(0, this.index.length)
       this.index.push({ text: '选择站点', flag: 1 })
       for (var i = 0; i < data.length; i++) {
@@ -54,7 +53,7 @@ export default {
     parentStationListen (id) {
       let temp = this.stations.find(function (value, index, stations) { return value.id === id })
       getClass({domain: '通量数据', station: temp.text}).then(resp => {
-        //  console.log(resp)
+        console.log(resp)
         let data = resp.data.data
         this.index.splice(0, this.index.length)
         this.index.push({ text: '选择类型', flag: 2 })
