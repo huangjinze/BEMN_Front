@@ -1,11 +1,10 @@
 <!-- 该模块为:点击导航栏的“数据展示”->“通量数据领域”->“数据展示”时，显示的页面内容，注意，与forestDominPage.vue共用一套子组件-->
 <<template>
     <BasePage>
-        <div slot="header">header</div>
         <div slot="aside"><navi></navi></div>
         <div slot="main">
           <topIndexSelect :initTopPartTags="stationName" :initTopSiteTags="className" ref="profile" :indices="index" :indexTags="indexTags" @ClickTower="parentStationListen" @ClickClass="parentClassListen" @ClickIndex="parentTabListen" @CloseStation="CloseStationListen" @CloseClass="CloseClassListen"></topIndexSelect>
-          <dataManager v-if="index[0].flag == 4" :navs="navs" :totalSize="totalSize" @changePage="changeDataByPage"></dataManager>
+          <dataManager v-if="index[0].flag == 4" :showSelect="showSelect" :navs="navs" :totalSize="totalSize" @changePage="changeDataByPage" v-on:selectValue="Svalue"></dataManager>
         </div>
     </BasePage>
 </template>
@@ -16,8 +15,9 @@ import topIndexSelect from '../../components/multiSelect/topIndexSelect'
 import dataManager from '../../components/dataManager'
 import {getStation, getClass, getIndexTableData, getTableCounts} from '../../model/vftData'
 import {getVFTIndex} from '../../model/data'
+import ElButton from '../../../node_modules/element-ui/packages/button/src/button.vue'
 export default {
-  components: {navi, BasePage, topIndexSelect, dataManager},
+  components: {ElButton, navi, BasePage, topIndexSelect, dataManager},
   data () {
     return {
       stationName: [
@@ -32,8 +32,10 @@ export default {
       indexTags: [],
       allIndexTags: new Map(),
       navs: [],
+      showSelect: true,
       currentTab: [],
-      totalSize: 0
+      totalSize: 0,
+      Type: 'level1'
     }
   },
   mounted: function () {
@@ -76,8 +78,7 @@ export default {
         this.$alert('数据获取失败', '失败', {confirmButtonText: 'ok'})
       })
       getVFTIndex({station: this.stationName[0], classification: temp.text, domain: '通量数据'}).then(resp => {
-        let data = resp.data.data
-        console.log('f', data)
+        let data = resp.data.data[0]
         let i = 0
         this.index.splice(0, this.index.length)
         this.navs.splice(0, this.navs.length)
@@ -127,7 +128,16 @@ export default {
         var obj = this.navs.find(function (value, index, classes) { return value.label === category })
         this.$set(obj, 'mcols', cols)
         this.$set(obj, 'tableData', data.data)
+        this.Type = 'level1'
+      }).catch(resp => {
+        this.$alert('暂无此类别', {confirmButtonText: 'ok'})
+        this.Type = 'level1'
       })
+    },
+    Svalue: function (data) {
+      console.log(data)
+      this.Type = data
+      this.getTableData(0)
     }
   }
 }
