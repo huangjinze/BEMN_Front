@@ -20,17 +20,14 @@
                         <el-form-item label="设备单价：">
                             <span>{{ props.row.price }}</span>
                         </el-form-item>
-                        <el-form-item label="设备数目：">
-                            <span>{{ props.row.number }}</span>
-                        </el-form-item>
-                        <el-form-item label="购买时间：">
-                            <span>{{ props.row.pur_time }}</span>
+                        <el-form-item label="站点设备介绍：">
+                            <span>{{ props.row.placeIntroduction }}</span>
                         </el-form-item>
                         <el-form-item label="联系电话：">
                             <span>{{ props.row.telephone }}</span>
                         </el-form-item>
                         <el-form-item label="介绍：">
-                            <span>{{ props.row.introduction }}</span>
+                            <span>{{ props.row.remarks }}</span>
                         </el-form-item>
                         <el-form-item style="width:100%" label="检测指标：">
                             <el-tag size="medium"
@@ -47,14 +44,21 @@
                 </template>
             </el-table-column>
             <el-table-column
-                    prop="class"
-                    label="类别名"
+                    prop="device"
+                    label="设备名"
                     width="300">
             </el-table-column>
             <el-table-column
-                    prop="dev"
-                    label="设备名"
+                    prop="className"
+                    label="类别名"
                     width="300">
+                <template slot-scope="scope">
+                    <el-tag
+                            :key="item"
+                            v-for="item in scope.row.className"
+                            type="info"
+                            close-transition>{{item}}</el-tag>
+                </template>
             </el-table-column>
             <el-table-column
                     prop="status"
@@ -63,10 +67,18 @@
             </el-table-column>
             <el-table-column label="操作" width="250">
                 <template slot-scope="scope">
-                    <el-button size="medium" plain>修改</el-button>
+                    <el-button size="medium" @click="handleEdit(scope.row)" plain>修改</el-button>
                 </template>
             </el-table-column>
         </el-table>
+        <div align="center">
+            <el-pagination
+                    @current-change="handleCurrentChange"
+                    :page-size="15"
+                    layout="prev, pager, next, jumper"
+                    :total="totalSize">
+            </el-pagination>
+        </div>
     </el-card>
 
 </template>
@@ -85,23 +97,27 @@
           type: Array,
           required: true
         },
-        tableName: ''
+        tableName: '',
+        editClick: {type: Function},
+        totalSize: 0
       },
       methods: {
+        handleCurrentChange (val) {
+          this.$emit('changePage', val)
+        },
+        handleEdit (row) {
+          this.$emit('editClick', row.device_id)
+        },
         cellStyle (cell) {
-          for (let temp in this.statusControl) {
-            if (cell.rowIndex === this.statusControl[temp].rowIndex && cell.columnIndex === 3) {
-              cell.row.status = '异常'
-              return { 'color': '#F56C6C', 'cursor': 'pointer', 'font-weight': '800' }
-            }
-          }
-          if (cell.columnIndex === 3) {
+          if (cell.row.status === '异常' && cell.columnIndex === 3) {
+            return { 'color': '#F56C6C', 'cursor': 'pointer', 'font-weight': '800' }
+          } else if (cell.row.status === '正常' && cell.columnIndex === 3) {
             return { 'color': '#67C23A', 'font-weight': '800' }
           }
         },
         cellClick (row, column, cell, event) {
           var innerText = cell.innerText.split('\n')[0]
-          this.$emit('errorDialog', [row.class, row.dev, innerText])
+          this.$emit('errorDialog', [row.device_id, row.device, innerText])
         },
         addDevice () {
           this.$emit('addInfoDialog')

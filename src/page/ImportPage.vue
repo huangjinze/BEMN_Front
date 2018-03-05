@@ -21,7 +21,7 @@
 //  import headGuider from '../components/headGuider'
   import BasePage from '../components/BasePage'
   import moment from 'moment'
-  import {getStation, getClass, submitTwoSelect, showExport} from '../model/vftData'
+  import {getStation, getClass, submitTwoSelect, showExport, downloadUrl, compareStatistics, compareExport, showStatistics} from '../model/vftData'
   import {getVFTIndex} from '../model/data'
 //  import { host } from '../model/data'
   export default {
@@ -81,23 +81,25 @@
       parentClassListen (id) {
         let temp = this.indexTags.find(function (value, index, classes) { return value.id === id })
         getVFTIndex({station: this.stationName[0], classification: temp.text, domain: '通量数据'}).then(resp => {
-          let data = resp.data.data[0]
+          let data = resp.data.data
+          console.log('f', data)
           let i = 0
           this.index.splice(0, this.index.length)
           this.allIndexTags.clear()
-          for (let k in data) {
-            this.index.push({text: k, id: i + 1, flag: 3})
+          for (let k of data) {
+            this.index.push({text: k['category'], id: i + 1, flag: 3})
             i++
-            this.allIndexTags.set(k, data[k])
+            this.allIndexTags.set(k['category'], k['index'])
           }
           this.indexTags.splice(0, this.indexTags.length)
-          for (var j = 0; j < data[this.index[0].text].length; j++) {
-            this.indexTags.push({ text: data[this.index[0].text][j], id: j + 1 })
+          var tagsArray = this.allIndexTags.get(this.index[0].text)
+          for (var j = 0; j < tagsArray.length; j++) {
+            this.indexTags.push({ text: tagsArray[j], id: j + 1 })
           }
           console.log(this.indexTags)
           this.className[0] = temp.text
         }).catch(resp => {
-          this.$alert('获取失败', '失败', {confirmButtonText: 'ok'})
+          this.$alert('指标获取失败', '失败', {confirmButtonText: 'ok'})
         })
       },
       parentIndexClassListen (id) {
@@ -138,30 +140,11 @@
             endTime: endDate,
             dataType: 'clean',
             class_name: className}).then(resp => {
-              const content = resp
-              console.log(content)
-              const blob = new Blob([content])
-              const fileName = '测试表格123.xls'
-              if ('download' in document.createElement('a')) { // 非IE下载
-                const elink = document.createElement('a')
-                elink.download = fileName
-                elink.style.display = 'none'
-                elink.href = URL.createObjectURL(blob)
-                console.log(elink.href)
-                document.body.appendChild(elink)
-                elink.click()
-                URL.revokeObjectURL(elink.href) // 释放URL 对象
-                document.body.removeChild(elink)
-              } else { // IE10+下载
-                navigator.msSaveBlob(blob, fileName)
+              if (resp.headers && (resp.headers['content-type'] === 'application/x-msdownload' || resp.headers['content-type'] === 'application/vnd.ms-excel')) {
+                downloadUrl(resp.request.responseURL)
+                return 0
               }
             })
-//          window.open('http://127.0.0.1/excel/vft/showExport?domain=' + domain +
-//                  '&station_name=' + stationName +
-//                  '&clickIndex=' + indexName +
-//                  '&startTime=' + startDate +
-//                  '&endTime=' + endDate +
-//                  '&dataType=clean&class_name=' + className)
         } else if (!topTag) {
           this.$message({
             message: '请先选择指标',
@@ -183,7 +166,18 @@
           let stationName = this.stationName[0]
           let className = this.className[0]
           let indexName = this.indexName[0]
-          window.open('http://127.0.0.1/excel/vft/compareExport?domain=' + domain + '&station_name=' + stationName + '&clickIndex=' + indexName + '&startTime=' + startDate + '&endTime=' + endDate + '&dataType=clean&class_name=' + className)
+          compareExport({domain: domain,
+            station_name: stationName,
+            clickIndex: indexName,
+            startTime: startDate,
+            endTime: endDate,
+            dataType: 'clean',
+            class_name: className}).then(resp => {
+              if (resp.headers && (resp.headers['content-type'] === 'application/x-msdownload' || resp.headers['content-type'] === 'application/vnd.ms-excel')) {
+                downloadUrl(resp.request.responseURL)
+                return 0
+              }
+            })
         } else if (!topTag) {
           this.$message({
             message: '请先选择指标',
@@ -205,7 +199,18 @@
           let stationName = this.stationName[0]
           let className = this.className[0]
           let indexName = this.indexName[0]
-          window.open('http://127.0.0.1/excel/vft/showStatistics?domain=' + domain + '&station_name=' + stationName + '&clickIndex=' + indexName + '&startTime=' + startDate + '&endTime=' + endDate + '&dataType=clean&class_name=' + className)
+          showStatistics({domain: domain,
+            station_name: stationName,
+            clickIndex: indexName,
+            startTime: startDate,
+            endTime: endDate,
+            dataType: 'clean',
+            class_name: className}).then(resp => {
+              if (resp.headers && (resp.headers['content-type'] === 'application/x-msdownload' || resp.headers['content-type'] === 'application/vnd.ms-excel')) {
+                downloadUrl(resp.request.responseURL)
+                return 0
+              }
+            })
         } else if (!topTag) {
           this.$message({
             message: '请先选择指标',
@@ -227,7 +232,18 @@
           let stationName = this.stationName[0]
           let className = this.className[0]
           let indexName = this.indexName[0]
-          window.open('http://127.0.0.1/excel/vft/compareStatistics?domain=' + domain + '&station_name=' + stationName + '&clickIndex=' + indexName + '&startTime=' + startDate + '&endTime=' + endDate + '&dataType=clean&class_name=' + className)
+          compareStatistics({domain: domain,
+            station_name: stationName,
+            clickIndex: indexName,
+            startTime: startDate,
+            endTime: endDate,
+            dataType: 'clean',
+            class_name: className}).then(resp => {
+              if (resp.headers && (resp.headers['content-type'] === 'application/x-msdownload' || resp.headers['content-type'] === 'application/vnd.ms-excel')) {
+                downloadUrl(resp.request.responseURL)
+                return 0
+              }
+            })
         } else if (!topTag) {
           this.$message({
             message: '请先选择指标',

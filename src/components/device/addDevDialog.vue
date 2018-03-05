@@ -15,7 +15,7 @@
                         </el-select>
                 </el-form-item>
                 <el-form-item prop="classSelect" label="类别" >
-                        <el-select v-model="form.classSelect" clearable :disabled="isDisabled" placeholder="请选择类型" >
+                        <el-select v-model="form.classSelect" clearable filterable allow-create default-first-option :disabled="isDisabled" placeholder="请选择类型" >
                             <el-option
                                     v-for="item in classList"
                                     :key="item.id"
@@ -30,7 +30,7 @@
                 <el-form-item prop="factorTags" style="display: block" label="检测指标">
                     <el-tag
                             :key="tag"
-                            v-for="tag in form.factorTags"
+                            v-for="tag in tagsArray"
                             closable
                             :disable-transitions="false"
                             @close="handleTagClose(tag)">
@@ -51,22 +51,19 @@
                 <el-form-item prop="facturer" label="生产厂商">
                     <el-input v-model="form.facturer" placeholder="生产厂商"></el-input>
                 </el-form-item>
-                <el-form-item prop="standard" label="设备规模">
-                    <el-input v-model="form.standard" placeholder="设备规模"></el-input>
-                </el-form-item>
                 <el-form-item prop="price" label="设备单价">
                     <el-input v-model="form.price" placeholder="设备单价"></el-input>
                 </el-form-item>
-                <el-form-item prop="number" label="设备数量" >
-                    <el-input v-model="form.number" placeholder="设备数量"  ></el-input>
-                </el-form-item>
-                <el-form-item prop="pur_time" label="购买时间">
-                    <el-date-picker type="date" placeholder="选择日期" v-model="form.pur_time"></el-date-picker>
+                <el-form-item prop="number" label="设备规模" >
+                    <el-input v-model="form.number" placeholder="设备规模"  ></el-input>
                 </el-form-item>
                 <el-form-item prop="telephone" label="联系电话">
                     <el-input v-model="form.telephone" placeholder="联系电话" ></el-input>
                 </el-form-item>
-                <el-form-item prop="introduction" id="addDevTextAreaItem" style="display: block;width:100%" label="简介">
+                <el-form-item prop="place_introduction" class="addDevTextAreaItem" style="display: block;width:100%" label="站点简介">
+                    <el-input type="textarea" v-model="form.place_introduction" style="width: 95%"></el-input>
+                </el-form-item>
+                <el-form-item prop="introduction" class="addDevTextAreaItem" style="display: block;width:100%" label="设备简介">
                     <el-input type="textarea" v-model="form.introduction" style="width: 95%"></el-input>
                 </el-form-item>
                 <el-form-item style="text-align: center;width:100%" size="large">
@@ -74,11 +71,61 @@
                     <el-button @click="formReset('form')">重置</el-button>
                 </el-form-item>
             </el-form>
+            <el-dialog
+                    width="30%"
+                    :title="tagInfoDialogTitle"
+                    :visible.sync="innerVisible"
+                    append-to-body>
+                <el-form :model="innerForm" ref="innerForm" label-width="80px" size="small">
+                    <el-form-item prop="academic_name" label="指标学名">
+                        <el-input v-model="innerForm.academic_name" placeholder="指标学名"></el-input>
+                    </el-form-item>
+                    <el-form-item prop="expression" label="表达式">
+                        <el-input v-model="innerForm.expression" placeholder="表达式"></el-input>
+                    </el-form-item>
+                    <el-form-item prop="phoneticize" label="音标">
+                        <el-input v-model="innerForm.phoneticize" placeholder="音标"></el-input>
+                    </el-form-item>
+                    <el-form-item prop="category" label="类目">
+                        <el-input v-model="innerForm.category" placeholder="类目"></el-input>
+                    </el-form-item>
+                    <el-form-item prop="unit" label="数据单位">
+                        <el-input v-model="innerForm.unit" placeholder="数据单位"></el-input>
+                    </el-form-item>
+                    <el-form-item prop="data_type" label="数据类型">
+                        <el-radio-group v-model="innerForm.data_type">
+                            <el-radio label="0"></el-radio>
+                            <el-radio label="1"></el-radio>
+                            <el-radio label="2"></el-radio>
+                            <el-radio label="3"></el-radio>
+                        </el-radio-group>
+                    </el-form-item>
+                    <el-form-item label="默认范围">
+                        <el-col :span="11">
+                            <el-form-item prop="min_default_value">
+                                <el-input v-model="innerForm.min_default_value" placeholder="最小值"></el-input>
+                            </el-form-item>
+
+                        </el-col>
+                        <el-col :span="2">-</el-col>
+                        <el-col :span="11">
+                            <el-form-item prop="max_default_value">
+                                <el-input v-model="innerForm.max_default_value" placeholder="最大值"></el-input>
+                            </el-form-item>
+
+                        </el-col>
+                    </el-form-item>
+                    <el-form-item style="text-align: center;width:100%" size="medium">
+                        <el-button type="primary" @click="onInnerSubmit('innerForm')">确定</el-button>
+                        <el-button @click="formReset('innerForm')">重置</el-button>
+                    </el-form-item>
+                </el-form>
+            </el-dialog>
         </el-dialog>
     </div>
 </template>
 <script>
-    import moment from 'moment'
+  //  import moment from 'moment'
     export default {
       props: {
         className: String,
@@ -92,20 +139,30 @@
       data () {
         return {
           dialogVisible: this.dialogAddingVisible,
+          innerVisible: false,
           isDisabled: true,
           dialogName: '添加设备',
           form: {
             stationSelect: '',
             classSelect: '',
             devName: '',
-            factorTags: [],
+            factorTags: {},
             facturer: '',
-            standard: '',
             price: '',
             number: '',
-            pur_time: '',
             telephone: '',
+            place_introduction: '',
             introduction: ''
+          },
+          innerForm: {
+            academic_name: '',
+            expression: '',
+            phoneticize: '',
+            category: '',
+            unit: '',
+            data_type: '',
+            max_default_value: '',
+            min_default_value: ''
           },
           tagInputVisible: false,
           tagInputValue: '',
@@ -118,7 +175,9 @@
               pattern: /^\d+$/,
               message: '数量必须为数字值'
             }]
-          }
+          },
+          tagInfoDialogTitle: '',
+          tagsArray: []
         }
       },
       watch: {
@@ -130,6 +189,9 @@
         }
       },
       methods: {
+        addClass (event) {
+          console.log(event)
+        },
         clickSelectStation (value) {
           if (value) {
             this.$emit('selectStation', value)
@@ -139,7 +201,9 @@
           }
         },
         handleTagClose (tag) {
-          this.form.factorTags.splice(this.form.factorTags.indexOf(tag), 1)
+          delete this.form.factorTags[tag]
+          this.tagsArray.splice(this.tagsArray.indexOf(tag), 1)
+          console.log('h', this.form.factorTags)
         },
         showTagInput () {
           this.tagInputVisible = true
@@ -149,17 +213,36 @@
         },
         tagInputConfirm () {
           let inputValue = this.tagInputValue
+        //  this.form.factorTags = {}
           if (inputValue) {
-            this.form.factorTags.push(inputValue)
+            this.tagsArray.push(inputValue)
+            this.form.factorTags[inputValue] = ''
+            this.tagInputVisible = false
+            this.tagInfoDialogTitle = this.tagInputValue
+            this.innerVisible = true
+            this.tagInputValue = ''
           }
-          this.tagInputVisible = false
-          this.tagInputValue = ''
         },
         onSubmit (formName) {
           this.$refs[formName].validate((valid) => {
             if (valid) {
-              this.form.pur_time = moment(this.form.pur_time).format('YYYY-MM-DD')
               this.$emit('devAddUpload', this.form)
+            } else {
+              this.$message({
+                message: '表单验证未通过',
+                type: 'warning'
+              })
+              return false
+            }
+          })
+        },
+        onInnerSubmit (formName) {
+          this.$refs[formName].validate((valid) => {
+            if (valid) {
+              this.form.factorTags[this.tagInfoDialogTitle] = JSON.parse(JSON.stringify(this.innerForm))
+              this.formReset(formName)
+              this.innerVisible = false
+              console.log(this.form.factorTags)
             } else {
               this.$message({
                 message: '表单验证未通过',
@@ -171,6 +254,9 @@
         },
         formReset (formName) {
           this.$refs[formName].resetFields()
+          if (formName === 'form') {
+            this.tagsArray.splice(0, this.tagsArray.length)
+          }
         }
       },
       name: 'addDevDialog'
@@ -183,7 +269,7 @@
     #addDevDialogForm>div>div>.el-input,.el-date-editor.el-input {
         width: 226px;
     }
-    #addDevTextAreaItem>div {
+    .addDevTextAreaItem>div {
         width: 80%;
     }
 </style>
