@@ -13,6 +13,7 @@
 </template>
 
 
+
 <script>
   import dataImport from '../components/dataImport/dataImport'
 //  import indexSelect from '../components/dataImport/indexSelect'
@@ -126,9 +127,10 @@
       onClickDataTable (DataTable) {
         console.log(DataTable)
         let topTag = this.$refs.profile.topIndexTags[0]
-        if (DataTable[0] && DataTable[1] && topTag) {
+        if (DataTable[0] && DataTable[1] && topTag && DataTable[2]) {
           let startDate = moment(DataTable[0]).format('YYYY-MM-DD')
           let endDate = moment(DataTable[1]).format('YYYY-MM-DD')
+          let dataType = DataTable[2]
           let domain = '通量数据'
           let stationName = this.stationName[0]
           let className = this.className[0]
@@ -138,7 +140,7 @@
             clickIndex: indexName,
             startTime: startDate,
             endTime: endDate,
-            dataType: 'clean',
+            dataType: dataType,
             class_name: className}).then(resp => {
               if (resp.headers && (resp.headers['content-type'] === 'application/x-msdownload' || resp.headers['content-type'] === 'application/vnd.ms-excel')) {
                 downloadUrl(resp.request.responseURL)
@@ -159,9 +161,10 @@
       },
       onClickMonthTable (MonthTable) {
         let topTag = this.$refs.profile.topIndexTags[0]
-        if (MonthTable[0] && MonthTable[1] && topTag) {
+        if (MonthTable[0] && MonthTable[1] && topTag && MonthTable[2]) {
           let startDate = MonthTable[0]
           let endDate = MonthTable[1]
+          let dataType = MonthTable[2]
           let domain = '通量数据'
           let stationName = this.stationName[0]
           let className = this.className[0]
@@ -171,7 +174,7 @@
             clickIndex: indexName,
             startTime: startDate,
             endTime: endDate,
-            dataType: 'clean',
+            dataType: dataType,
             class_name: className}).then(resp => {
               if (resp.headers && (resp.headers['content-type'] === 'application/x-msdownload' || resp.headers['content-type'] === 'application/vnd.ms-excel')) {
                 downloadUrl(resp.request.responseURL)
@@ -192,9 +195,10 @@
       },
       onClickDataValue (DataValue) {
         let topTag = this.$refs.profile.topIndexTags[0]
-        if (DataValue[0] && DataValue[1] && topTag) {
+        if (DataValue[0] && DataValue[1] && topTag && DataValue[2]) {
           let startDate = moment(DataValue[0]).format('YYYY-MM-DD')
           let endDate = moment(DataValue[1]).format('YYYY-MM-DD')
+          let dataType = DataValue[2]
           let domain = '通量数据'
           let stationName = this.stationName[0]
           let className = this.className[0]
@@ -204,7 +208,7 @@
             clickIndex: indexName,
             startTime: startDate,
             endTime: endDate,
-            dataType: 'clean',
+            dataType: dataType,
             class_name: className}).then(resp => {
               if (resp.headers && (resp.headers['content-type'] === 'application/x-msdownload' || resp.headers['content-type'] === 'application/vnd.ms-excel')) {
                 downloadUrl(resp.request.responseURL)
@@ -225,9 +229,10 @@
       },
       onClickMonthValue (MonthValue) {
         let topTag = this.$refs.profile.topIndexTags[0]
-        if (MonthValue[0] && MonthValue[1] && topTag) {
+        if (MonthValue[0] && MonthValue[1] && topTag && MonthValue[2]) {
           let startDate = MonthValue[0]
           let endDate = MonthValue[1]
+          let dataType = MonthValue[2]
           let domain = '通量数据'
           let stationName = this.stationName[0]
           let className = this.className[0]
@@ -237,7 +242,7 @@
             clickIndex: indexName,
             startTime: startDate,
             endTime: endDate,
-            dataType: 'clean',
+            dataType: dataType,
             class_name: className}).then(resp => {
               if (resp.headers && (resp.headers['content-type'] === 'application/x-msdownload' || resp.headers['content-type'] === 'application/vnd.ms-excel')) {
                 downloadUrl(resp.request.responseURL)
