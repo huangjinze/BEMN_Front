@@ -306,7 +306,7 @@
           this.tagsArray.splice(this.tagsAdd.indexOf(this.tagInfoDialogTitle), 1)
           this.editInnerVisible = false
           console.log(id)
-          deleteFactor({factorId: id}).then( resp => {
+          deleteFactor({factorId: id}).then(resp => {
             if (resp.data.status === 'success') {
               this.$message({
                 message: '删除成功！',

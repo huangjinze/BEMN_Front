@@ -139,7 +139,7 @@ export default {
       this.dialogAddVisible = true
     },
     onEditClick (devId) {
-      var  currentStation = this.$refs.profile.topPartTags[0].text
+      var currentStation = this.$refs.profile.topPartTags[0].text
       var tower = this.stations.find(function (value) { return value.text === currentStation })
       var item = this.tableData.find(function (value) { return value.device_id === devId })
       this.onSelectStation(tower.id)
@@ -176,13 +176,13 @@ export default {
         if (resp.data.status === 'success') {
           this.$message({
             message: '修改成功！',
-              type: 'success'
+            type: 'success'
           })
           var towerName = this.$refs.profile.topPartTags[0].text
         }
         getDevice(towerName, '通量数据')
       }).catch(resp => {
-          this.$alert('修改失败', '失败', {confirmButtonText: 'ok'})
+        this.$alert('修改失败', '失败', {confirmButtonText: 'ok'})
       })
     },
     onSelectStation (id) {
