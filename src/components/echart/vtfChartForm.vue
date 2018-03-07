@@ -33,7 +33,8 @@
             v-model="form.startTime"
             align="right"
             type="year"
-            placeholder="选择年">
+            placeholder="选择年"
+            value-format="yyyy">
           </el-date-picker>
 
           <span class="demonstration">结束年</span>
@@ -41,7 +42,8 @@
             v-model="form.endTime"
             align="right"
             type="year"
-            placeholder="选择年">
+            placeholder="选择年"
+            value-format="yyyy">
           </el-date-picker>
         </div>
       </el-form-item>
