@@ -97,6 +97,7 @@ export default {
         this.faultyDeviceId = temp[0]
         getDeviceErrorInfo({device_id: temp[0]}).then(resp => {
           let data = resp.data.data
+          console.log('fff', data)
           this.errorData.splice(0, this.errorData.length)
           for (var item of data) {
             this.errorData.push({deviceName: this.faultyDeviceName, status: item.status, alertType: item.alert_type, occurrence: item.occurrence, remarks: item.remarks})
