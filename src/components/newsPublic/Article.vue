@@ -1,15 +1,15 @@
 <template>
     <div id="articles">
         <el-row type="flex" justify="space-between" v-if="flage=='true'">
-            <el-col :span="4">
-                <div class="title">
-                  <h3>新闻分类</h3>
-                </div>
-                  <div class="type-bg" v-for="leftItem in leftItems" :key="leftItem.value">
-                      <a :href="leftItem.linkto">{{leftItem.label}}</a>
-                  </div>
-            </el-col>
-            <el-col :span="19" style="padding-top: 20px;border-bottom: 1px solid #D8DCE5;">
+            <!--<el-col :span="4">-->
+                <!--<div class="title">-->
+                  <!--<h3>新闻分类</h3>-->
+                <!--</div>-->
+                  <!--<div class="type-bg" v-for="leftItem in leftItems" :key="leftItem.value">-->
+                      <!--<a :href="leftItem.linkto">{{leftItem.label}}</a>-->
+                  <!--</div>-->
+            <!--</el-col>-->
+            <el-col :span="24" style="padding-top: 20px;border-bottom: 1px solid #D8DCE5;">
               <el-row type="flex" justify="space-between">
                 <el-col class="addnew-header">
                   <span class="addnew">新闻</span><a @click="edit" style="cursor:pointer;" class="el-icon-circle-plus-outline"></a>
@@ -153,7 +153,7 @@ export default {
   .bnt-tag{
     margin-left: 5px;
     float: right;
-    background-color: #6484b3;
+    /*background-color: #6484b3;*/
   }
   .new-row{
     border-top: 1px solid #D8DCE5;
@@ -162,7 +162,7 @@ export default {
   }
   .new-title{
     float: left;
-    font-size: 25px;
+    font-size: 16px;
     padding-left: 5px;
     overflow: hidden;
     text-overflow: ellipsis;
@@ -180,7 +180,7 @@ export default {
         padding-left: 15px;
         height: 35px;
         line-height: 35px;
-    }   
+    }
 </style>
 
 
