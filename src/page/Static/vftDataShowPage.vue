@@ -41,7 +41,6 @@ export default {
   mounted: function () {
     getStation({domain: '通量数据'}).then(resp => {
       let data = resp.data.data
-      console.log(data)
       this.index.splice(0, this.index.length)
       this.index.push({ text: '选择站点', flag: 1 })
       for (var i = 0; i < data.length; i++) {
@@ -56,7 +55,7 @@ export default {
     parentStationListen (id) {
       let temp = this.stations.find(function (value, index, stations) { return value.id === id })
       getClass({domain: '通量数据', station: temp.text}).then(resp => {
-        //  console.log(resp)
+        console.log(resp)
         let data = resp.data.data
         this.index.splice(0, this.index.length)
         this.index.push({ text: '选择类型', flag: 2 })
@@ -78,7 +77,7 @@ export default {
         this.$alert('数据获取失败', '失败', {confirmButtonText: 'ok'})
       })
       getVFTIndex({station: this.stationName[0], classification: temp.text, domain: '通量数据'}).then(resp => {
-        let data = resp.data.data[0]
+        let data = resp.data.data
         let i = 0
         this.index.splice(0, this.index.length)
         this.navs.splice(0, this.navs.length)
@@ -93,12 +92,10 @@ export default {
         this.indexTags.splice(0, this.indexTags.length)
         this.className[0] = temp.text
         this.currentTab[0] = this.index[0].text
-      //  console.log(this.currentTab)
         this.getTableData(1)
       }).catch(resp => {
         this.$alert('数据获取失败', '失败', {confirmButtonText: 'ok'})
       })
-      console.log(this.navs)
     },
     parentTabListen () {
     },
