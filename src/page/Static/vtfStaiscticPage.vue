@@ -12,11 +12,11 @@
         :indexesOptions="indexesOptions"
         v-model="formValue"></chartForm>
         <el-button @click="onDrawClick" type="primary" icon="el-icon-edit">绘制</el-button>
-        <el-row>
-          <el-col :span="18" :offset="3">
+        <el-row v-if="showChart">
+          <el-col :span="20" >
             <echart :options="chartMeta"></echart>
           </el-col>
-          <el-col  :offset="3">
+          <el-col >
               <chartGrid :tableData="gridData"></chartGrid>
           </el-col>
         </el-row>
@@ -54,7 +54,8 @@ export default {
       station: '奥林匹克  ',
       chartMeta: {},
       indexesOptions: [],
-      gridData: []
+      gridData: [],
+      showChart: false
     }
   },
   watch: {
@@ -68,6 +69,11 @@ export default {
     this.getIndexes()
   },
   methods: {
+    clearAttr: function () {
+      this.chartMeta = {}
+      this.indexesOptions.length = 0
+      this.gridData.length = 0
+    },
     getIndexes: function () {
       this.loading = true
       getVFTIndex({
@@ -99,6 +105,7 @@ export default {
       })
     },
     onDrawClick: function () {
+      this.clearAttr()
       this.loading = true
       getVTFData({
         domain: '通量数据',
@@ -114,6 +121,7 @@ export default {
       }).then((resp) => {
         if (resp.data.status !== 'success') {
           alert(resp.data.reason)
+          this.loading = false
           return
         }
         let data = resp.data.data
@@ -129,7 +137,14 @@ export default {
             containLabel: true
           },
           legend: {
-            data: []
+            data: [],
+            show: true
+          },
+          toolbox: {
+            show: true,
+            feature: {
+              saveAsImage: {}
+            }
           },
           animation: false,
           dataZoom: [
@@ -141,7 +156,13 @@ export default {
           xAxis: [{
             boundaryGap: false
           }],
-          yAxis: [{ type: 'value' }],
+          yAxis: [
+            {
+              type: 'value',
+              splitArea: {
+                show: true
+              }
+            }],
           series: []
         }
         meta.xAxis[0].data = data[0].data.map((item) => {
@@ -149,20 +170,21 @@ export default {
         })
         console.log(data)
         meta.series = data.map((perData) => {
-          console.log(perData.data)
           this.gridData.push(perData.stats_data)
           if (this.formValue.type === 'scatter') {
             return {
               name: perData.name,
-              symbolSize: 3,
+              symbolSize: 5,
               large: true,
               type: 'scatter',
               data: perData.data.map((dataItem) => { return dataItem.y })
             }
           } else if (this.formValue.type === 'compare') {
+            console.log(perData.data)
+            perData.stats_data.year = perData.year
+            meta.legend.data.push(perData.year + perData.name)
             return {
               name: perData.year + perData.name,
-              symbolSize: 3,
               large: true,
               type: 'scatter',
               data: perData.data.map((dataItem) => { return dataItem.y })
@@ -172,6 +194,19 @@ export default {
               name: perData.name,
               type: 'line',
               data: perData.sum_data.map((dataItem) => { return dataItem.y })
+            }
+          } else if (this.formValue.type === 'bar') {
+            return {
+              name: perData.name,
+              type: this.formValue.type,
+              barWidth: '60%',
+              data: perData.data.map((dataItem) => { return dataItem.y })
+            }
+          } else if (this.formValue.type === 'boxplot') {
+            return {
+              name: perData.name,
+              type: 'boxplot',
+              data: perData.data.map((dataItem) => { return dataItem.y })
             }
           } else {
             return {
@@ -184,6 +219,7 @@ export default {
 
         this.chartMeta = meta
         this.loading = false
+        this.showChart = true
       }).catch((e) => {
         this.loading = false
         alert(e)
