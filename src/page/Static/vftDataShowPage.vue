@@ -114,7 +114,7 @@ export default {
       this.getTableData(page[0])
     },
     getTableData (page) {
-      getIndexTableData({station: this.stationName[0], classification: this.className[0], domain: '通量数据', category: this.currentTab[0], page: page}).then(resp => {
+      getIndexTableData({station: this.stationName[0], classification: this.className[0], domain: '通量数据', category: this.currentTab[0], page: page, dataType: this.Type}).then(resp => {
         var data = resp.data.data
         var category = this.currentTab[0]
         var cols = []
