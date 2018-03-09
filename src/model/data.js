@@ -44,3 +44,8 @@ export const gapfillRes = params => {
 export const ustarRes = params => {
   return axios.get(host + '/dataProcess/vft/ustarRes', {'params': params})
 }
+
+export const getShowStaticData = params => {
+  return axios.get(host + '/getstaticdata', {'params': params})
+
+}
