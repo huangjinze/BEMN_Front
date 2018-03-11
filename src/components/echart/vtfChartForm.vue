@@ -2,95 +2,104 @@
 
 */
 <template>
-  <div>
+  <el-row id="select_form">
     <el-form v-model="form">
-      <el-form-item>
-        <span class="demonstration">选择指标</span>
-        <el-cascader
-          placeholder="输入指标"
-          :options="indexesOptions"
-          v-model="selectedIndex"
-          filterable
-        ></el-cascader>
-      </el-form-item>
+      <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="9">
+        <el-form-item v-if="form.type === 'compare'">
+          <div class="block">
+            <span class="demonstration">时间范围</span>
+            <el-date-picker
+                    v-model="form.startTime"
+                    align="right"
+                    type="year"
+                    placeholder="选择年"
+                    value-format="yyyy">
+            </el-date-picker>
 
-      <el-form-item>
-        <span class="demonstration">选择展示方法</span>
-        <el-select v-model="form.type" placeholder="请选择">
-          <el-option
-            v-for="item in showTypeOptions"
-            :key="item.value + 'show'"
-            :label="item.label"
-            :value="item.value">
-          </el-option>
-        </el-select>
-      </el-form-item>
+            <span class="demonstration">-</span>
+            <el-date-picker
+                    v-model="form.endTime"
+                    align="right"
+                    type="year"
+                    placeholder="选择年"
+                    value-format="yyyy">
+            </el-date-picker>
+          </div>
+        </el-form-item>
+        <el-form-item v-if="form.type !== 'compare'">
+          <div class="block">
+            <span class="demonstration">时间范围</span>
+            <el-date-picker
+                    v-model="timeRange"
+                    type="datetimerange"
+                    range-separator="至"
+                    start-placeholder="开始日期"
+                    end-placeholder="结束日期"
+                    value-format="yyyy-MM-dd">
+            </el-date-picker>
+          </div>
+        </el-form-item>
+      </el-col>
+      <el-col :xs="12" :sm="12" :md="12" :lg="12" :xl="6">
+        <el-form-item>
+          <span class="demonstration">选择指标</span>
+          <el-cascader
+                  placeholder="输入指标"
+                  :options="indexesOptions"
+                  v-model="selectedIndex"
+                  filterable
+          ></el-cascader>
+        </el-form-item>
+      </el-col>
+      <el-col :xs="12" :sm="12" :md="12" :lg="12" :xl="6">
+        <el-form-item>
+          <span class="demonstration">展示方法</span>
+          <el-select v-model="form.type" placeholder="请选择">
+            <el-option
+                    v-for="item in showTypeOptions"
+                    :key="item.value + 'show'"
+                    :label="item.label"
+                    :value="item.value">
+            </el-option>
+          </el-select>
+        </el-form-item>
+      </el-col>
 
-      <el-form-item v-if="form.type === 'compare'">
-        <div class="block">
-          <span class="demonstration">开始年</span>
-          <el-date-picker
-            v-model="form.startTime"
-            align="right"
-            type="year"
-            placeholder="选择年"
-            value-format="yyyy">
-          </el-date-picker>
+      <el-col :xs="12" :sm="12" :md="12" :lg="12" :xl="9">
+        <el-form-item>
+          <span class="demonstration">输入时长</span>
+          <el-input-number v-model="form.timeInterval"></el-input-number>
+        </el-form-item>
+      </el-col>
+      <el-col :xs="12" :sm="12" :md="12" :lg="12" :xl="6">
+        <el-form-item>
+          <span class="demonstration">选择单位</span>
+          <el-select v-model="form.intervalUnit" placeholder="请选择">
+            <el-option
+                    v-for="item in UnitOptions"
+                    :key="item.value + 'unit'"
+                    :label="item.label"
+                    :value="item.value">
+            </el-option>
+          </el-select>
+        </el-form-item>
+      </el-col>
 
-          <span class="demonstration">结束年</span>
-          <el-date-picker
-            v-model="form.endTime"
-            align="right"
-            type="year"
-            placeholder="选择年"
-            value-format="yyyy">
-          </el-date-picker>
-        </div>
-      </el-form-item>
-      <el-form-item v-if="form.type !== 'compare'">
-        <div class="block">
-          <span class="demonstration">选择时间范围</span>
-          <el-date-picker
-            v-model="timeRange"
-            type="datetimerange"
-            range-separator="至"
-            start-placeholder="开始日期"
-            end-placeholder="结束日期"
-            value-format="yyyy-MM-dd">
-          </el-date-picker>
-        </div>
-      </el-form-item>
-
-      <el-form-item>
-        <span class="demonstration">输入时长</span>
-        <el-input-number v-model="form.timeInterval"></el-input-number>
-      </el-form-item>
-
-      <el-form-item>
-        <span class="demonstration">单位</span>
-        <el-select v-model="form.intervalUnit" placeholder="请选择">
-          <el-option
-            v-for="item in UnitOptions"
-            :key="item.value + 'unit'"
-            :label="item.label"
-            :value="item.value">
-          </el-option>
-        </el-select>
-      </el-form-item>
-
-      <el-form-item>
-        <span class="demonstration">选择展示模型</span>
-        <el-select v-model="form.model" placeholder="请选择">
-          <el-option
-            v-for="item in modelOptions"
-            :key="item.value + 'way'"
-            :label="item.label"
-            :value="item.value">
-          </el-option>
-        </el-select>
-      </el-form-item>
+      <el-col :xs="12" :sm="12" :md="12" :lg="12" :xl="6">
+        <el-form-item>
+          <span class="demonstration">展示模型</span>
+          <el-select v-model="form.model" placeholder="请选择">
+            <el-option
+                    v-for="item in modelOptions"
+                    :key="item.value + 'way'"
+                    :label="item.label"
+                    :value="item.value">
+            </el-option>
+          </el-select>
+        </el-form-item>
+      </el-col>
     </el-form>
-  </div>
+  </el-row>
 </template>
 
 <script>
@@ -187,6 +196,19 @@
   }
   .optionCenter{
     text-align: center;
+  }
+  #select_form{
+    margin-top: 20px;
+  }
+  @media only screen and (min-width: 1000px){
+    #select_form{
+      margin-left: 4.5%;
+    }
+  }
+  @media only screen and (min-width: 1400px){
+    #select_form{
+      margin-left: 10%;
+    }
   }
 </style>
 

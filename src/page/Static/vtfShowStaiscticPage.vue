@@ -11,14 +11,16 @@
         <chartForm
           :indexesOptions="indexesOptions"
           v-model="formValue"></chartForm>
-        <el-button @click="onDrawClick" type="primary" icon="el-icon-edit">绘制</el-button>
-        <el-row v-if="showChart">
+        <el-col :span="24" id="print">
+          <el-button @click="onDrawClick" type="primary" icon="el-icon-edit">绘制</el-button>
+        </el-col>
+        <el-row v-if="showChart" id="chart">
           <el-col :span="20" >
-            <echart :options="chartMeta"></echart>
+            <echart :options="chartMeta" style="width: 100%"></echart>
           </el-col>
-          <el-col >
-            <chartGrid :tableData="gridData"></chartGrid>
-          </el-col>
+          <!--<el-col >-->
+            <!--<chartGrid :tableData="gridData"></chartGrid>-->
+          <!--</el-col>-->
         </el-row>
       </el-row>
     </div>
@@ -225,5 +227,17 @@
 </script>
 
 <style scoped>
-
+#print{
+  text-align: center;
+  margin-bottom: 20px;
+  z-index: 999;
+}
+  #print .el-button{
+    width: 180px;
+  }
+  #chart{
+    text-align: center;
+     margin-top: 20px;
+     z-index: -1;
+   }
 </style>

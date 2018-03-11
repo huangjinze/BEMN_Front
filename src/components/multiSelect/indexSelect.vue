@@ -62,7 +62,7 @@
         font-size: 16px;
     }
     #tabs{
-        margin-top: 50px;
+        margin-top: 20px;
     }
     .link{
         margin-bottom: 10px;
