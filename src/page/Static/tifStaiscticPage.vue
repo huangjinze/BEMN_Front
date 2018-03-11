@@ -8,21 +8,21 @@
         :targetOptions="targetOptions"
         v-model="formValue"
         @Click="onClick"></chartForm>
-      <charts class="testchart" id="1"  :chartMeta="chartMetaData"></charts>
+      <echart :options="chartMetaData"></echart>
     </div>
   </BasePage>
 </template>
 
 <script>
 
-import charts from '../../components/echart/charts.vue'
 import navi from '../../components/layout/navi'
 import BasePage from '../../components/BasePage'
 import chartForm from '../../components/echart/tifChartForm.vue'
 import {getVTFData} from '../../model/data'
+import echart from 'vue-echarts'
 
 export default {
-  components: {charts, navi, BasePage, chartForm},
+  components: {echart, navi, BasePage, chartForm},
   name: 'tifStaiscticPage',
   data () {
     return {

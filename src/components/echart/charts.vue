@@ -19,7 +19,6 @@
       chartMeta: {type: Object, default: {xAxis: {}, yAxis: {}, series: []}},
       id: String},
     mounted: function () {
-      console.log(echarts)
       this.myChart = echarts.init(document.getElementById(this.id))
       this.initData()
       window.addEventListener('resize', this.windowResize)
@@ -31,6 +30,7 @@
     watch: {
       chartMeta: {
         handler: function (val) {
+          console.log('echar mata change', val)
           this.updateData()
         },
         deep: true

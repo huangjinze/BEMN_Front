@@ -23,7 +23,7 @@
                 <div class="table-scrollable" style="">
                     <el-table
                             ref="multipleTable"
-                            :data="tableData"
+                            :data="tableData.slice((currentPage-1)*pagesize,currentPage*pagesize)"
                             tooltip-effect="dark"
                             stripe
                             style="width: 100%">
@@ -104,6 +104,8 @@
                                         :value="item.value">
                                 </el-option>
                             </el-select>
+                            <p style="color: red">带星号的为必填项</p>
+                            <p style="color: red">新增用户默认密码为“123456”，请及时修改密码！</p>
                         </el-form-item>
                     </el-form>
                     <div slot="footer" class="dialog-footer">
@@ -141,6 +143,7 @@
                                         :value="item.value">
                                 </el-option>
                             </el-select>
+                            <p style="color: red">带星号的为必填项</p>
                         </el-form-item>
                     </el-form>
                     <div slot="footer" class="dialog-footer">
@@ -149,13 +152,22 @@
                     </div>
                 </el-dialog>
             </div>
+            <el-pagination
+                    align="center"
+                    @size-change="handleSizeChange"
+                    @current-change="handleCurrentChange"
+                    :current-page="currentPage"
+                    :page-sizes="[5, 10, 20, 50, 100]"
+                    :page-size="pagesize"
+                    layout="total, sizes, prev, pager, next, jumper"
+                    :total="tableData.length">
+            </el-pagination>
         </div>
     </BasePage>
 </template>
 
 <script>
-//  import {store} from '../store/index'
-  import {mapState, mapGetters} from 'vuex'
+  import {mapGetters} from 'vuex'
   import navi from '../../components/layout/navi'
   import BasePage from '../../components/BasePage'
   import {UserInfo, AddUser, DeleteUser, FindRoleId, ChangeUser} from '../../model/user'
@@ -165,6 +177,8 @@
     data () {
       return {
         tableData: [],
+        currentPage: 1,
+        pagesize: 5,
         Addinfo: false,
         Changeinfo: false,
         PermissionAdd: false,
@@ -225,15 +239,7 @@
         }
       }
     },
-    created: function () {
-      if (!this.msg) {
-        console.log('vuex no info')
-        this.$store.commit('SET_STATUS', JSON.parse(sessionStorage.getItem('userInfo')))
-      }
-//      console.log('created', this.add())
-    },
     mounted: function () {
-//      console.log('poip', this.msg)
       if (addPermission(this.msg) === true) {
         this.PermissionAdd = true
       } else {
@@ -250,8 +256,6 @@
         this.PermissionDelete = false
       }
       UserInfo().then(resp => {
-//        console.log('userinfo', resp.data.data[1])
-//        console.log('userinfo', resp.data.data[0].length)
         for (let i = 0; i < resp.data.data[0].length; i++) {
           this.tableData.push({
             'name': resp.data.data[0][i].name,
@@ -261,7 +265,6 @@
             'age': resp.data.data[0][i].age,
             'role': resp.data.data[0][i].display_name
           })
-//          console.log(this.tableData)
         }
         for (let i = 0; i < resp.data.data[1].length; i++) {
           this.options.push({
@@ -269,35 +272,20 @@
             'label': resp.data.data[1][i].display_name
           })
         }
-//        console.log('role', this.options)
       }).catch(resp => {
         this.$alert('网络差', '失败', {confirmButtonText: 'ok'})
       })
     },
     computed: {
-      ...mapState([
-        'status'
-      ]),
       ...mapGetters({
         msg: 'GET_MSG'
       })
     },
     methods: {
-      asd () {
-//        console.log(this.msg)
-      },
       indexMethod (index) {
         return index + 1
       },
-      con () {
-//        console.log(this.msg[0])
-//        console.log(this.msg[0].length)
-      },
-      count () {
-//        console.log(this.multipleSelection)
-      },
       handleEdit (index, row) {
-//        console.log(index, row)
         this.Changeinfo = true
         this.formchange.name = row.name
         this.formchange.email = row.email
@@ -306,14 +294,11 @@
         this.formchange.age = row.age
         this.formchange.roles = ''
         if (row.role) {
-//          console.log(row.role)
           var role = []
           role.push({
             'name': row.role
           })
-//        console.log('find', name)
           FindRoleId(role[0]).then(resp => {
-//            console.log('find', resp)
             this.formchange.roles = resp.data.data[0][0].id
           }).catch(resp => {
             this.$alert('网络差', '失败', {confirmButtonText: 'ok'})
@@ -321,14 +306,11 @@
         }
       },
       handleDelete (index, row) {
-//        console.log(index, row.email)
         var email = []
         email.push({
           'email': row.email
         })
-//        console.log(email)
         DeleteUser(email[0]).then(resp => {
-//          console.log('addinfo', resp)
           if (resp.data.status === 'success') {
             this.$alert('删除成功', {confirmButtonText: 'ok'})
             document.location.reload()
@@ -340,9 +322,7 @@
         })
       },
       confirminfo () {
-//        console.log(this.formadd)
         AddUser(this.formadd).then(resp => {
-//          console.log('addinfo', resp)
           if (resp.data.status === 'success') {
             this.$alert('添加成功', {confirmButtonText: 'ok'})
             document.location.reload()
@@ -354,9 +334,7 @@
         })
       },
       changeinfo () {
-//        console.log(this.formchange)
         ChangeUser(this.formchange).then(resp => {
-//          console.log('addinfo', resp.data.status)
           if (resp.data.status === 'success') {
             this.$alert('修改成功', {confirmButtonText: 'ok'})
             document.location.reload()
@@ -366,6 +344,12 @@
         }).catch(resp => {
           this.$alert('网络差', '失败', {confirmButtonText: 'ok'})
         })
+      },
+      handleSizeChange: function (size) {
+        this.pagesize = size
+      },
+      handleCurrentChange: function (currentPage) {
+        this.currentPage = currentPage
       }
     }
   }

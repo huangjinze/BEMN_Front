@@ -20,6 +20,12 @@
       <el-input-number v-model="form.z">
 
       </el-input-number>
+
+      <el-row v-for="(item, index) in chartIndexesMetaList" :key="'chart_key'+index">
+        <el-col :span="18" :offset="3">
+          <echart :options="item"></echart>
+        </el-col>
+      </el-row>
     </div>
 
     <div v-show="step === 2" id="methodSelect">
@@ -28,7 +34,7 @@
           <el-button type="primary" size="small" @click="onAddVarClick" icon="el-icon-plus" id="plus">增加</el-button>
           <el-button type="danger" size="small" @click="onDeleteVarClick"  icon="el-icon-delete">删除</el-button>
         </el-col>
-          <el-row :span="24" v-for="(item,index) in form.variables">
+          <el-row :span="24" v-for="(item,index) in form.variables" :key="index+'varfor'">
             <el-col :span="8">
               因变量:
               <el-select v-model="item.independent_var">
@@ -53,7 +59,7 @@
             </el-col>
             <el-col :span="8">
               插补方法选择 ：
-              <el-select v-model="item.interpolation">
+              <el-select v-model="item.method">
                 <el-option
                         v-for="item in interpolationOptions"
                         :key="item.label"
@@ -63,6 +69,16 @@
               </el-select>
             </el-col>
           </el-row>
+
+      <el-row v-for="(item, index) in chartIndexesMetaList" :key="'chart_key'+index">
+        <el-col :span="18" :offset="3">
+          <echart :options="item"></echart>
+        </el-col>
+      </el-row>
+    </div>
+
+    <div v-if="step === 3">
+      <i class="el-icon-success">数据QAQC完成</i>
     </div>
 
     <div class="bottom-op">
@@ -100,12 +116,12 @@
         loading: false,
         form: {
           z: 4,
-          interpolation: ' ',
           indexes: [],
           range: [],
-          variables: [{independent_var: '', dependent_var: '', interpolation: ''}]
+          variables: [{independent_var: '', dependent_var: '', method: ''}]
         },
         m_indexes: this.indexes,
+        chartIndexesMetaList: [],
         interpolationOptions: [{label: '内插', value: '内插'}, {label: '外插', value: '外插'}]
       }
     },
@@ -123,7 +139,50 @@
 
         if (this.step === 0) {
           this.postIndexes().then(
-            () => {
+            (resp) => {
+              this.chartIndexesMetaList.splice(0, this.chartIndexesMetaList.length)
+              this.chartIndexesMetaList = resp.data.data.map((perIndex) => {
+                let meta = {
+                  title: {
+                    text: perIndex.index + '数据'
+                  },
+                  grid: {
+                    left: '3%',
+                    right: '4%',
+                    bottom: '3%',
+                    containLabel: true
+                  },
+                  legend: {
+                    data: []
+                  },
+                  animation: false,
+                  dataZoom: [
+                    {show: true, type: 'inside'}
+                  ],
+                  tooltip: {
+                    trigger: 'axis'
+                  },
+                  xAxis: [{
+                    boundaryGap: false
+                  }],
+                  yAxis: [{ type: 'value' }],
+                  series: []
+                }
+                meta.xAxis[0].data = perIndex.data.map((perData) => { return perData.x })
+
+                meta.series.push({
+                  name: '原始数据',
+                  symbolSize: 3,
+                  large: true,
+                  type: 'scatter',
+                  data: perIndex.data.map((dataItem) => { return dataItem.y })
+                })
+                meta.legend.data.push('原始数据')
+
+                console.log('填充', meta.xAxis)
+
+                return meta
+              })
               this.loading = false
             })
         }
@@ -141,7 +200,49 @@
             this.loading = false
             if (resp.data.status === 'success') {
               console.log(resp)
-              alert(resp.data.data)
+              this.chartIndexesMetaList.splice(0, this.chartIndexesMetaList.length)
+              this.chartIndexesMetaList = resp.data.data.map((perIndex) => {
+                let meta = {
+                  title: {
+                    text: perIndex.index + '数据'
+                  },
+                  grid: {
+                    left: '3%',
+                    right: '4%',
+                    bottom: '3%',
+                    containLabel: true
+                  },
+                  legend: {
+                    data: []
+                  },
+                  animation: false,
+                  dataZoom: [
+                    {show: true, type: 'inside'}
+                  ],
+                  tooltip: {
+                    trigger: 'axis'
+                  },
+                  xAxis: [{
+                    boundaryGap: false
+                  }],
+                  yAxis: [{ type: 'value' }],
+                  series: []
+                }
+                meta.xAxis[0].data = perIndex.data.map((perData) => { return perData.x })
+
+                meta.series.push({
+                  name: '原始数据',
+                  symbolSize: 3,
+                  large: true,
+                  type: 'scatter',
+                  data: perIndex.data.map((dataItem) => { return dataItem.y })
+                })
+                meta.legend.data.push('原始数据')
+
+                console.log('填充', meta.xAxis)
+
+                return meta
+              })
             } else {
               this.step = this.step - 1
               alert(resp.data.reason)
@@ -159,7 +260,8 @@
             'year': this.washing_form.year,
             'station': this.washing_form.station,
             'user_mail': '1103232282@qq.com',
-            'type': '气象'
+            'type': '气象',
+            'variables': this.form.variables
           }).then((resp) => {
             this.loading = false
             if (resp.data.status === 'success') {
@@ -208,7 +310,7 @@
           }).then((resp) => {
             if (resp.data.status === 'success') {
               console.log(resp)
-              alert(resp.data.data[0])
+              return resp
             } else {
               this.step = this.step - 1
               alert(resp.data.reason)
@@ -220,7 +322,7 @@
           })
       },
       onAddVarClick () {
-        this.form.variables.push({independent_var: '', dependent_var: '', interpolation: ''})
+        this.form.variables.push({independent_var: '', dependent_var: '', method: ''})
       },
       onDeleteVarClick () {
         this.form.variables.pop()

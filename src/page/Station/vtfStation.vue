@@ -22,7 +22,7 @@
             <div class="portlet-body">
                 <div class="table-scrollable" style="">
                     <el-table
-                            :data="tableData"
+                            :data="tableData.slice((currentPage-1)*pagesize,currentPage*pagesize)"
                             border
                             style="width: 100%">
                         <el-table-column
@@ -137,6 +137,7 @@
                         </el-form-item>
                         <el-form-item label="备注" :label-width="formLabelWidth" prop="remarks">
                             <el-input v-model="formadd.remarks" auto-complete="off"></el-input>
+                            <p style="color: red">带星号的为必填项</p>
                         </el-form-item>
                     </el-form>
                     <div slot="footer" class="dialog-footer">
@@ -189,6 +190,7 @@
                         </el-form-item>
                         <el-form-item label="备注" :label-width="formLabelWidth" prop="remarks">
                             <el-input v-model="formchange.remarks" auto-complete="off"></el-input>
+                            <p style="color: red">带星号的为必填项</p>
                         </el-form-item>
                     </el-form>
                     <div slot="footer" class="dialog-footer">
@@ -197,13 +199,23 @@
                     </div>
                 </el-dialog>
             </div>
+            <el-pagination
+                    align="center"
+                    @size-change="handleSizeChange"
+                    @current-change="handleCurrentChange"
+                    :current-page="currentPage"
+                    :page-sizes="[5, 10, 20, 50, 100]"
+                    :page-size="pagesize"
+                    layout="total, sizes, prev, pager, next, jumper"
+                    :total="tableData.length">
+            </el-pagination>
         </div>
     </BasePage>
 </template>
 
 <script>
   //  import {store} from '../store/index'
-  import {mapState, mapGetters} from 'vuex'
+  import {mapGetters} from 'vuex'
   import navi from '../../components/layout/navi'
   import BasePage from '../../components/BasePage'
   import {vtfStationInfo, DeletevtfStation, AddvtfStation, ChangevtfInfo, FindUserId} from '../../model/station'
@@ -213,6 +225,8 @@
     data () {
       return {
         tableData: [],
+        currentPage: 1,
+        pagesize: 5,
         Addinfo: false,
         Changeinfo: false,
         PermissionAdd: false,
@@ -302,9 +316,12 @@
       } else {
         this.PermissionChangeAdmin = false
       }
-      vtfStationInfo(this.msg[0][0]).then(resp => {
-//        console.log('tifStationInfo', resp.data.data)
-//        console.log('userinfo', resp.data.data[0].length)
+      var role = []
+      role.push({
+        'permission': this.PermissionChangeAdmin,
+        'id': this.msg[0][0].id
+      })
+      vtfStationInfo(role[0]).then(resp => {
         for (let i = 0; i < resp.data.data[0].length; i++) {
           this.tableData.push({
             'station_name': resp.data.data[0][i].station_name,
@@ -332,9 +349,6 @@
       })
     },
     computed: {
-      ...mapState([
-        'status'
-      ]),
       ...mapGetters({
         msg: 'GET_MSG'
       })
@@ -379,7 +393,6 @@
         }
       },
       handleDelete (index, row) {
-//        console.log(index, row.email)
         var info = []
         info.push({
           'name': row.name,
@@ -425,6 +438,12 @@
         }).catch(resp => {
           this.$alert('网络差', '失败', {confirmButtonText: 'ok'})
         })
+      },
+      handleSizeChange: function (size) {
+        this.pagesize = size
+      },
+      handleCurrentChange: function (currentPage) {
+        this.currentPage = currentPage
       }
     }
   }

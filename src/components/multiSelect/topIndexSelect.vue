@@ -60,8 +60,12 @@
       },
       mounted: function () {
         this.$nextTick(function () {
-          this.topPartTags.push({ text: this.initTopPartTags[0] })
-          this.topSiteTags.push({ text: this.initTopSiteTags[0] })
+          if (this.initTopPartTags[0]) {
+            this.topPartTags.push({ text: this.initTopPartTags[0] })
+          }
+          if (this.initTopSiteTags[0]) {
+            this.topSiteTags.push({ text: this.initTopSiteTags[0] })
+          }
         })
       },
       methods: {
