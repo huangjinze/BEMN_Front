@@ -109,7 +109,7 @@
           classification: '通量',
           index: this.formValue.index,
           start_time: this.formValue.startTime,
-          end_time: this.formValue.endTime,
+          end_time: this.formValue.endTime
         }).then((resp) => {
           if (resp.data.status !== 'success') {
             alert(resp.data.reason)
@@ -118,9 +118,11 @@
           }
           let data = resp.data.data
 
+          console.log('first', data)
+
           let meta = {
             title: {
-              text: data[0].name + '数据'
+              text: data[0].index + '数据'
             },
             grid: {
               left: '3%',

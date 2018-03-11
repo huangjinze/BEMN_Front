@@ -47,5 +47,4 @@ export const ustarRes = params => {
 
 export const getShowStaticData = params => {
   return axios.get(host + '/getstaticdata', {'params': params})
-
 }
