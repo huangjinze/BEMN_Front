@@ -58,7 +58,7 @@
         showTypeOptions: [{
           value: 'scatter',
           label: '散点图'
-        },{
+        }, {
           value: 'line',
           label: '折线图'
         }],
@@ -68,7 +68,7 @@
           index: '',
           type: '',
           startTime: '',
-          endTime: '',
+          endTime: ''
         }
       }
     },
