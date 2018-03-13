@@ -108,7 +108,7 @@
     name: 'chartsForm',
     props: {
       indexesOptions: Array,
-      value: Object
+      input: Object
     },
     data () {
       return {
