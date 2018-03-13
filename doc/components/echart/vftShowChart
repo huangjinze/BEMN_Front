@@ -1,6 +1,6 @@
-# vtfChart 
+# vtfShowChart 
 
-> 统计模块的图表
+> 数据展示的图表
 
 ## props
 
@@ -16,28 +16,28 @@
   ```js
             form: {
               index: '',
-              type: '',
               startTime: '',
               endTime: '',
-              timeInterval: '',
-              intervalUnit: '',
-              model: ''
+              type:''
             }
   ```
 
 ## data
 
-* UnitOptions:
-  * type: Array
-  * 单位
- 
-* modelOptions:
-  * type: Array
-  * 计算模型
+
    
 * showTypeOptions:
   * type: Array
   * 展示模型
   
+* form
+```js
+        form: {
+          index: '',
+          type: '',
+          startTime: '',
+          endTime: ''
+        }
+```
 ## method
 

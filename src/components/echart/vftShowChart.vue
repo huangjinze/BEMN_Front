@@ -53,7 +53,7 @@
     name: 'vftShowChart',
     props: {
       indexesOptions: Array,
-      value: Object
+      input: Object
     },
     data () {
       return {
