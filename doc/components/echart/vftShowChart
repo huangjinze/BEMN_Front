@@ -1,0 +1,43 @@
+# vtfShowChart 
+
+> 数据展示的图表
+
+## props
+
+* indexesOptions:
+   * type: Array
+   * 内容 指标下拉框中的指标
+
+* v-model:
+  * type: Object
+  * 内容 表单的值
+  * eg: 
+  
+  ```js
+            form: {
+              index: '',
+              startTime: '',
+              endTime: '',
+              type:''
+            }
+  ```
+
+## data
+
+
+   
+* showTypeOptions:
+  * type: Array
+  * 展示模型
+  
+* form
+```js
+        form: {
+          index: '',
+          type: '',
+          startTime: '',
+          endTime: ''
+        }
+```
+## method
+

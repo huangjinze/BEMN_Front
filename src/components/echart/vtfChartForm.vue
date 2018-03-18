@@ -2,485 +2,191 @@
 
 */
 <template>
-  <div :class="className" :id="id">
-    <div class="header">
-      <div>
-        <el-form v-model="form">
-          <el-row :gutter="20">
-            <el-col :span="8">
-              <el-form-item>
-                <span>
-                  选择指标：
-                  <el-cascader
-                    v-model="form.index"
-                    placeholder="搜索"
-                    :options="targetOptions"
-                    filterable>
-                  </el-cascader>
-                </span>
-              </el-form-item>
-            </el-col>
-            <el-col :span="8">
-              <el-form-item>
-            <span>
-              类&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;型：
-              <el-select v-model="form.selectedType" placeholder="请选择" @change="onTypeChange">
-                <el-option
-                  class="optionCenter"
-                  v-for="item in typeOptions"
-                  :key="item.value"
-                  :label="item.label"
-                  :value="item.value">
-                </el-option>
-              </el-select>
-             </span>
-              </el-form-item>
-            </el-col>
-            <el-col :span="8">
-              <el-form-item>
-                <span>
-                  计算方法：
-                  <el-select v-model="form.model" placeholder="请选择"  >
-                  <el-option
-                    class="optionCenter"
-                    v-for="item in wayOptions"
-                    :key="item.value"
+  <el-row id="select_form">
+    <el-form v-model="form">
+      <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="9">
+        <el-form-item v-if="form.type === 'compare'">
+          <div class="block">
+            <span class="demonstration">时间范围</span>
+            <el-date-picker
+                    v-model="form.startTime"
+                    align="right"
+                    type="year"
+                    placeholder="选择年"
+                    value-format="yyyy">
+            </el-date-picker>
+
+            <span class="demonstration">-</span>
+            <el-date-picker
+                    v-model="form.endTime"
+                    align="right"
+                    type="year"
+                    placeholder="选择年"
+                    value-format="yyyy">
+            </el-date-picker>
+          </div>
+        </el-form-item>
+        <el-form-item v-if="form.type !== 'compare'">
+          <div class="block">
+            <span class="demonstration">时间范围</span>
+            <el-date-picker
+                    v-model="timeRange"
+                    type="datetimerange"
+                    range-separator="至"
+                    start-placeholder="开始日期"
+                    end-placeholder="结束日期"
+                    value-format="yyyy-MM-dd">
+            </el-date-picker>
+          </div>
+        </el-form-item>
+      </el-col>
+      <el-col :xs="12" :sm="12" :md="12" :lg="12" :xl="6">
+        <el-form-item>
+          <span class="demonstration">选择指标</span>
+          <el-cascader
+                  placeholder="输入指标"
+                  :options="indexesOptions"
+                  v-model="selectedIndex"
+                  filterable
+          ></el-cascader>
+        </el-form-item>
+      </el-col>
+      <el-col :xs="12" :sm="12" :md="12" :lg="12" :xl="6">
+        <el-form-item>
+          <span class="demonstration">展示方法</span>
+          <el-select v-model="form.type" placeholder="请选择">
+            <el-option
+                    v-for="item in showTypeOptions"
+                    :key="item.value + 'show'"
                     :label="item.label"
                     :value="item.value">
-                  </el-option>
-                </el-select>
-                </span>
-              </el-form-item>
-            </el-col>
-          </el-row>
+            </el-option>
+          </el-select>
+        </el-form-item>
+      </el-col>
 
-          <el-row :gutter="20" v-if="(form.selectedType =='a') ">
-            <el-col :span="8">
-              <el-form-item>
-                <span>
-                  开始时间：
-                  <el-date-picker
-                    v-model="form.start_time"
-                    type="date"
-                    placeholder="选择日期"
-                    value-format="yyyy-MM-dd">
-                </el-date-picker>
-                </span>
-              </el-form-item>
-            </el-col>
-            <el-col :span="8">
-              <el-form-item>
-                <span>
-                  结束时间：
-                  <el-date-picker
-                    v-model="form.end_time"
-                    type="date"
-                    placeholder="选择日期"
-                    value-format="yyyy-MM-dd">
-                </el-date-picker>
-                </span>
-              </el-form-item>
-            </el-col>
-          </el-row>
-
-          <el-row :gutter="20" v-else-if="(form.selectedType =='b') ">
-            <el-col :span="8">
-              <el-form-item>
-                <span>开始时间：
-                    <el-date-picker
-                      v-model="form.start_time"
-                      type="month"
-                      placeholder="开始月"
-                      value-format="yyyy-MM-dd">
-                  </el-date-picker>
-                </span>
-              </el-form-item>
-            </el-col>
-            <el-col :span="8">
-              <el-form-item>
-                <span>结束时间：
-                    <el-date-picker
-                      v-model="form.end_time"
-                      type="month"
-                      placeholder="开始月"
-                      value-format="yyyy-MM-dd">
-                  </el-date-picker>
-                </span>
-            </el-form-item>
-            </el-col>
-          </el-row>
-
-          <el-row :gutter="20" v-else-if="(form.selectedType =='c') ">
-            <el-col :span="8">
-              <el-form-item>
-                <span>
-                  粒&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;度：
-                  <el-select v-model="form.time_interval" placeholder="请选择"  >
-                  <el-option
-                    class="optionCenter"
-                    v-for="item in granularityOptions"
-                    :key="item.value"
+      <el-col :xs="12" :sm="12" :md="12" :lg="12" :xl="9">
+        <el-form-item>
+          <span class="demonstration">输入时长</span>
+          <el-input-number v-model="form.timeInterval"></el-input-number>
+        </el-form-item>
+      </el-col>
+      <el-col :xs="12" :sm="12" :md="12" :lg="12" :xl="6">
+        <el-form-item>
+          <span class="demonstration">选择单位</span>
+          <el-select v-model="form.intervalUnit" placeholder="请选择">
+            <el-option
+                    v-for="item in UnitOptions"
+                    :key="item.value + 'unit'"
                     :label="item.label"
                     :value="item.value">
-                  </el-option>
-                </el-select>
-                </span>
-              </el-form-item>
-            </el-col>
+            </el-option>
+          </el-select>
+        </el-form-item>
+      </el-col>
 
-            <el-col :span="8" v-if="form.time_interval==='day'">
-              <el-form-item>
-                <span>
-                  开始时间：
-                  <el-date-picker
-                                    v-model="form.start_time"
-                                    type="date"
-                                    placeholder="选择日期"
-                                    value-format="yyyy-MM-dd">
-                </el-date-picker>
-                </span>
-              </el-form-item>
-              </el-col>
-
-            <el-col :span="16" v-if="form.time_interval==='month'">
-              <el-col :span="8" style="width: 50%;padding-left: 0">
-                <el-form-item>
-                  <span>
-                    开始月份：
-                    <el-date-picker
-                                        v-model="form.start_time"
-                                        type="month"
-                                        placeholder="开始月"
-                                        value-format="yyyy-MM-dd">
-                  </el-date-picker>
-                  </span>
-                </el-form-item>
-              </el-col>
-              <el-col :span="8"  style="width: 50%;padding-right: 0">
-                <el-form-item>
-                  <span>
-                    结束月份：
-                    <el-date-picker
-                                        v-model="form.start_time"
-                                        type="month"
-                                        placeholder="结束月"
-                                        value-format="yyyy-MM-dd">
-                  </el-date-picker>
-                  </span>
-                </el-form-item>
-              </el-col>
-            </el-col>
-
-            <el-col :span="8" v-if="form.time_interval=='2week'">
-              <el-form-item>
-                <span>开始时间：
-                  <el-date-picker
-                                    v-model="form.start_time"
-                                    type="date"
-                                    placeholder="起始"
-                                    value-format="yyyy-MM-dd"
-                                    >
-                </el-date-picker>
-                </span>
-              </el-form-item>
-            </el-col>
-
-            <el-col :span="8" v-if="form.time_interval=='week'">
-              <el-form-item>
-                <span>开始时间：
-                  <el-date-picker
-                                    v-model="form.start_time"
-                                    type="date"
-                                    placeholder="起始"
-                                    value-format="yyyy-MM-dd">
-                </el-date-picker>
-                </span>
-              </el-form-item>
-            </el-col>
-
-            <el-col :span="16" v-if="form.time_interval==='year'">
-              <el-col :span="8" style="width: 50%;padding-left: 0">
-                <el-form-item>
-                  <span>
-                    开始年份：
-                    <el-date-picker
-                                        v-model="form.start_time"
-                                        type="year"
-                                        placeholder="起始"
-                                        value-format="yyyy-MM-dd">
-                  </el-date-picker>
-                  </span>
-                </el-form-item>
-              </el-col>
-              <el-col :span="8" style="width: 50%;padding-right: 0">
-                <el-form-item>
-                  <span>
-                    结束年份：
-                    <el-date-picker
-                                        v-model="form.end_time"
-                                        type="year"
-                                        placeholder="结束"
-                                        value-format="yyyy-MM-dd">
-                  </el-date-picker>
-                  </span>
-                </el-form-item>
-              </el-col>
-            </el-col>
-          </el-row>
-
-          <el-row :gutter="20" v-else-if="(form.selectedType =='d') ">
-            <el-col :span="8">
-              <el-form-item>
-                <span>
-                  粒&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;度：
-                </span>
-                <el-select v-model="form.time_interval" placeholder="请选择"  >
-                  <el-option
-                    v-for="item in granularityOptions"
-                    :key="item.value"
+      <el-col :xs="12" :sm="12" :md="12" :lg="12" :xl="6">
+        <el-form-item>
+          <span class="demonstration">展示模型</span>
+          <el-select v-model="form.model" placeholder="请选择">
+            <el-option
+                    v-for="item in modelOptions"
+                    :key="item.value + 'way'"
                     :label="item.label"
                     :value="item.value">
-                  </el-option>
-                </el-select>
-              </el-form-item>
-            </el-col>
-
-            <el-col :span="8" v-if="form.time_interval==='day'">
-              <el-form-item>
-                <span>
-                  开始时间：
-                  <el-date-picker
-                    v-model="form.start_time"
-                    type="date"
-                    placeholder="选择日期"
-                    value-format="yyyy-MM-dd">
-                </el-date-picker>
-                </span>
-              </el-form-item>
-            </el-col>
-
-            <el-col :span="16" v-if="form.time_interval==='month'">
-              <el-col :span="8" style="width: 50%;padding-left: 0">
-                <el-form-item>
-                  <span>
-                    开始月份：
-                    <el-date-picker
-                                        v-model="form.start_time"
-                                        type="month"
-                                        placeholder="开始月"
-                                        value-format="yyyy-MM-dd">
-                  </el-date-picker>
-                  </span>
-                </el-form-item>
-              </el-col>
-              <el-col :span="8" style="width: 50%;padding-right: 0">
-                <el-form-item>
-                  <span>
-                    结束月份：
-                    <el-date-picker
-                                        v-model="form.end_time"
-                                        type="month"
-                                        placeholder="结束月"
-                                        value-format="yyyy-MM-dd">
-                  </el-date-picker>
-                  </span>
-                </el-form-item>
-              </el-col>
-            </el-col>
-
-            <el-col :span="8" v-if="form.time_interval==='2week'">
-              <el-form-item>
-                <span>
-                  开始时间：
-                  <el-date-picker
-                    v-model="form.start_time"
-                    type="date"
-                    placeholder="起始"
-                    value-format="yyyy-MM-dd">
-                </el-date-picker>
-                </span>
-              </el-form-item>
-            </el-col>
-
-            <el-col :span="8" v-if="form.time_interval==='week'">
-              <el-form-item>
-                <span>
-                  开始时间：
-                  <el-date-picker
-                    v-model="form.start_time"
-                    type="date"
-                    placeholder="起始"
-                    value-format="yyyy-MM-dd">
-                </el-date-picker>
-                </span>
-              </el-form-item>
-            </el-col>
-
-            <el-col :span="16" v-if="form.time_interval==='year'">
-              <el-col :span="8"  style="width: 50%;padding-left: 0">
-                <el-form-item>
-                  <span>
-                    开始年份：
-                    <el-date-picker
-                                        v-model="form.start_time"
-                                        type="year"
-                                        placeholder="起始"
-                                        value-format="yyyy-MM-dd">
-                  </el-date-picker>
-                  </span>
-                </el-form-item>
-              </el-col>
-              <el-col :span="8"  style="width: 50%;padding-right: 0">
-                <el-form-item>
-                  <span>
-                    结束年份：
-                    <el-date-picker
-                                        v-model="form.end_time"
-                                        type="year"
-                                        placeholder="结束"
-                                        value-format="yyyy-MM-dd">
-                  </el-date-picker>
-                  </span>
-                </el-form-item>
-              </el-col>
-            </el-col>
-          </el-row>
-
-          <el-row :gutter="20" v-else-if="(form.selectedType =='e') ">
-            <el-col :span="8">
-              <el-form-item>
-                <span>
-                  开始时间：
-                  <el-date-picker
-                                    v-model="form.start_time"
-                                    type="month"
-                                    placeholder="开始"
-                                    value-format="yyyy-MM-dd">
-                </el-date-picker>
-                </span>
-              </el-form-item>
-            </el-col>
-            <el-col :span="8">
-              <el-form-item>
-                <span>
-                  结束时间：
-                  <el-date-picker
-                                    v-model="form.end_time"
-                                    type="month"
-                                    placeholder="结束"
-                                    value-format="yyyy-MM-dd">
-                </el-date-picker>
-                </span>
-              </el-form-item>
-            </el-col>
-          </el-row>
-
-          <el-row type="flex" class="row-bg" justify="space-around">
-            <el-col :span="6">
-              <el-form-item>
-                <el-button type="primary" icon="el-icon-edit"  v-on:click="onClick" style="width: 80%;font-size: 18px">绘制</el-button>
-              </el-form-item>
-            </el-col>
-          </el-row>
-        </el-form>
-      </div>
-    </div>
-  </div>
+            </el-option>
+          </el-select>
+        </el-form-item>
+      </el-col>
+    </el-form>
+  </el-row>
 </template>
 
 <script>
-  import ElFormItem from '../../../node_modules/element-ui/packages/form/src/form-item.vue'
-
   export default {
-    components: {
-      ElFormItem
-    },
+    components: {},
     name: 'chartsForm',
     props: {
-      className: String,
-      id: String,
-      Click: Function,
-      targetOptions: {type: Array, default: []},
-      value: Object }, // 目标选项
-    mounted: function () {
-
+      indexesOptions: Array,
+      input: Object
     },
     data () {
       return {
-        chartMeta: {
-          tittle: {}
-        },
-        myChart: {},
+        UnitOptions: [{
+          value: 'day',
+          label: '按天'
+        }, {
+          value: 'hour',
+          label: '按小时'
+        }],
+        modelOptions: [{
+          value: 'max',
+          label: '最大值'
+        }, {
+          value: 'min',
+          label: '最小值'
+        }, {
+          value: 'mean',
+          label: '平均值'
+        }, {
+          value: 'median',
+          label: '中位数'
+        }, {
+          value: 'std',
+          label: '标准差'
+        }],
+        showTypeOptions: [{
+          value: 'boxplot',
+          label: '箱线图'
+        }, {
+          value: 'compare',
+          label: '散点图-对比'
+        }, {
+          value: 'scatter',
+          label: '散点图-展示'
+        }, {
+          value: 'line_sum',
+          label: '折线图-累计'
+        }, {
+          value: 'line',
+          label: '折线图-趋势'
+        }, {
+          value: 'bar',
+          label: '柱状图'
+        }],
+        selectedIndex: '',
+        timeRange: [],
         form: {
-          index: [],
-          selectedType: 'a',
-          model: 'mean',
-          time_interval: 'day',
-          start_time: '',
-          end_time: ''
-        },
-        startPickerOptions: {
-          disabledDate (time) {
-            return time.getTime() > Date.now()
-          }},
-        endPickerOptions: {
-          disabledDate (time) {
-            return time.getTime() > Date.now()
-          }
-        },
-        currentForm: 'data2dataForm',
-        typeOptions: [
-          {value: 'a', label: '展示散点图'},
-          {value: 'b', label: '对比散点图'},
-          {value: 'c', label: '柱状图'},
-          {value: 'd', label: '箱线图'},
-          {value: 'e', label: '纵向对比图'}],
-        granularityOptions: [
-          {
-            value: 'day', label: '按天'
-          },
-          {
-            value: 'month', label: '按月'
-          },
-          {
-            value: '2week', label: '俩周'
-          },
-          {
-            value: 'week', label: '一周'
-          },
-          {
-            value: 'year', label: '按年'
-          }
-        ],
-        wayOptions: [
-          {
-            value: 'mean', label: '平均值'
-          },
-          {
-            value: 'max', label: '最大值'
-          },
-          {
-            value: 'min', label: '最小值'
-          },
-          {
-            value: 'mid', label: '中位数'
-          },
-          {
-            value: 'std', label: '标准差'
-          }
-        ]
-      }
-    },
-    methods: {
-      onTypeChange (value) {
-      },
-      onClick () {
-        this.$emit('input', this.form)
-        this.$emit('Click', this.form)
+          index: '',
+          type: '',
+          startTime: '',
+          endTime: '',
+          timeInterval: '',
+          intervalUnit: '',
+          model: ''
+        }
       }
     },
     watch: {
-
+      selectedIndex: {
+        handler: function (val) {
+          this.form.index = val[val.length - 1]
+        },
+        deep: true
+      },
+      timeRange: {
+        handler: function (val) {
+          this.form.startTime = val[0]
+          this.form.endTime = val[1]
+        },
+        deep: true
+      },
+      form: {
+        handler: function (val) {
+          this.$emit('input', val)
+        },
+        deep: true
+      }
     }
   }
 </script>
@@ -490,6 +196,19 @@
   }
   .optionCenter{
     text-align: center;
+  }
+  #select_form{
+    margin-top: 20px;
+  }
+  @media only screen and (min-width: 1000px){
+    #select_form{
+      margin-left: 4.5%;
+    }
+  }
+  @media only screen and (min-width: 1400px){
+    #select_form{
+      margin-left: 10%;
+    }
   }
 </style>
 

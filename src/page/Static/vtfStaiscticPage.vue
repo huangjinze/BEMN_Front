@@ -3,97 +3,247 @@
   <BasePage>
     <div slot="header">header</div>
     <div slot="aside"><navi></navi></div>
-    <div slot="main">
+    <div slot="main" v-loading="loading">
+      <el-row :span="24">
+        <singleSelect v-model="station"></singleSelect>
+      </el-row>
+      <el-row :span="24">
       <chartForm
-        :targetOptions="targetOptions"
-        v-model="formValue"
-        @Click="onClick"
-        v-loading="loading"></chartForm>
-      <charts class="testchart" id="1"  :xAxis="chartMetaData.xAxis" :yAxis="chartMetaData.yAxis"
-      :series="chartMetaData.series"></charts>
+        :indexesOptions="indexesOptions"
+        v-model="formValue"></chartForm>
+        <el-col :span="24" id="print">
+          <el-button @click="onDrawClick" type="primary" icon="el-icon-edit">绘制</el-button>
+        </el-col>
+        <el-row v-if="showChart" id="chart">
+          <el-col :span="24" >
+            <echart :options="chartMeta" style="width: 100%"></echart>
+          </el-col>
+          <el-col class="gridData">
+              <chartGrid :tableData="gridData"></chartGrid>
+          </el-col>
+        </el-row>
+      </el-row>
     </div>
   </BasePage>
 </template>
 
 <script>
 
-import charts from '../../components/echart/charts.vue'
 import navi from '../../components/layout/navi'
 import BasePage from '../../components/BasePage'
 import chartForm from '../../components/echart/vtfChartForm'
 import {getVTFData, getVFTIndex} from '../../model/data'
+import singleSelect from '../../components/multiSelect/singleSelect'
+import echart from 'vue-echarts'
+import chartGrid from '../../components/echart/chartGrid'
 
 export default {
-  components: {charts, navi, BasePage, chartForm},
+  components: {
+    echart, navi, BasePage, chartForm, singleSelect, chartGrid},
   name: 'vtfStaiscticPage',
   data () {
     return {
       loading: false,
-      targetOptions: [],
       formValue: {
-        index: [],
-        selectedType: 'a',
-        model: 'mean',
-        time_interval: 'day',
-        start_time: '',
-        end_time: ''
+        index: '',
+        type: '',
+        startTime: '',
+        endTime: '',
+        timeInterval: '',
+        intervalUnit: '',
+        model: ''
       },
-      chartMetaData: {
-        xAxis: {},
-        yAxis: {},
-        series: []
-      },
-      chart_value2kind: {
-        a: 'scatter',
-        b: 'scatter',
-        c: 'bar',
-        d: 'boxplot',
-        e: 'scatter'
+      station: '奥林匹克  ',
+      chartMeta: {},
+      indexesOptions: [],
+      gridData: [],
+      showChart: false
+    }
+  },
+  watch: {
+    station: {
+      handler: function (val) {
+        this.getIndexes()
       }
     }
   },
-  mounted: function () {
-    getVFTIndex({station_name: '盐池_1', 'classification_name': '气象'}).then(resp => {
-      console.log('get_vft_index', resp)
-      let data = resp.data.data[0]
-      for (let k in data) {
-        let child = data[k].map(item => {
-          return {'label': item, 'value': item}
-        })
-        console.log('get_vft_index_child', child)
-        this.targetOptions.push({'label': k, 'value': k, 'children': child})
-      }
-      console.log('get_vft_index_finish', this.targetOptions)
-    })
+  mounted () {
+    this.getIndexes()
   },
   methods: {
-    onClick: function () {
-      console.log('Button Click')
+    clearAttr: function () {
+      this.chartMeta = {}
+      this.indexesOptions.length = 0
+      this.gridData.length = 0
+    },
+    getIndexes: function () {
       this.loading = true
-      let data = {xAxis: {data: []}, series: [{name: 'co2_flux', type: 'bar', data: []}]}
-      getVTFData({'index': this.formValue.index[1],
-        'domin': '水文',
-        'start_time': this.formValue.start_time,
-        'end_time': this.formValue.end_time,
-        'time_interval': this.formValue.time_interval,
-        'model': this.formValue.model}).then(resp => {
-          console.log('net', resp)
-          console.log(data)
-          let series = resp.data.data[0]
-          for (let k in series) {
-            data.xAxis.data.push(k)
-            data.series[0].data.push(series[k])
-            data.series[0].type = this.chart_value2kind[this.formValue.selectedType]
+      getVFTIndex({
+        domain: '通量数据',
+        station: this.station,
+        classification: '通量'
+      }).then((resp) => {
+        if (resp.data.status !== 'success') {
+          alert('ail')
+          return
+        }
+        let data = resp.data.data
+        this.indexesOptions = data.map((item) => {
+          return {
+            value: item.category,
+            label: item.category,
+            children: item.index.map((perIndex) => {
+              return {
+                value: perIndex,
+                label: perIndex
+              }
+            })
           }
-          console.log('net finish', resp.data.data)
-          this.chartMetaData = Object.assign(this.chartMetaData, data)
-          this.loading = false
         })
+        this.loading = false
+      }).catch((e) => {
+        this.loading = false
+        alert(e)
+      })
+    },
+    onDrawClick: function () {
+      this.clearAttr()
+      this.loading = true
+      getVTFData({
+        domain: '通量数据',
+        station: this.station,
+        classification: '通量',
+        index: this.formValue.index,
+        start_time: this.formValue.startTime,
+        end_time: this.formValue.endTime,
+        num: this.formValue.timeInterval,
+        time_interval: this.formValue.intervalUnit,
+        model: this.formValue.model,
+        draw_type: this.formValue.type
+      }).then((resp) => {
+        if (resp.data.status !== 'success') {
+          alert(resp.data.reason)
+          this.loading = false
+          return
+        }
+        let data = resp.data.data
+
+        let meta = {
+          title: {
+            text: data[0].name + '数据'
+          },
+          grid: {
+            left: '3%',
+            right: '4%',
+            bottom: '3%',
+            containLabel: true
+          },
+          legend: {
+            data: [],
+            show: true
+          },
+          toolbox: {
+            show: true,
+            feature: {
+              saveAsImage: {}
+            }
+          },
+          animation: false,
+          dataZoom: [
+            {
+              show: true,
+              realtime: true
+            },
+            {show: true, type: 'inside'}
+          ],
+          tooltip: {
+            trigger: 'axis'
+          },
+          xAxis: [{
+            boundaryGap: false
+          }],
+          yAxis: [
+            {
+              type: 'value',
+              splitArea: {
+                show: true
+              }
+            }],
+          series: []
+        }
+        meta.xAxis[0].data = data[0].data.map((item) => {
+          return item.x
+        })
+        console.log(data)
+        meta.series = data.map((perData) => {
+          this.gridData.push(perData.stats_data)
+          if (this.formValue.type === 'scatter') {
+            return {
+              name: perData.name,
+              symbolSize: 5,
+              large: true,
+              type: 'scatter',
+              data: perData.data.map((dataItem) => { return dataItem.y })
+            }
+          } else if (this.formValue.type === 'compare') {
+            console.log(perData.data)
+            perData.stats_data.year = perData.year
+            meta.legend.data.push(perData.year + perData.name)
+            return {
+              name: perData.year + perData.name,
+              large: true,
+              type: 'scatter',
+              data: perData.data.map((dataItem) => { return dataItem.y })
+            }
+          } else if (this.formValue.type === 'line_sum') {
+            return {
+              name: perData.name,
+              type: 'line',
+              data: perData.sum_data.map((dataItem) => { return dataItem.y })
+            }
+          } else if (this.formValue.type === 'bar') {
+            return {
+              name: perData.name,
+              type: this.formValue.type,
+              barWidth: '60%',
+              data: perData.data.map((dataItem) => { return dataItem.y })
+            }
+          } else if (this.formValue.type === 'boxplot') {
+            return {
+              name: perData.name,
+              type: 'boxplot',
+              data: perData.data.map((dataItem) => { return dataItem.y })
+            }
+          } else {
+            return {
+              name: perData.name,
+              type: this.formValue.type,
+              data: perData.data.map((dataItem) => { return dataItem.y })
+            }
+          }
+        })
+
+        this.chartMeta = meta
+        this.loading = false
+        this.showChart = true
+      }).catch((e) => {
+        this.loading = false
+        alert(e)
+        console.log(e)
+      })
     }
   }
 }
 </script>
 
 <style scoped>
-
+#print{
+  text-align: center;
+  margin-bottom: 20px;
+  z-index: 999;
+}
+#chart{
+  margin-top: 20px;
+  z-index: -1;
+}
 </style>

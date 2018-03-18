@@ -3,23 +3,25 @@
 */
 <template>
   <div>
+    <div id="title">
+      <el-row>
+        <el-col :span="12" :offset="6">
+          <div class="logo" align="center" style="width:100%;">
+            <h1 style="color:#42DCA3;font-weight:bold;text-shadow:#333 1px 1px 1px;font-size: 50px">林业生态大数据平台</h1>
+          </div>
+        </el-col>
+      </el-row>
+    </div>
     <div id="loginform" >
       <el-row>
-        <el-col :span="6" :offset="9">
+        <el-col :span="5" :offset="9">
           <div class="grid-content bg-purple-light">
             <el-form v-model="form">
               <el-row :gutter="20">
                 <el-col :span="24">
-                  <div class="logo" align="center" style="width:120%;">
-                    <h1 style="color:#42DCA3;font-weight:bold;text-shadow:#333 1px 1px 1px;font-size: 40px">林业生态大数据平台</h1>
-                  </div>
-                </el-col>
-              </el-row>
-              <el-row :gutter="20">
-                <el-col :span="24">
                   <div class="grid-content bg-purple">
                     <el-form-item>
-                      <el-input v-model="form.email" placeholder="用户名" ></el-input>
+                      <el-input v-model="form.email" placeholder="邮箱" ></el-input>
                     </el-form-item>
                   </div>
                 </el-col>
@@ -28,7 +30,7 @@
                 <el-col :span="24">
                   <div class="grid-content bg-purple">
                     <el-form-item>
-                      <el-input v-model="form.password" placeholder="密码"></el-input>
+                      <el-input v-model="form.password" placeholder="密码" type="password"></el-input>
                     </el-form-item>
                   </div>
                 </el-col>
@@ -65,8 +67,11 @@
 
 <script>
 //  import * as THREE from 'three'
+  import ElRow from 'element-ui/packages/row/src/row'
+
   export default {
     components: {
+      ElRow
     },
     name: 'login',
     props: {
@@ -102,7 +107,10 @@
     height: 500px;
   }
   #loginform{
-    margin-top: 16%;
+    margin-top: 8%;
+  }
+  #title{
+    margin-top: 8%;
   }
 </style>
 

@@ -1,11 +1,19 @@
 <template>
   <div id="app">
-    <router-view/>
+    <div >
+      <router-view></router-view>
+    </div>
+
   </div>
 </template>
 
 <script>
-
+  export default {
+    date () {
+      return {
+      }
+    }
+  }
 </script>
 
 <style>
@@ -18,5 +26,8 @@
   }
   input{
     text-align: center;
+  }
+  body{
+    margin: 0;
   }
 </style>

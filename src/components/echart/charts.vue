@@ -2,8 +2,8 @@
 
 */
 <template>
-  <div :class="className" :id="id">
-    <div id="chart_container" >
+  <div>
+    <div :id="id" class="chart_container">
     </div>
   </div>
 </template>
@@ -16,37 +16,24 @@
     },
     name: 'charts',
     props: {
-      className: String,
-      id: String,
-      xAxis: {type: Object, default: []},     // echart xAxis 对象
-      yAxis: {type: Object, default: []},     // echart yAxis 对象
-      series: {type: Array, default: []}},
+      chartMeta: {type: Object, default: {xAxis: {}, yAxis: {}, series: []}},
+      id: String},
     mounted: function () {
-      console.log(echarts)
-      this.myChart = echarts.init(document.getElementById('chart_container'))
+      this.myChart = echarts.init(document.getElementById(this.id))
       this.initData()
       window.addEventListener('resize', this.windowResize)
     },
     data () {
       return {
-        chartMeta: {
-          tittle: {}
-        },
-        myChart: {}
       }
     },
     watch: {
-      xAxis: function (value) {
-        console.log('xAxis Change', value)
-        this.updateData()
-      },
-      yAxis: function () {
-        console.log('yAxis Change')
-        this.updateData()
-      },
-      series: function (value) {
-        console.log('series Change', value)
-        this.updateData()
+      chartMeta: {
+        handler: function (val) {
+          console.log('echar mata change', val)
+          this.updateData()
+        },
+        deep: true
       }
     },
     methods: {
@@ -55,7 +42,7 @@
 //        const colors = ['#d14a61', '#5793f3', '#675bba', '#13CE66']
         const option = {
           title: {
-            text: 'ECharts 入门示例'
+            text: ''
           },
           tooltip: {},
           legend: {
@@ -69,13 +56,7 @@
       },
       updateData () {
         /* 检测到props变化调用此方法 */
-        const option = {
-          xAxis: this.$props.xAxis,
-          yAxis: this.$props.yAxis,
-          series: this.$props.series
-        }
-        console.log('updata', option)
-        this.myChart.setOption(option, true)
+        this.myChart.setOption(this.chartMeta, true)
         console.log('updata finsh', this.myChart)
       },
       windowResize () {
@@ -85,7 +66,7 @@
   }
 </script>
 <style scoped>
-  #chart_container {
+  .chart_container {
     height: 500px;
   }
 </style>
