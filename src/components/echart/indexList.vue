@@ -23,7 +23,8 @@
     name: 'indexList',
     props: {
       input: Object,
-      indexElements: Array
+      indexElements: Array,
+      value: Object
     },
     data () {
       return {
@@ -44,7 +45,7 @@
         return {id: index, name: item.name, light: false}
       })
       setTimeout(() => {
-        this.chooseIndex(this.chooseId + 1)
+        this.ChooseIndex(this.chooseId + 1)
       }, 3000)
     },
     methods: {
@@ -52,6 +53,7 @@
         this.indexElementsData[this.chooseId].light = false
         this.indexElementsData[id].light = true
         this.chooseId = id
+        this.emit('input',this.indexElementsData[id])
       }
     }
   }
