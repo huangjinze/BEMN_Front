@@ -144,6 +144,10 @@
             },
             animation: false,
             dataZoom: [
+              {
+                show: true,
+                realtime: true
+              },
               {show: true, type: 'inside'}
             ],
             tooltip: {
