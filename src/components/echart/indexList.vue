@@ -53,7 +53,7 @@
         this.indexElementsData[this.chooseId].light = false
         this.indexElementsData[id].light = true
         this.chooseId = id
-        this.emit('input',this.indexElementsData[id])
+        this.emit('input', this.indexElementsData[id])
       }
     }
   }
