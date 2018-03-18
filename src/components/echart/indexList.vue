@@ -50,6 +50,9 @@
     },
     methods: {
       ChooseIndex: function (id) {
+        if (id > this.indexElementsData.length) {
+          this.chooseId = 0
+        }
         this.indexElementsData[this.chooseId].light = false
         this.indexElementsData[id].light = true
         this.chooseId = id
