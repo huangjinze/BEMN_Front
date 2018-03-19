@@ -39,11 +39,20 @@
         normal_css: {}
       }
     },
+    watch: {
+      indexElements: {
+        handler: function (val) {
+          let index = -1
+          this.indexElementsData = val.map((item) => {
+            index++
+            return {id: index, name: item.name, light: false}
+          })
+        },
+        deep: true
+      }
+    },
     mounted: function () {
-      let index = 0
-      this.indexElementsData = this.indexElements.map((item) => {
-        return {id: index, name: item.name, light: false}
-      })
+
       setTimeout(() => {
         this.ChooseIndex(this.chooseId + 1)
       }, 3000)
