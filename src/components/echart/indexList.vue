@@ -2,9 +2,9 @@
 <template>
   <el-card class="box-card">
     <div class="body-card">
-      <li v-for="item in indexElements">
-        <span :style="normal_css" v-if="item.light === true"><i class="el-icon-star-on" >{{ item.name }}</i></span>
-        <span :style="highlight_css" v-else-if="item.light = false"><i class="el-icon-star-on" >{{ item.name }}</i></span>
+      <li v-for="item in indexElementsData">
+        <span class="normal_item_css"  v-if="item.light === false"><i class="el-icon-star-on" > {{ item.name }} </i></span>
+        <span class="highlight_item_css" v-if="item.light === true"><i class="el-icon-star-on" > {{ item.name }} </i></span>
       </li>
     </div>
   </el-card>
@@ -30,33 +30,45 @@
       return {
         indexElementsData: [],
         chooseId: 0,
-        currentIndex_i: 0,
         currentIndex: {},
-        highlight_css: {
-          background: 'blue',
-          opacity: 0.5
+        tasker: ''
+      }
+    },
+    watch: {
+      indexElements: {
+        handler: function (val) {
+          this.indexElementsData.length = 0
+          for (let indexI in val) {
+            this.indexElementsData.push({id: indexI, name: val[indexI], light: false})
+          }
+          this.chooseId = 0
+          this.indexElementsData[this.chooseId].light = true
+          this.ChooseIndex(this.chooseId)
+          this.tasker = setInterval(() => {
+            this.ChooseIndex(this.chooseId + 1)
+          }, 12000)
+          console.log(this.tasker)
         },
-        normal_css: {}
+        deep: true
       }
     },
     mounted: function () {
-      let index = 0
-      this.indexElementsData = this.indexElements.map((item) => {
-        return {id: index, name: item.name, light: false}
-      })
-      setTimeout(() => {
-        this.ChooseIndex(this.chooseId + 1)
-      }, 3000)
+      this.chooseId = 0
     },
     methods: {
       ChooseIndex: function (id) {
-        if (id > this.indexElementsData.length) {
-          this.chooseId = 0
+        console.log('itemer', id)
+        if (this.indexElementsData.length === 0) {
+          return
+        }
+        if (id === this.indexElementsData.length) {
+          id = 0
         }
         this.indexElementsData[this.chooseId].light = false
         this.indexElementsData[id].light = true
         this.chooseId = id
-        this.emit('input',this.indexElementsData[id])
+        console.log('trigger', this.indexElements[id])
+        this.$emit('input', this.indexElements[id])
       }
     }
   }
@@ -71,5 +83,17 @@
   #chart{
     margin-top: 20px;
     z-index: -1;
+  }
+  .normal_item_css{
+
+  }
+  .highlight_item_css{
+    background: #82ccdd;
+    opacity: 0.3
+  }
+
+  .box-card {
+    background-color: rgba(51,51,51,1);
+    color: whitesmoke;
   }
 </style>

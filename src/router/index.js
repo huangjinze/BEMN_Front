@@ -22,6 +22,7 @@ import tifStation from '@/page/Station/tifStation.vue'
 import OneChartPage from '@/page/Static/OneChartPage.vue'
 import devicePage from '@/page/Device/devicePage'
 import vtfShowStaiscticPage from '@/page/Static/vtfShowStaiscticPage.vue'
+import vtfShowPaper from '@/page/Static/vtfShowPaper.vue'
 
 Vue.use(Router)
 
@@ -136,6 +137,11 @@ export default new Router({
       path: '/vtf/ShowStaiscticPage',
       name: 'vtfShowStaiscticPage',
       component: vtfShowStaiscticPage
+    },
+    {
+      path: '/vtf/ShowPaper',
+      name: 'vtfShowPaper',
+      component: vtfShowPaper
     }
   ]
 
