@@ -3,9 +3,9 @@
 */
 <template>
   <el-row id="form">
-    <el-form v-model="form">
+    <el-form v-model="form" :rules="rules">
       <el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="7">
-        <el-form-item v-if="form.type !== 'compare'">
+        <el-form-item v-if="form.type !== 'compare'" prop="timeRange">
           <div class="block">
             <span class="demonstration">时间范围</span>
             <el-date-picker
@@ -20,7 +20,7 @@
         </el-form-item>
       </el-col>
       <el-col :xs="24" :sm="24" :md="12" :lg="12" :xl="8">
-        <el-form-item>
+        <el-form-item prop="selectedIndex">
           <span class="demonstration">选择指标</span>
           <el-cascader
                   placeholder="输入指标"
@@ -31,7 +31,7 @@
         </el-form-item>
       </el-col>
       <el-col :xs="24" :sm="24" :md="12" :lg="12" :xl="8">
-        <el-form-item>
+        <el-form-item prop="type">
           <span class="demonstration">展示方法</span>
           <el-select v-model="form.type" placeholder="请选择">
             <el-option
@@ -93,6 +93,17 @@
           this.$emit('input', val)
         },
         deep: true
+      },
+      rules: {
+        timeRange: [
+          { required: true, message: '不能为空', trigger: 'blur' }
+        ],
+        selectedIndex: [
+          { required: true, message: '不能为空', trigger: 'blur' }
+        ],
+        type: [
+          { required: true, message: '不能为空', trigger: 'blur' }
+        ]
       }
     }
   }
