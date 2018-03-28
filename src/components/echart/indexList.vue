@@ -46,7 +46,7 @@
           this.ChooseIndex(this.chooseId)
           this.tasker = setInterval(() => {
             this.ChooseIndex(this.chooseId + 1)
-          }, 10000)
+          }, 12000)
           console.log(this.tasker)
         },
         deep: true
@@ -90,5 +90,10 @@
   .highlight_item_css{
     background: #82ccdd;
     opacity: 0.3
+  }
+
+  .box-card {
+    background-color: rgba(51,51,51,1);
+    color: whitesmoke;
   }
 </style>

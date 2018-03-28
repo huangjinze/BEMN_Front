@@ -1,26 +1,29 @@
 <template>
+  <div  id="main-container">
     <div slot="main" v-loading="loading">
       <el-row v-if="showChart" id="headchart">
         <el-col :span="15">
-          <echart :options="lineMeta" style="width: 100%"></echart>
+          <echart :options="lineMeta" style="width: 100%" :theme="'dark'"></echart>
         </el-col>
         <el-col :span="7">
-          <indexList v-model="chooseIndex" :index-elements="indexesOptions"></indexList>
+          <indexList v-model="chooseIndex" :index-elements="indexesOptions" id="index_list_card" ></indexList>
         </el-col>
       </el-row>
       <el-row v-if="showChart" id="downchart">
         <el-col :span="6">
-        <echart :options="mapMeta" style="width: 100%" id="mapChart"></echart>
+          <echart :options="mapMeta" style="width: 100%" id="mapChart" :theme="'dark'"></echart>
         </el-col>
         <el-col :span="12">
-          <echart :options="pieMeta" style="width: 100%"></echart>
+          <echart :options="pieMeta" style="width: 100%" :theme="'dark'"></echart>
         </el-col>
         <el-col :span="6" >
-          <echart :options="barMeta" style="width: 100%"></echart>
+          <echart :options="barMeta" style="width: 100%" :theme="'dark'"></echart>
         </el-col>
 
       </el-row>
     </div>
+  </div>
+
 </template>
 
 <script>
@@ -33,6 +36,7 @@
     import ElRow from 'element-ui/packages/row/src/row'
     import chinaJSON from '../../model/china.json'
     import indexList from '../../components/echart/indexList'
+
     console.log(chinaJSON)
 
     echart.registerMap('china', chinaJSON)
@@ -44,7 +48,7 @@
       name: 'vtfShowPaper',
       data () {
         return {
-          loading: true,
+          loading: false,
           element_name: 'es',
           barMeta: {},
           pieMeta: {},
@@ -111,6 +115,8 @@
                   type: 'value'
                 }
               ],
+              animationDuration: 6000,
+              animationDurationUpdate: 6000,
               dataZoom: [
                 {show: true, type: 'inside'}
               ],
@@ -122,23 +128,13 @@
             linemeta.series.push({
               name: data.name,
               type: 'line',
-              lineStyle: {
-                color: '#82ccdd'
-              },
               areaStyle: {
-                normal: {
-                  color: new echart.graphic.LinearGradient(0, 0, 0, 1, [{
-                    offset: 0,
-                    color: '#82ccdd'
-                  }, {
-                    offset: 1,
-                    color: '#1e3799'
-                  }])
-                }
+                normal: {}
               },
               data: data[0].sum_data.map((dataItem) => { return dataItem.y })
             })
             this.lineMeta = linemeta
+            this.loading = false
             console.log(data)
           })
         },
@@ -199,6 +195,7 @@
               },
               data: maxdata[0].data.map((dataItem) => { return dataItem.y })
             })
+            this.loading = false
           })
           getVTFData({
             domain: '通量数据',
@@ -231,6 +228,7 @@
               },
               data: minxdata[0].data.map((dataItem) => { return dataItem.y })
             })
+            this.loading = false
           })
           this.barMeta = barmeta
         },
@@ -708,6 +706,7 @@
             }
             console.log('data', getdata[0].data)
             this.pieMeta = piemeta
+            this.loading = false
           })
         },
         getIndex: function () {
@@ -727,7 +726,7 @@
               indexes = indexes.concat(resp.data.data[catI].index)
             }
             console.log('j', indexes)
-            this.indexesOptions = indexes.slice(0, 5)
+            this.indexesOptions = indexes.slice(0, 12)
 
             console.log('idnex', resp)
           }).catch((e) => {
@@ -755,6 +754,8 @@
             geo: {
               map: 'china',
               mapType: 'china',
+              layoutSize: 3000,
+              layoutCenter: ['30%', '30%'],
               roam: true,
               label: {
                 normal: {
@@ -790,6 +791,15 @@
 <style scoped>
 #mapChart {
  float: left;
+  height: 300px;
+}
+
+#main-container {
+  background-color: rgba(51,51,51,1)
+}
+
+#index_list_card {
+  margin-top: 50px;
 }
 
 </style>
