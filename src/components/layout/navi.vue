@@ -7,7 +7,7 @@
            background-color="#314254"
            text-color="#fff"
            active-text-color="#ffd04b"
-  router>
+           router>
       <el-menu-item index="/" >
           <i class="el-icon-menu"></i>
           <span slot="title">综合信息</span>
