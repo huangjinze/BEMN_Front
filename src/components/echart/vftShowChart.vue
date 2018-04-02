@@ -71,6 +71,17 @@
           type: '',
           startTime: '',
           endTime: ''
+        },
+        rules: {
+          timeRange: [
+            { required: true, message: '不能为空', trigger: 'blur' }
+          ],
+          selectedIndex: [
+            { required: true, message: '不能为空', trigger: 'blur' }
+          ],
+          type: [
+            { required: true, message: '不能为空', trigger: 'blur' }
+          ]
         }
       }
     },
@@ -93,17 +104,6 @@
           this.$emit('input', val)
         },
         deep: true
-      },
-      rules: {
-        timeRange: [
-          { required: true, message: '不能为空', trigger: 'blur' }
-        ],
-        selectedIndex: [
-          { required: true, message: '不能为空', trigger: 'blur' }
-        ],
-        type: [
-          { required: true, message: '不能为空', trigger: 'blur' }
-        ]
       }
     }
   }
