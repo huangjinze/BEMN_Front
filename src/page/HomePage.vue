@@ -3,7 +3,6 @@
   <div slot="main" class="main">
     <el-row class="left">
       <h2 class="">森林生态</h2>
-
     </el-row>
     <el-row class="left">
       <h2 class="">通量数据</h2>
