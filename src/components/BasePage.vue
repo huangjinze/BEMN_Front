@@ -15,7 +15,7 @@
       </el-dropdown>
     </el-header>
     <el-container>
-      <el-aside width="200px"><slot name="aside"></slot></el-aside>
+      <el-aside width="180px" style="background-color: #314254"><navi></navi></el-aside>
       <el-main><slot name="main"></slot></el-main>
     </el-container>
     <el-footer>
@@ -64,7 +64,7 @@
 </script>
 <style scoped>
   .el-header{
-    background-color: #6484b3;
+    background-color: #fff;
     height: 75px!important;
     text-align: center;
     color: #fff;

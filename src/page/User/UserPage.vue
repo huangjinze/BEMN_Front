@@ -1,6 +1,5 @@
 <template>
     <BasePage>
-        <div slot="aside"><navi></navi></div>
         <div slot="main">
             <div>
                 <el-row>

@@ -1,6 +1,5 @@
 <template>
   <BasePage>
-    <div slot="aside"><navi></navi></div>
     <div slot="main" >
       <div class="top " v-loading="loading">
         <washingForm v-model="form"

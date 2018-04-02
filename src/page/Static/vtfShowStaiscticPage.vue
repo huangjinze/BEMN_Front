@@ -1,8 +1,6 @@
 
 <template>
   <BasePage>
-    <div slot="header">header</div>
-    <div slot="aside"><navi></navi></div>
     <div slot="main" v-loading="loading">
       <el-row :span="24">
         <singleSelect v-model="station"></singleSelect>

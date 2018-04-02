@@ -1,8 +1,6 @@
 <!--设备管理表格页面-->
 <template>
     <BasePage>
-        <div slot="header">header</div>
-        <div slot="aside"><navi></navi></div>
         <div slot="main">
             <topIndexSelect :initTopPartTags="stationName" :initTopSiteTags="className" ref="profile" :indices="index" :indexTags="indexTags" @ClickIndexClass="parentIndexClassListen" @ClickTower="parentStationListen" @ClickClass="parentClassListen" @ClickIndex="parentIndexListen" @CloseStation="CloseStationListen" @CloseClass="CloseClassListen"></topIndexSelect>
             <devDataTable :totalSize="totalSize" :tableData="tableData" :tableName="tableName" :statusControl="faultyList" @errorDialog="errorDialog" @addInfoDialog="addInfoDialog" @addDevice="onAddDevice" @editClick="onEditClick" @changePage="onChangePage"></devDataTable>
