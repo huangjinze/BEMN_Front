@@ -7,6 +7,7 @@
            background-color="#314254"
            text-color="#fff"
            active-text-color="#ffd04b"
+           class="nav_menu"
            router>
       <el-menu-item index="/" >
           <i class="el-icon-menu"></i>
@@ -232,6 +233,10 @@
     }
     .fa{
         margin: 0 5px;
+    }
+    .nav_menu{
+      width: 180px;
+      height: 100%;
     }
 </style>
 
