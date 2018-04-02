@@ -8,7 +8,7 @@
 
         <el-form-item v-if="form.type === 'compare'" prop="startTime">
           <div class="block">
-            <span class="demonstration">时间范围</span>
+            <span class="demonstration">开始年</span>
             <el-date-picker
                     v-model="form.startTime"
                     align="right"
@@ -21,7 +21,7 @@
 
         <el-form-item v-if="form.type === 'compare'" prop="endTime">
           <div class="block">
-            <span class="demonstration">时间范围</span>
+            <span class="demonstration">结束年</span>
             <el-date-picker
               v-model="form.endTime"
               align="right"
