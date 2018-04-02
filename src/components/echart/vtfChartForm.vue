@@ -162,7 +162,7 @@
           value: 'bar',
           label: '柱状图'
         }],
-        selectedIndex: '',
+        selectedIndex: [],
         timeRange: [],
         form: {
           index: '',

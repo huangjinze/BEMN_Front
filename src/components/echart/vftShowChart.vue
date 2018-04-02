@@ -64,7 +64,7 @@
           value: 'line',
           label: '折线图'
         }],
-        selectedIndex: '',
+        selectedIndex: [],
         timeRange: [],
         form: {
           index: '',
