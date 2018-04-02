@@ -6,10 +6,9 @@
     <el-form v-model="form" :rules="rules">
       <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="9">
 
-        <div class="block">
-          <span class="demonstration">时间范围</span>
         <el-form-item v-if="form.type === 'compare'" prop="startTime">
-
+          <div class="block">
+            <span class="demonstration">时间范围</span>
             <el-date-picker
                     v-model="form.startTime"
                     align="right"
@@ -17,13 +16,25 @@
                     placeholder="选择年"
                     value-format="yyyy">
             </el-date-picker>
+          </div>
         </el-form-item>
-        </div>
 
-        <div class="block">
-          <span class="demonstration">时间范围</span>
+        <el-form-item v-if="form.type === 'compare'" prop="endTime">
+          <div class="block">
+            <span class="demonstration">时间范围</span>
+            <el-date-picker
+              v-model="form.endTime"
+              align="right"
+              type="year"
+              placeholder="选择年"
+              value-format="yyyy">
+            </el-date-picker>
+          </div>
+        </el-form-item>
+
         <el-form-item v-if="form.type !== 'compare'" prop="timeRange">
-
+          <div class="block">
+            <span class="demonstration">时间范围</span>
             <el-date-picker
                     v-model="timeRange"
                     type="datetimerange"
@@ -32,8 +43,8 @@
                     end-placeholder="结束日期"
                     value-format="yyyy-MM-dd">
             </el-date-picker>
+          </div>
         </el-form-item>
-        </div>
 
       </el-col>
       <el-col :xs="12" :sm="12" :md="12" :lg="12" :xl="6">
