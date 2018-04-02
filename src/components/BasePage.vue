@@ -1,7 +1,7 @@
 
 <template>
   <el-container>
-    <el-aside style="background-color: #314254"><navi></navi></el-aside>
+    <el-aside style="background-color: #314254" width="180px"><navi></navi></el-aside>
     <el-container>
       <el-header>
         <slot name="header">北京城市副中心核心区林地绿地大数据平台</slot>
