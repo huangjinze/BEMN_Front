@@ -1,6 +1,5 @@
 
 <template>
-
   <el-container>
     <el-aside width="180px" style="background-color: #314254"><navi></navi></el-aside>
     <el-container>
@@ -17,10 +16,9 @@
         </el-dropdown>
       </el-header>
       <el-main><slot name="main"></slot></el-main>
-      <el-footer>Footer</el-footer>
     </el-container>
+    <el-footer>Footer</el-footer>
   </el-container>
-
 </template>
 <script>
   import {mapGetters} from 'vuex'
@@ -66,7 +64,6 @@
 <style scoped>
   .el-header{
     background-color: #fff;
-    height: 75px!important;
     text-align: center;
     color: #000000;
     font-size: 24px;
