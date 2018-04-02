@@ -3,7 +3,7 @@
 */
 <template>
   <el-row id="select_form">
-    <el-form v-model="form" :rules="rules">
+    <el-form v-model="form">
       <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="9">
 
         <el-form-item v-if="form.type === 'compare'" prop="startTime">
@@ -119,29 +119,7 @@
     },
     data () {
       return {
-        rules: {
-          startTime: [
-            { required: true, message: '不能为空', trigger: 'blur' }
-          ],
-          endTime: [
-            { required: true, message: '不能为空', trigger: 'blur' }
-          ],
-          timeRange: [
-            { required: true, message: '不能为空', trigger: 'blur' }
-          ],
-          selectedIndex: [
-            { required: true, message: '不能为空', trigger: 'blur' }
-          ],
-          type: [
-            { required: true, message: '不能为空', trigger: 'blur' }
-          ],
-          intervalUnit: [
-            { required: true, message: '不能为空', trigger: 'blur' }
-          ],
-          model: [
-            { required: true, message: '不能为空', trigger: 'blur' }
-          ]
-        },
+
         UnitOptions: [{
           value: 'day',
           label: '按天'
