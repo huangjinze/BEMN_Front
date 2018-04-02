@@ -3,7 +3,7 @@
 */
 <template>
   <el-row id="form">
-    <el-form v-model="form" :rules="rules">
+    <el-form v-model="form">
       <el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="7">
         <el-form-item v-if="form.type !== 'compare'" prop="timeRange">
           <div class="block">
@@ -71,17 +71,6 @@
           type: '',
           startTime: '',
           endTime: ''
-        },
-        rules: {
-          timeRange: [
-            { required: true, message: '不能为空', trigger: 'blur' }
-          ],
-          selectedIndex: [
-            { required: true, message: '不能为空', trigger: 'blur' }
-          ],
-          type: [
-            { required: true, message: '不能为空', trigger: 'blur' }
-          ]
         }
       }
     },
