@@ -64,6 +64,7 @@
 <style scoped>
   .el-header{
     background-color: #fff;
+    height: 75px!important;
     text-align: center;
     color: #000000;
     font-size: 24px;
@@ -73,7 +74,7 @@
     color: #fff;
   }
   .el-main{
-    overflow: hidden;
+
   }
   .el-header{
     padding-top: 22px;
