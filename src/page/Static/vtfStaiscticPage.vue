@@ -151,10 +151,17 @@ export default {
           animation: false,
           dataZoom: [
             {
-              show: true,
-              realtime: true
+              id: 'dataZoomX',
+              type: 'slider',
+              xAxisIndex: [0],
+              filterMode: 'filter'
             },
-            {show: true, type: 'inside'}
+            {
+              id: 'dataZoomY',
+              type: 'slider',
+              yAxisIndex: [0],
+              filterMode: 'empty'
+            }
           ],
           tooltip: {
             trigger: 'axis'
