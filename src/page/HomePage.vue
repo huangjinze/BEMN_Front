@@ -1,7 +1,5 @@
 <template>
 <BasePage>
-  <div slot="header">header</div>
-  <div slot="aside"><navi></navi></div>
   <div slot="main" class="main">
     <el-row class="left">
       <h2 class="">森林生态</h2>
