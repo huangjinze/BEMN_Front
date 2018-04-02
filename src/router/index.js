@@ -134,7 +134,7 @@ export default new Router({
       component: OneChartPage
     },
     {
-      path: '/vtf/ShowStaiscticPage',
+      path: '/vtf/ShowStatisticsPage',
       name: 'vtfShowStaiscticPage',
       component: vtfShowStaiscticPage
     },

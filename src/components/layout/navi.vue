@@ -35,6 +35,10 @@
                                 <i class="fa fa-download" aria-hidden="true"></i>
                                 数据导入导出
                             </el-menu-item>
+                          <el-menu-item index="/vtf/ShowStatisticsPage">
+                            <i class="fa fa-area-chart" aria-hidden="true"></i>
+                            数据展示图表
+                          </el-menu-item>
                         </el-menu-item-group>
                     </el-submenu>
                     <el-submenu index="2-2" >
