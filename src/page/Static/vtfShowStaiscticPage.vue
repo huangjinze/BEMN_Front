@@ -144,17 +144,12 @@
             },
             animation: false,
             dataZoom: [
+              {show: true, type: 'inside'},
               {
-                id: 'dataZoomX',
-                type: 'slider',
+                show: true,
+                realtime: true,
                 xAxisIndex: [0],
-                filterMode: 'filter'
-              },
-              {
-                id: 'dataZoomY',
-                type: 'slider',
-                yAxisIndex: [0],
-                filterMode: 'empty'
+                type: 'slider'
               }
             ],
             tooltip: {
