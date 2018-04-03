@@ -1,6 +1,5 @@
 <template>
     <BasePage>
-        <div slot="aside"><navi></navi></div>
         <div slot="main" id="info" align="center">
             <div id="picture">
                 <img :src="myurl" style="width:100px;">

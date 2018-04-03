@@ -1,8 +1,6 @@
 <!--数据导出页面，具体内容通过dataImport/dataImport.vue导入-->
 <template>
   <BasePage>
-    <div slot="header">header</div>
-    <div slot="aside"><navi></navi></div>
     <div slot="main">
       <!--<headGuider :initTopPartTags="stationName" :initTopSiteTags="className" ref="profile" :partTags="stations" :siteTags="classes" @ClickPart="parentStationListen" @ClickSite="parentClassListen" @CloseIndex="closeIndexListen"></headGuider>-->
       <!--<indexSelect :indices="index" :indexTags="indexTags" @ClickIndexClass="parentIndexClassListen" @ClickIndex="parentIndexListen"></indexSelect>-->

@@ -1,8 +1,5 @@
 <template>
   <BasePage>
-    <div slot="aside">
-      <navi></navi>
-    </div>
     <div slot="main">
       <articles :options="options" :leftItems="leftItems" :rightBnts="rightBnts" :news="news" :totalSize="totalSize"
       @Submit="onSubmitW" @changeCategory="dataSource" @delete="dltNews" @edit="EditNews" :newContents="newContents"></articles>

@@ -1,7 +1,6 @@
 <!-- 该模块为:点击导航栏的“数据展示”->“通量数据领域”->“数据展示”时，显示的页面内容，注意，与forestDominPage.vue共用一套子组件-->
 <<template>
     <BasePage>
-        <div slot="aside"><navi></navi></div>
         <div slot="main">
           <topIndexSelect :initTopPartTags="stationName" :initTopSiteTags="className" ref="profile" :indices="index" :indexTags="indexTags" @ClickTower="parentStationListen" @ClickClass="parentClassListen" @ClickIndex="parentTabListen" @CloseStation="CloseStationListen" @CloseClass="CloseClassListen"></topIndexSelect>
           <dataManager v-if="index[0].flag == 4" :showSelect="showSelect" :navs="navs" :totalSize="totalSize" @changePage="changeDataByPage" v-on:selectValue="Svalue"></dataManager>

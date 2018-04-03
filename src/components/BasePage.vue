@@ -1,42 +1,57 @@
 
 <template>
-  <el-container>
-    <!--北京城市副中心核心区林地绿地大数据平台-->
-    <el-header>
-      <slot name="header">北京城市副中心核心区林地绿地大数据平台</slot>
-      <el-dropdown style="float: right">
-        <el-button type="text"  style="font-size: 16px;color: white">
-          欢迎您！{{ msg[0][0].name }}<i class="el-icon-arrow-down el-icon--right"></i>
-        </el-button>
-        <el-dropdown-menu slot="dropdown">
-          <el-dropdown-item><el-button type="text" @click="info">个人信息</el-button></el-dropdown-item>
-          <el-dropdown-item><el-button type="text" @click="logout">退出</el-button></el-dropdown-item>
-        </el-dropdown-menu>
-      </el-dropdown>
-    </el-header>
+  <el-container class="app_container_view">
+    <el-aside style="background-color: #314254" width="190px"><transition name="slideLeft"><navi ></navi></transition></el-aside>
     <el-container>
-      <el-aside width="200px"><slot name="aside"></slot></el-aside>
-      <el-main><slot name="main"></slot></el-main>
+      <el-header height="10%">
+        <transition name="slideDown">
+        <el-card class="header-box-card" v-show="showMain">
+          <span style="color: #696969">北京城市副中心核心区林地绿地大数据平台</span>
+          <el-dropdown style="float: right"  class="user_info">
+            <el-button type="text"  style="font-size: 16px;color: #518DD6">
+              欢迎您！{{ msg[0][0].name }}<i class="el-icon-arrow-down el-icon--right"></i>
+            </el-button>
+            <el-dropdown-menu slot="dropdown">
+              <el-dropdown-item><el-button type="text" @click="info">个人信息</el-button></el-dropdown-item>
+              <el-dropdown-item><el-button type="text" @click="logout">退出</el-button></el-dropdown-item>
+            </el-dropdown-menu>
+          </el-dropdown>
+        </el-card>
+        </transition>
+      </el-header>
+      <el-main>
+        <transition name="fadeUp">
+          <el-card class="main-box-card" v-show="showMain"><slot name="main"></slot> </el-card>
+        </transition></el-main>
+      <el-footer>Footer</el-footer>
     </el-container>
-    <el-footer>
-      <slot name="footer"></slot>
-      <slot name="footer-copyright"></slot>
-    </el-footer>
-  </el-container>
 
+  </el-container>
 </template>
 <script>
   import {mapGetters} from 'vuex'
   import {logoutUser} from '../model/user'
-  export default {
+  import navi from './layout/navi'
 
+  export default {
+    components: {
+      navi
+    },
     created: function () {
 
+    },
+    data () {
+      return {
+        showMain: false
+      }
     },
     computed: {
       ...mapGetters({
         msg: 'GET_MSG'
       })
+    },
+    mounted: function () {
+      this.showMain = true
     },
     methods: {
       handleOpen (key, keyPath) {
@@ -63,11 +78,14 @@
   }
 </script>
 <style scoped>
+  .app_container_view{
+    padding: 0px;
+    height: 900px;
+  }
   .el-header{
-    background-color: #6484b3;
-    height: 75px!important;
+    background-color: #fff;
     text-align: center;
-    color: #fff;
+    color: #696969;
     font-size: 24px;
   }
   .el-footer{
@@ -75,9 +93,22 @@
     color: #fff;
   }
   .el-main{
-    overflow: hidden;
+
   }
   .el-header{
-    padding-top: 22px;
+    padding-top: 2px;
+    padding-bottom: 50px;
+    padding-left: 0px;
+    padding-right: 0px;
+  }
+  .header-box-card{
+    width: 100%;
+  }
+
+  .main-box-card{
+    width: 100%;
+  }
+  .user_info {
+    margin-bottom: 2px;
   }
 </style>
