@@ -6,7 +6,7 @@
     </el-row>
     <el-row class="left">
       <h2 class="">通量数据</h2>
-      <el-col class="linear_gra linear_gra1" :span="6"
+      <el-col class="linear_gra linear_gra2" :span="6"
               v-for="(value, index) in vftResults"
               :key="value.name">
         <div class="word">{{value.name}}</div>
@@ -107,10 +107,10 @@
     background: linear-gradient(to right, #FA7797 , #FFE241); /* 标准的语法 */
   }
   .linear_gra2{
-    background: -webkit-linear-gradient(left, #459EF3 , #00E2FA); /* Safari 5.1 - 6.0 */
-    background: -o-linear-gradient(right, #459EF3 , #00E2FA); /* Opera 11.1 - 12.0 */
-    background: -moz-linear-gradient(right, #459EF3 , #00E2FA); /* Firefox 3.6 - 15 */
-    background: linear-gradient(to right, #459EF3 , #00E2FA); /* 标准的语法 */
+    background: -webkit-linear-gradient(left, #518DD6 , #87CEFA); /* Safari 5.1 - 6.0 */
+    background: -o-linear-gradient(right, #518DD6 , #87CEFA); /* Opera 11.1 - 12.0 */
+    background: -moz-linear-gradient(right, #518DD6 , #87CEFA); /* Firefox 3.6 - 15 */
+    background: linear-gradient(to right, #518DD6 , #87CEFA); /* 标准的语法 */
   }
   .word{
     float: left;

@@ -23,11 +23,14 @@
     -moz-osx-font-smoothing: grayscale;
     color: #2c3e50;
     min-width: 960px;
+    min-height: 100%;
+    border-top: 0px;
   }
   input{
     text-align: center;
   }
   body{
-    margin: 0;
+    margin-top: 0%;
+    height: 100%;
   }
 </style>
