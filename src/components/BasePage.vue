@@ -1,14 +1,16 @@
 
 <template>
   <el-container class="app_container_view">
-    <el-aside style="background-color: #314254" width="190px"><transition name="slideLeft"><navi ></navi></transition></el-aside>
+    <el-aside style="background-color: #314254"><transition name="slideLeft"><navi :collapse="isCollapse"></navi></transition></el-aside>
     <el-container>
       <el-header height="10%">
         <transition name="slideDown">
         <el-card class="header-box-card" v-show="showMain">
+          <el-button @click="isCollapse=!isCollapse" class="navi_button"><i class="fa fa-bars" aria-hidden="true"></i></el-button>
           <span style="color: #696969">北京城市副中心核心区林地绿地大数据平台</span>
           <el-dropdown style="float: right"  class="user_info">
             <el-button type="text"  style="font-size: 16px;color: #518DD6">
+              <i class="fa fa-user-o" aria-hidden="true"></i>
               欢迎您！{{ msg[0][0].name }}<i class="el-icon-arrow-down el-icon--right"></i>
             </el-button>
             <el-dropdown-menu slot="dropdown">
@@ -19,11 +21,18 @@
         </el-card>
         </transition>
       </el-header>
-      <el-main>
+      <el-main class="main-content">
         <transition name="fadeUp">
           <el-card class="main-box-card" v-show="showMain"><slot name="main"></slot> </el-card>
-        </transition></el-main>
-      <el-footer>Footer</el-footer>
+        </transition>
+      </el-main>
+      <!--<el-footer>-->
+        <!--<el-row>-->
+          <!--<el-col :xs="4" :sm="4" :md="2" :lg="1" :xl="1" :offset="2" class="footer-img1">-->
+            <!--<img src="../assets/img/footer/red.png" style="margin-top: -10px;">-->
+          <!--</el-col>-->
+        <!--</el-row>-->
+      <!--</el-footer>-->
     </el-container>
 
   </el-container>
@@ -42,7 +51,8 @@
     },
     data () {
       return {
-        showMain: false
+        showMain: false,
+        isCollapse: false
       }
     },
     computed: {
@@ -110,5 +120,18 @@
   }
   .user_info {
     margin-bottom: 2px;
+  }
+  .navi_button{
+    float: left;
+  }
+  .el-main{
+    background-color: #eee;
+    position: relative!important;
+  }
+  .main-box-card{
+    position:absolute;
+    min-height: 80%;
+    max-width: 95%;
+    left: 2.5%;
   }
 </style>
