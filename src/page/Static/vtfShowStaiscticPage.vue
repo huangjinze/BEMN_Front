@@ -242,6 +242,5 @@
   #chart{
     text-align: center;
      margin-top: 20px;
-     z-index: -1;
    }
 </style>

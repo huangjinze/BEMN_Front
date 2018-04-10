@@ -33,4 +33,8 @@
     margin-top: 0%;
     height: 100%;
   }
+  .el-aside{
+    overflow: hidden;
+    width: auto!important;
+  }
 </style>

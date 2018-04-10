@@ -244,6 +244,5 @@ export default {
 }
 #chart{
   margin-top: 20px;
-  z-index: -1;
 }
 </style>
