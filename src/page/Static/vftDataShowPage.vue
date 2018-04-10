@@ -124,16 +124,17 @@ export default {
         var obj = this.navs.find(function (value, index, classes) { return value.label === category })
         this.$set(obj, 'mcols', cols)
         this.$set(obj, 'tableData', data.data)
-        this.Type = 'level1'
+//        this.Type = 'level1'
       }).catch(resp => {
         this.$alert('暂无此类别', {confirmButtonText: 'ok'})
-        this.Type = 'level1'
+//        this.Type = 'level1'
       })
     },
     Svalue: function (data) {
       console.log(data)
       this.Type = data
-      this.getTableData(0)
+//      this.changeDataByPage(0)
+      this.getTableData(1)
     }
   }
 }

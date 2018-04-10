@@ -316,10 +316,10 @@
         console.log(name)
         DeleteRole(name[0]).then(resp => {
           if (resp.data.status === 'success') {
-            alert('删除成功')
+            this.$alert('删除成功', {confirmButtonText: 'ok'})
             document.location.reload()
           } else {
-            alert('删除失败')
+            this.$alert('删除失败', {confirmButtonText: 'ok'})
           }
         }).catch(resp => {
           this.$alert('网络差', '失败', {confirmButtonText: 'ok'})
@@ -329,10 +329,10 @@
         AddRole(this.formadd).then(resp => {
 //          console.log('addinfo', resp)
           if (resp.data.status === 'success') {
-            alert('添加成功')
+            this.$alert('添加成功', {confirmButtonText: 'ok'})
             document.location.reload()
           } else {
-            alert('添加失败')
+            this.$alert('添加失败', {confirmButtonText: 'ok'})
           }
         }).catch(resp => {
           this.$alert('网络差', '失败', {confirmButtonText: 'ok'})

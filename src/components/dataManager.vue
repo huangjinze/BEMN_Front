@@ -24,6 +24,7 @@
           <el-pagination
             @size-change="handleSizeChange"
             @current-change="handleCurrentChange"
+            :current-page="currentPage"
             :page-size="15"
             layout="prev, pager, next, jumper"
             :total="totalSize">
@@ -46,6 +47,7 @@
     data () {
       return {
         tab2: '0',
+        currentPage: 1,
         options: [{
           value: 'level1',
           label: 'level1'
@@ -87,16 +89,21 @@
       handleSizeChange (val) {
         console.log(`每页 ${val} 条`)
       },
-      handleCurrentChange (val) {
-        console.log(`当前页: ${val}`)
-        this.$emit('changePage', [val, this.tab2])
-        // tab[0]为分页组件的当前页数，tab[1]为便签页组件的当前索引
+//      handleCurrentChange (currentPage) {
+//        console.log(`当前页: ${val}`)
+//        this.$emit('changePage', [val, this.tab2])
+//        // tab[0]为分页组件的当前页数，tab[1]为便签页组件的当前索引
+//      }
+      handleCurrentChange: function (currentPage) {
+        this.currentPage = currentPage
+        this.$emit('changePage', [currentPage, this.tab2])
       }
     },
     watch: {
       value: function (val) {
 //        console.log(val)
         this.$emit('selectValue', val)
+        this.currentPage = 1
       }
     }
   }
