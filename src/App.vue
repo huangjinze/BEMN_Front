@@ -36,5 +36,21 @@
   .el-aside{
     overflow: hidden;
     width: auto!important;
+    display: flex;
+    min-height: 100vh;
+    flex-direction: column;
   }
+  #app {
+    display: flex;
+    min-height: 100vh;
+    flex-direction: column;
+  }
+  .el-container {
+    display: flex;
+    min-height: 100vh;
+    /*flex-direction: column;*/
+  }
+  /*body{*/
+    /*display: flex;*/
+  /*}*/
 </style>
