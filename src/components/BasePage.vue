@@ -27,8 +27,7 @@
         </transition>
       </el-main>
       <el-card class="footer-card">
-        <img src="../assets/img/footer/red.png" style="margin-top: -10px;">
-        <p> 北京市城市生态监测大数据平台 | 网站声明 | 联系我们</p>
+        <p> 北京市城市生态监测大数据平台 | 网站声明 | 联系我们 </p>
         <p>版权所有：北京市园林绿化局　京ICP备05070218号　中文域名：中国政府网.政务</p>
         <p class="copyright">2017 Copyright 北京林业大学 林业生态监测技术研究所</p>
       </el-card>
@@ -142,5 +141,8 @@
   }
   .footer-card{
     text-align: center;
+    font-size: 0.7em;
+    color: #8d8d8d;
   }
+
 </style>
