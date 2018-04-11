@@ -72,7 +72,7 @@
         </el-form-item>
       </el-col>
 
-      <el-col :xs="12" :sm="12" :md="12" :lg="12" :xl="9">
+      <el-col :xs="12" :sm="12" :md="12" :lg="12" :xl="6">
         <el-form-item prop="type">
           <span class="demonstration">输入时长</span>
           <el-input-number v-model="form.timeInterval"></el-input-number>
