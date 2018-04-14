@@ -1,6 +1,6 @@
 <template>
   <div  id="main-container">
-    <div slot="main" v-loading="loading">
+    <div v-loading="loading" id="main">
       <el-row v-if="showChart" id="headchart">
         <el-col :span="15">
           <echart :options="lineMeta" style="width: 100%" :theme="'dark'"></echart>
@@ -27,7 +27,6 @@
 </template>
 
 <script>
-    import navi from '../../components/layout/navi'
     import chartForm from '../../components/echart/vftShowChart'
     import echart from 'vue-echarts'
     import {getVTFData, getVFTIndex} from '../../model/data'
@@ -45,7 +44,7 @@
 
     export default {
       components: {
-        ElRow, echart, navi, chartForm, singleSelect, chartGrid, indexList
+        ElRow, echart, chartForm, singleSelect, chartGrid, indexList
       },
       name: 'vtfShowPaper',
       data () {
@@ -850,7 +849,7 @@
                 saveAsImage: {}
               }
             },
-            backgroundColor: 'rgba(100,149,237,1)',
+            backgroundColor: 'rgba(51,51,51,1)',
             geo: {
               map: 'beijing',
               mapType: 'beijing',
@@ -859,7 +858,7 @@
               roam: true,
               label: {
                 normal: {
-                  areaColor: '#1078B6',
+                  areaColor: '#111',
 
                   borderColor: 'rgba(100,149,237,1)'
                 }
@@ -890,11 +889,28 @@
 }
 
 #main-container {
-  background-color: rgba(51,51,51,1)
+  background-color: rgba(51,51,51,1);
+  height: 1067px;
 }
 
 #index_list_card {
   margin-top: 50px;
+}
+
+body {
+  display: block;
+}
+
+#headchart {
+  height: 600px
+}
+
+#downchart {
+  height: 467px;
+}
+
+#main {
+  min-height: 100%;
 }
 
 </style>
