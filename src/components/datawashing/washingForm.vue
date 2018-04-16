@@ -18,7 +18,7 @@
 
   <el-col :xs="24" :sm="12" :md="6" :lg="6">
     <el-form-item>
-      <span>指标：</span>
+      <span>类别：</span>
       <el-select v-model="form.classification">
         <el-option
                 v-for="item in classifications"
