@@ -12,7 +12,7 @@ export default {
   data () {
     return {
       stationName: [
-        '奥林匹克'
+        ''
       ],
       className: [null],
       indexName: [],
