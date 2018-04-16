@@ -102,6 +102,7 @@
   import washingForm from '../../components/datawashing/washingForm'
   import ElButton from 'element-ui/packages/button/src/button'
   import echart from 'vue-echarts'
+  import {mapGetters} from 'vuex'
 
   export default {
     components: {
@@ -115,6 +116,11 @@
     props: {
       washing_form: {type: Object},
       indexes: {type: Array}
+    },
+    computed: {
+      ...mapGetters({
+        msg: 'GET_MSG'
+      })
     },
     data () {
       return {
@@ -200,7 +206,7 @@
             'domain': '通量数据',
             'year': this.washing_form.year,
             'station': this.washing_form.station,
-            'user_mail': '1103232282@qq.com',
+            'user_mail': this.msg[0][0].email,
             'z': this.form.z,
             'type': '水'
           }).then((resp) => {
@@ -266,7 +272,7 @@
             'domain': '通量数据',
             'year': this.washing_form.year,
             'station': this.washing_form.station,
-            'user_mail': '1103232282@qq.com',
+            'user_mail': this.msg[0][0].email,
             'type': '水',
             'variables': this.form.variables
           }).then((resp) => {
@@ -312,7 +318,7 @@
             'domain': '通量数据',
             'year': this.washing_form.year,
             'station': this.washing_form.station,
-            'user_mail': '1103232282@qq.com'
+            'user_mail': this.msg[0][0].email
           }).then((resp) => {
             if (resp.data.status === 'success') {
               console.log(resp)

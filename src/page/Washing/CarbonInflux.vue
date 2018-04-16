@@ -26,8 +26,8 @@
       </el-input-number>
 
       <el-row v-for="(item, index) in chartIndexesMetaList" :key="'chart_key'+index">
-        <el-col :span="18" :offset="3">
-          <echart :options="item"></echart>
+        <el-col >
+          <echart :options="item" style="width: 100%"></echart>
         </el-col>
       </el-row>
 
@@ -51,6 +51,7 @@
     <el-col :span="24" v-if="step === 3">
 
       <echart :options="chartUMetaData"></echart>
+      <span><el-input-number v-model="form.u"></el-input-number></span>
       <el-button @click="onUAdjustValueDraw" type="primary">确认</el-button>
 
       <div v-if="adjustChartShow" v-loading="loading">
@@ -62,7 +63,6 @@
           <echart :options="item"></echart>
         </el-col>
       </el-row>
-
     </el-col>
 
     <div v-if="step === 4">
@@ -77,7 +77,7 @@
       </el-select>
 
       <el-row v-for="(item, index) in chartIndexesMetaList" :key="'chart_key'+index">
-        <el-col :span="18" :offset="3">
+        <el-col class="echart-align">
           <echart :options="item"></echart>
         </el-col>
       </el-row>
@@ -105,6 +105,7 @@
   import ElInputNumber from 'element-ui/packages/input-number/src/input-number'
   import {ustarRes, checkWashingIndexRange, despiking, CStore, UStar, Gapfill} from '../../model/data'
   import echart from 'vue-echarts'
+  import {mapGetters} from 'vuex'
 
   export default {
     components: {
@@ -119,6 +120,11 @@
     props: {
       washing_form: {type: Object},
       indexes: {type: Array}
+    },
+    computed: {
+      ...mapGetters({
+        msg: 'GET_MSG'
+      })
     },
     data () {
       return {
@@ -184,7 +190,7 @@
             'domain': '通量数据',
             'year': this.washing_form.year,
             'station': this.washing_form.station,
-            'user_mail': '1103232282@qq.com',
+            'user_mail': this.msg[0][0].email,
             'type': '碳通量',
             'ustarc': this.form.u
           }).then((resp) => {
@@ -211,7 +217,7 @@
                 this.chartIndexesMetaList = resp.data.data.map((perIndex) => {
                   let meta = {
                     title: {
-                      text: perIndex.index + '数据'
+                      text: perIndex.name + '数据'
                     },
                     grid: {
                       left: '3%',
@@ -324,7 +330,7 @@
             'year': this.washing_form.year,
             'station': this.washing_form.station,
             'classification': '通量',
-            'user_mail': '1103232282@qq.com',
+            'user_mail': this.msg[0][0].email,
             'z': this.form.z,
             'type': '碳通量'
           }).then((resp) => {
@@ -391,7 +397,7 @@
             'domain': '通量数据',
             'year': this.washing_form.year,
             'station': this.washing_form.station,
-            'user_mail': '1103232282@qq.com',
+            'user_mail': this.msg[0][0].email,
             'type': '碳通量'
           }).then((resp) => {
             this.loading = false
@@ -456,7 +462,7 @@
             'domain': '通量数据',
             'year': this.washing_form.year,
             'station': this.washing_form.station,
-            'user_mail': '1103232282@qq.com'
+            'user_mail': this.msg[0][0].email
           }).then((resp) => {
             this.loading = false
             if (resp.data.status === 'success') {
@@ -520,7 +526,7 @@
             'domain': '通量数据',
             'year': this.washing_form.year,
             'station': this.washing_form.station,
-            'user_mail': '1103232282@qq.com',
+            'user_mail': this.msg[0][0].email,
             'type': '碳通量',
             'method': this.method
           }).then((resp) => {
@@ -562,7 +568,7 @@
           'domain': '通量数据',
           'year': this.washing_form.year,
           'station': this.washing_form.station,
-          'user_mail': '1103232282@qq.com',
+          'user_mail': this.msg[0][0].email,
           'type': '碳通量',
           'ustarc': this.form.u
         }).then((resp) => {
@@ -605,7 +611,7 @@
             'year': this.washing_form.year,
             'station': this.washing_form.station,
             'classification': '通量',
-            'user_mail': '1103232282@qq.com'
+            'user_mail': this.msg[0][0].email
           }).then((resp) => {
             if (resp.data.status === 'success') {
               console.log(resp)
@@ -657,5 +663,10 @@
     background-color: #5b8ecf;
     color: white;
   }
-
+  .echart div{
+    width: 100%!important;
+  }
+  .echart-align{
+    text-align: center;
+  }
 </style>

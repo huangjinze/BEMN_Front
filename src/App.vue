@@ -1,9 +1,6 @@
 <template>
   <div id="app">
-    <div >
-      <router-view></router-view>
-    </div>
-
+    <router-view></router-view>
   </div>
 </template>
 
@@ -25,6 +22,9 @@
     min-width: 960px;
     min-height: 100%;
     border-top: 0px;
+    border-bottom: 0px;
+    border-left: 0px;
+    border-right: 0px;
   }
   input{
     text-align: center;
@@ -36,5 +36,24 @@
   .el-aside{
     overflow: hidden;
     width: auto!important;
+    display: flex;
+    min-height: 100vh;
+    flex-direction: column;
   }
+  #app {
+    display: flex;
+    min-height: 100vh;
+    flex-direction: column;
+  }
+  #container {
+    min-height: 100%;
+  }
+  .el-container {
+    display: flex;
+    min-height: 100vh;
+    /*flex-direction: column;*/
+  }
+  /*body{*/
+    /*display: flex;*/
+  /*}*/
 </style>

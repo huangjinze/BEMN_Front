@@ -26,13 +26,11 @@
           <el-card class="main-box-card" v-show="showMain"><slot name="main"></slot> </el-card>
         </transition>
       </el-main>
-      <!--<el-footer>-->
-        <!--<el-row>-->
-          <!--<el-col :xs="4" :sm="4" :md="2" :lg="1" :xl="1" :offset="2" class="footer-img1">-->
-            <!--<img src="../assets/img/footer/red.png" style="margin-top: -10px;">-->
-          <!--</el-col>-->
-        <!--</el-row>-->
-      <!--</el-footer>-->
+      <el-card class="footer-card">
+        <p> 北京市城市生态监测大数据平台 | 网站声明 | 联系我们 </p>
+        <p>版权所有：北京市园林绿化局　京ICP备05070218号　中文域名：中国政府网.政务</p>
+        <p class="copyright">2017 Copyright 北京林业大学 林业生态监测技术研究所</p>
+      </el-card>
     </el-container>
 
   </el-container>
@@ -99,11 +97,18 @@
     font-size: 24px;
   }
   .el-footer{
-    background-color: #313131;
-    color: #fff;
-  }
-  .el-main{
-
+    flex: 0 0 auto;
+    padding: 0!important;
+    /*background-color: #fff;*/
+    /*color: #333;*/
+    /*!*position: absolute;*!*/
+    /*width: 100%;*/
+    /*!*bottom: 1%;*!*/
+    /*height: 300px;*/
+    /*display: block;*/
+    /*-webkit-box-flex: 1;*/
+    /*-webkit-flex:1;*/
+    /*flex:1;*/
   }
   .el-header{
     padding-top: 2px;
@@ -134,4 +139,10 @@
     max-width: 95%;
     left: 2.5%;
   }
+  .footer-card{
+    text-align: center;
+    font-size: 0.7em;
+    color: #8d8d8d;
+  }
+
 </style>
