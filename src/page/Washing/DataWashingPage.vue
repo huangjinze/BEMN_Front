@@ -81,7 +81,7 @@
     methods: {
       getIndexes () {
         this.loading = true
-        this.indexes.splice(0, this.indexes.length)
+        this.indexes.length = 0
         return getWashingIndexAndRange(
           {
             domain: '通量数据',
