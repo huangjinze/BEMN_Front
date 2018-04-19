@@ -43,7 +43,7 @@
 
     </div>
 
-    <el-col :span="24" v-show="step === 3"  id="methodSelect">
+    <el-row :span="24" v-show="step === 3"  id="methodSelect">
         <el-col class="select">
           请选择因变量自变量
           <el-button type="primary" size="small" @click="onAddVarClick" icon="el-icon-plus" id="plus">增加</el-button>
@@ -90,7 +90,7 @@
           <echart :options="item"></echart>
         </el-col>
       </el-row>
-    </el-col>
+    </el-row>
 
     <div v-if="step === 3">
       <i class="el-icon-success">数据QAQC完成</i>
@@ -420,7 +420,7 @@
         this.loading = true
         return checkWashingIndexRange(
           {
-            'type': '碳通量',
+            'type': '能量',
             'data': this.form.range,
             'domain': '通量数据',
             'year': this.washing_form.year,
