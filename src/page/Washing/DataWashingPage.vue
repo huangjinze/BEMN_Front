@@ -111,6 +111,7 @@
               station: this.form.station,
               classification: '通量'}).then(resp => {
                 this.loading = true
+                this.indexes.splice(0, this.indexes.length)
                 resp.data.data.map(item => {
                   let index = {
                     name: item.name,

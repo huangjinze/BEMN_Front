@@ -97,13 +97,16 @@
   import navi from '../../components/layout/navi'
   import washingForm from '../../components/datawashing/washingForm'
   import {mapGetters} from 'vuex'
+  import echart from 'vue-echarts'
 
   export default {
     components: {
       rangeCheck,
       BasePage,
       navi,
-      washingForm},
+      washingForm,
+      echart
+    },
     name: 'Weather',
     props: {
       washing_form: {type: Object},

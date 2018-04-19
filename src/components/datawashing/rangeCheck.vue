@@ -65,6 +65,11 @@
       }
     },
     watch: {
+      showIndexes: function (val) {
+        if (this.showIndexes.length === 0) {
+          this.selectedIndexes.length = 0
+        }
+      }
     },
     computed: {
       indexesOptions: function () {
