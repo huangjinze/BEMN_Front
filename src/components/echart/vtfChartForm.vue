@@ -5,9 +5,10 @@
   <el-row id="select_form">
     <el-form v-model="form">
       <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="9">
-        <el-form-item v-if="form.type === 'compare'">
+
+        <el-form-item v-if="form.type === 'compare'" prop="startTime">
           <div class="block">
-            <span class="demonstration">时间范围</span>
+            <span class="demonstration">开始年</span>
             <el-date-picker
                     v-model="form.startTime"
                     align="right"
@@ -15,18 +16,23 @@
                     placeholder="选择年"
                     value-format="yyyy">
             </el-date-picker>
+          </div>
+        </el-form-item>
 
-            <span class="demonstration">-</span>
+        <el-form-item v-if="form.type === 'compare'" prop="endTime">
+          <div class="block">
+            <span class="demonstration">结束年</span>
             <el-date-picker
-                    v-model="form.endTime"
-                    align="right"
-                    type="year"
-                    placeholder="选择年"
-                    value-format="yyyy">
+              v-model="form.endTime"
+              align="right"
+              type="year"
+              placeholder="选择年"
+              value-format="yyyy">
             </el-date-picker>
           </div>
         </el-form-item>
-        <el-form-item v-if="form.type !== 'compare'">
+
+        <el-form-item v-if="form.type !== 'compare'" prop="timeRange">
           <div class="block">
             <span class="demonstration">时间范围</span>
             <el-date-picker
@@ -39,9 +45,10 @@
             </el-date-picker>
           </div>
         </el-form-item>
+
       </el-col>
       <el-col :xs="12" :sm="12" :md="12" :lg="12" :xl="6">
-        <el-form-item>
+        <el-form-item prop="selectedIndex">
           <span class="demonstration">选择指标</span>
           <el-cascader
                   placeholder="输入指标"
@@ -52,7 +59,7 @@
         </el-form-item>
       </el-col>
       <el-col :xs="12" :sm="12" :md="12" :lg="12" :xl="6">
-        <el-form-item>
+        <el-form-item prop="type">
           <span class="demonstration">展示方法</span>
           <el-select v-model="form.type" placeholder="请选择">
             <el-option
@@ -65,14 +72,14 @@
         </el-form-item>
       </el-col>
 
-      <el-col :xs="12" :sm="12" :md="12" :lg="12" :xl="9">
-        <el-form-item>
+      <el-col :xs="12" :sm="12" :md="12" :lg="12" :xl="6">
+        <el-form-item prop="type">
           <span class="demonstration">输入时长</span>
           <el-input-number v-model="form.timeInterval"></el-input-number>
         </el-form-item>
       </el-col>
       <el-col :xs="12" :sm="12" :md="12" :lg="12" :xl="6">
-        <el-form-item>
+        <el-form-item prop="intervalUnit">
           <span class="demonstration">选择单位</span>
           <el-select v-model="form.intervalUnit" placeholder="请选择">
             <el-option
@@ -86,7 +93,7 @@
       </el-col>
 
       <el-col :xs="12" :sm="12" :md="12" :lg="12" :xl="6">
-        <el-form-item>
+        <el-form-item prop="model">
           <span class="demonstration">展示模型</span>
           <el-select v-model="form.model" placeholder="请选择">
             <el-option
@@ -112,6 +119,7 @@
     },
     data () {
       return {
+
         UnitOptions: [{
           value: 'day',
           label: '按天'
@@ -154,7 +162,7 @@
           value: 'bar',
           label: '柱状图'
         }],
-        selectedIndex: '',
+        selectedIndex: [],
         timeRange: [],
         form: {
           index: '',

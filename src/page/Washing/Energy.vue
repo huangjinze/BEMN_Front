@@ -43,7 +43,7 @@
 
     </div>
 
-    <el-col :span="24" v-show="step === 3"  id="methodSelect">
+    <el-row :span="24" v-show="step === 3"  id="methodSelect">
         <el-col class="select">
           请选择因变量自变量
           <el-button type="primary" size="small" @click="onAddVarClick" icon="el-icon-plus" id="plus">增加</el-button>
@@ -90,7 +90,7 @@
           <echart :options="item"></echart>
         </el-col>
       </el-row>
-    </el-col>
+    </el-row>
 
     <div v-if="step === 3">
       <i class="el-icon-success">数据QAQC完成</i>
@@ -114,6 +114,7 @@
   import ElButton from 'element-ui/packages/button/src/button'
   import ElInputNumber from 'element-ui/packages/input-number/src/input-number'
   import {checkWashingIndexRange, despiking, pca, Gapfill} from '../../model/data'
+  import {mapGetters} from 'vuex'
 
   export default {
     components: {
@@ -128,6 +129,11 @@
     props: {
       washing_form: {type: Object},
       indexes: {type: Array}
+    },
+    computed: {
+      ...mapGetters({
+        msg: 'GET_MSG'
+      })
     },
     data () {
       return {
@@ -221,7 +227,7 @@
             'domain': '通量数据',
             'year': this.washing_form.year,
             'station': this.washing_form.station,
-            'user_mail': '1103232282@qq.com',
+            'user_mail': this.msg[0][0].email,
             'z': this.form.z,
             'type': '能量'
           }).then((resp) => {
@@ -289,7 +295,7 @@
             'domain': '通量数据',
             'year': this.washing_form.year,
             'station': this.washing_form.station,
-            'user_mail': '1103232282@qq.com',
+            'user_mail': this.msg[0][0].email,
             'type': '能量'
           }).then((resp) => {
             this.loading = false
@@ -369,7 +375,7 @@
             'domain': '通量数据',
             'year': this.washing_form.year,
             'station': this.washing_form.station,
-            'user_mail': '1103232282@qq.com',
+            'user_mail': this.msg[0][0].email,
             'type': '能量',
             'variables': this.form.variables
           }).then((resp) => {
@@ -414,13 +420,13 @@
         this.loading = true
         return checkWashingIndexRange(
           {
-            'type': '碳通量',
+            'type': '能量',
             'data': this.form.range,
             'domain': '通量数据',
             'year': this.washing_form.year,
             'station': this.washing_form.station,
             'classification': '通量',
-            'user_mail': '1103232282@qq.com'
+            'user_mail': this.msg[0][0].email
           }).then((resp) => {
             if (resp.data.status === 'success') {
               console.log(resp)

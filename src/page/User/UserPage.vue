@@ -1,6 +1,5 @@
 <template>
     <BasePage>
-        <div slot="aside"><navi></navi></div>
         <div slot="main">
             <div>
                 <el-row>
@@ -326,8 +325,8 @@
           if (resp.data.status === 'success') {
             this.$alert('添加成功', {confirmButtonText: 'ok'})
             document.location.reload()
-          } else {
-            this.$alert('添加失败', {confirmButtonText: 'ok'})
+          } else if (resp.data.status === 'fail') {
+            this.$alert('添加失败,该邮箱已被占用', {confirmButtonText: 'ok'})
           }
         }).catch(resp => {
           this.$alert('网络差', '失败', {confirmButtonText: 'ok'})

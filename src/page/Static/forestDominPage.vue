@@ -1,8 +1,6 @@
 <!-- 该模块为:点击导航栏的“数据展示”->“森林生态”->“水文”等时，显示的页面内容-->
 <<template>
     <BasePage>
-        <div slot="header">header</div>
-        <div slot="aside"><navi></navi></div>
         <div slot="main">
             <headGuider :initTopPartTags="topPartTags" :initTopSiteTags="topSiteTags" :partTags="partTags" :siteTags="siteTags" @ClickPart="parentPartListen" @ClickSite="parentSiteListen"></headGuider>
             <indexChoice :indices="index" :col_name="colName" :tableData="tableData"></indexChoice>

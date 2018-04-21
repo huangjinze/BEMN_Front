@@ -1,7 +1,6 @@
 <!-- 该模块为:点击导航栏的“数据展示”->“通量数据领域”->“数据展示”时，显示的页面内容，注意，与forestDominPage.vue共用一套子组件-->
 <<template>
     <BasePage>
-        <div slot="aside"><navi></navi></div>
         <div slot="main">
           <topIndexSelect :initTopPartTags="stationName" :initTopSiteTags="className" ref="profile" :indices="index" :indexTags="indexTags" @ClickTower="parentStationListen" @ClickClass="parentClassListen" @ClickIndex="parentTabListen" @CloseStation="CloseStationListen" @CloseClass="CloseClassListen"></topIndexSelect>
           <dataManager v-if="index[0].flag == 4" :showSelect="showSelect" :navs="navs" :totalSize="totalSize" @changePage="changeDataByPage" v-on:selectValue="Svalue"></dataManager>
@@ -21,10 +20,10 @@ export default {
   data () {
     return {
       stationName: [
-        '奥林匹克'
+        ''
       ],
       className: [
-        '通量'
+        ''
       ],
       stations: [],
       classes: [],
@@ -40,13 +39,19 @@ export default {
   },
   mounted: function () {
     getStation({domain: '通量数据'}).then(resp => {
-      let data = resp.data.data
-      this.index.splice(0, this.index.length)
-      this.index.push({ text: '选择站点', flag: 1 })
-      for (var i = 0; i < data.length; i++) {
-        this.indexTags.push({ text: data[i], id: i + 1 })
+      if (resp.data.status === 'fail') {
+        this.$alert('抱歉，您暂时没有管理的站点！', {confirmButtonText: 'ok'})
+        // this.stationName = ['']
+        // this.className = ['']
+      } else {
+        let data = resp.data.data
+        this.index.splice(0, this.index.length)
+        this.index.push({ text: '选择站点', flag: 1 })
+        for (var i = 0; i < data.length; i++) {
+          this.indexTags.push({ text: data[i], id: i + 1 })
+        }
+        this.stations = Array.from(this.indexTags)
       }
-      this.stations = Array.from(this.indexTags)
     }).catch(resp => {
       this.$alert('获取失败', '失败', {confirmButtonText: 'ok'})
     })
@@ -125,16 +130,17 @@ export default {
         var obj = this.navs.find(function (value, index, classes) { return value.label === category })
         this.$set(obj, 'mcols', cols)
         this.$set(obj, 'tableData', data.data)
-        this.Type = 'level1'
+//        this.Type = 'level1'
       }).catch(resp => {
         this.$alert('暂无此类别', {confirmButtonText: 'ok'})
-        this.Type = 'level1'
+//        this.Type = 'level1'
       })
     },
     Svalue: function (data) {
       console.log(data)
       this.Type = data
-      this.getTableData(0)
+//      this.changeDataByPage(0)
+      this.getTableData(1)
     }
   }
 }

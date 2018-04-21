@@ -5,6 +5,7 @@ import router from './router/index'
 import Vue from 'vue'
 import store from './store/index'
 import {currentUser, currentInfo} from './model/user'
+import 'vue2-animate/dist/vue2-animate.min.css'
 import {
   Pagination,
   Dialog,

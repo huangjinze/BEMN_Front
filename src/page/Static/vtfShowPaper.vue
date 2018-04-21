@@ -1,30 +1,32 @@
 <template>
-    <div slot="main" v-loading="loading">
+  <div  id="main-container">
+    <div v-loading="loading" id="main">
       <el-row v-if="showChart" id="headchart">
         <el-col :span="15">
-          <echart :options="lineMeta" style="width: 100%"></echart>
+          <echart :options="lineMeta" style="width: 100%" :theme="'dark'"></echart>
         </el-col>
         <el-col :span="7">
-          <indexList v-model="chooseIndex" :index-elements="indexesOptions"></indexList>
+          <indexList v-model="chooseIndex" :index-elements="indexesOptions" id="index_list_card" ></indexList>
         </el-col>
       </el-row>
       <el-row v-if="showChart" id="downchart">
         <el-col :span="6">
-        <echart :options="mapMeta" style="width: 100%" id="mapChart"></echart>
+          <echart :options="mapMeta" style="width: 100%" id="mapChart" :theme="'dark'"></echart>
         </el-col>
         <el-col :span="12">
-          <echart :options="pieMeta" style="width: 100%"></echart>
+          <echart :options="pieMeta" style="width: 100%" :theme="'dark'"></echart>
         </el-col>
         <el-col :span="6" >
-          <echart :options="barMeta" style="width: 100%"></echart>
+          <echart :options="barMeta" style="width: 100%" :theme="'dark'"></echart>
         </el-col>
 
       </el-row>
     </div>
+  </div>
+
 </template>
 
 <script>
-    import navi from '../../components/layout/navi'
     import chartForm from '../../components/echart/vftShowChart'
     import echart from 'vue-echarts'
     import {getVTFData, getVFTIndex} from '../../model/data'
@@ -32,19 +34,22 @@
     import chartGrid from '../../components/echart/chartGrid'
     import ElRow from 'element-ui/packages/row/src/row'
     import chinaJSON from '../../model/china.json'
+    import beijingJSON from '../../model/beijing'
     import indexList from '../../components/echart/indexList'
+
     console.log(chinaJSON)
 
     echart.registerMap('china', chinaJSON)
+    echart.registerMap('beijing', beijingJSON)
 
     export default {
       components: {
-        ElRow, echart, navi, chartForm, singleSelect, chartGrid, indexList
+        ElRow, echart, chartForm, singleSelect, chartGrid, indexList
       },
       name: 'vtfShowPaper',
       data () {
         return {
-          loading: true,
+          loading: false,
           element_name: 'es',
           barMeta: {},
           pieMeta: {},
@@ -98,22 +103,39 @@
             }
             let data = resp.data.data
             let linemeta = {
-
+              tooltip: {
+                trigger: 'axis',
+                position: function (pt) {
+                  return [pt[0], '100%']
+                }
+              },
               xAxis: [
                 {
                   type: 'category',
                   boundaryGap: false,
-                  data: this.date
+                  data: this.date,
+                  splitLine: {
+                    show: false
+                  },
+                  axisLabel: {
+                    textStyle: {
+                      color: 'white'
+                    }}
                 }
               ],
               yAxis: [
                 {
-                  type: 'value'
+                  type: 'value',
+                  boundaryGap: [0, '100%'],
+                  scale: true,
+                  splitLine: {
+                    show: true
+                  }
+
                 }
               ],
-              dataZoom: [
-                {show: true, type: 'inside'}
-              ],
+              animationDuration: 6000,
+              animationDurationUpdate: 6000,
               series: []
             }
             linemeta.xAxis[0].data = data[0].data.map((item) => {
@@ -122,28 +144,34 @@
             linemeta.series.push({
               name: data.name,
               type: 'line',
-              lineStyle: {
-                color: '#82ccdd'
+              smooth: true,
+              large: true,
+              symbol: 'none',
+              sampling: 'average',
+              itemStyle: {
+                normal: {
+                  color: 'rgb(255, 70, 131)'
+                }
               },
               areaStyle: {
                 normal: {
                   color: new echart.graphic.LinearGradient(0, 0, 0, 1, [{
                     offset: 0,
-                    color: '#82ccdd'
+                    color: 'rgb(255, 158, 68)'
                   }, {
                     offset: 1,
-                    color: '#1e3799'
+                    color: 'rgb(255, 70, 131)'
                   }])
-                }
-              },
-              data: data[0].sum_data.map((dataItem) => { return dataItem.y })
-            })
+                }},
+              data: data[0].sum_data.map((dataItem) => { return dataItem.y })})
             this.lineMeta = linemeta
+            this.loading = false
             console.log(data)
           })
         },
         getBarData: function () {
           let barmeta = {
+            animationDuration: 14000,
             tooltip: {
               trigger: 'axis',
               axisPointer: {            // 坐标轴指示器，坐标轴触发有效
@@ -151,7 +179,13 @@
               }
             },
             legend: {
-              data: ['MAX', 'MIN']
+              data: ['MAX', 'MIN'],
+              textStyle: {
+                color: 'white',
+                fontSize: 20,
+                fontFamily: 'Microsoft YaHei',
+                fontWeight: 'bolder'
+              }
             },
             grid: {
               left: '3%',
@@ -160,10 +194,30 @@
               containLabel: true
             },
             xAxis: {
-              type: 'value'
+              type: 'value',
+              show: false,
+              splitLine: {
+                show: false
+              },
+              axisLabel: {
+                show: false,
+                textStyle: {
+                  color: 'white',
+                  fontFamily: 'Microsoft YaHei'
+                }
+              }
             },
             yAxis: {
+              axisLabel: {
+                textStyle: {
+                  color: 'white',
+                  fontFamily: 'Microsoft YaHei'
+                }},
+              splitLine: {
+                show: false
+              },
               type: 'category',
+              axisTick: {show: false},
               data: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sept', 'Oct', 'Nov', 'Dec']
             },
             series: []
@@ -197,8 +251,22 @@
                   position: 'inside'
                 }
               },
+              animationEasing: 'elasticOut',
+              animationDelay: function (idx) {
+                return idx * 1
+              },
+              itemStyle: {normal: {
+                color: new echart.graphic.LinearGradient(0, 0, 1, 0, [{
+                  offset: 0,
+                  color: '#003366'
+                }, {
+                  offset: 1,
+                  color: 'rgba(1, 169, 255,0.6)'
+                }])
+              }},
               data: maxdata[0].data.map((dataItem) => { return dataItem.y })
             })
+            this.loading = false
           })
           getVTFData({
             domain: '通量数据',
@@ -229,8 +297,22 @@
                   position: 'inside'
                 }
               },
+              animationEasing: 'elasticOut',
+              animationDelay: function (idx) {
+                return idx * 1
+              },
+              itemStyle: {normal: {
+                color: new echart.graphic.LinearGradient(0, 0, 1, 0, [{
+                  offset: 0,
+                  color: 'rgb(255, 158, 68)'
+                }, {
+                  offset: 1,
+                  color: 'rgb(255, 70, 131)'
+                }])
+              }},
               data: minxdata[0].data.map((dataItem) => { return dataItem.y })
             })
+            this.loading = false
           })
           this.barMeta = barmeta
         },
@@ -382,8 +464,8 @@
                     }
                   },
                   data: [
-                    {value: getdata[0].data[0].y, name: '本月份'},
-                    {value: getdata[0].sum_data[11].y - getdata[0].data[0].y, name: '剩余月份'}
+                    {value: getdata[0].data[0].y, name: '本月份', itemStyle: {normal: {color: 'rgb(255, 158, 68)'}}},
+                    {value: getdata[0].sum_data[11].y - getdata[0].data[0].y, name: '剩余月份', itemStyle: {normal: {color: 'rgb(255, 70, 131)'}}}
                   ]
                 },
                 {
@@ -411,12 +493,12 @@
                     }
                   },
                   data: [
-                    {value: getdata[0].data[1].y, name: '本月份'},
-                    {value: getdata[0].sum_data[11].y - getdata[0].data[1].y, name: '剩余月份'}
+                    {value: getdata[0].data[1].y, name: '本月份', itemStyle: {normal: {color: 'rgb(255, 158, 68)'}}},
+                    {value: getdata[0].sum_data[11].y - getdata[0].data[1].y, name: '剩余月份', itemStyle: {normal: {color: 'rgb(255, 70, 131)'}}}
                   ]
                 },
                 {
-                  name: 'Ma',
+                  name: 'Mar',
                   type: 'pie',
                   center: ['40%', '40%'],
                   radius: ['15%', '21%'],
@@ -440,8 +522,8 @@
                     }
                   },
                   data: [
-                    {value: getdata[0].data[2].y, name: '本月份'},
-                    {value: getdata[0].sum_data[11].y - getdata[0].data[2].y, name: '剩余月份'}
+                    {value: getdata[0].data[2].y, name: '本月份', itemStyle: {normal: {color: 'rgb(255, 158, 68)'}}},
+                    {value: getdata[0].sum_data[11].y - getdata[0].data[2].y, name: '剩余月份', itemStyle: {normal: {color: 'rgb(255, 70, 131)'}}}
                   ]
                 },
                 {
@@ -469,8 +551,8 @@
                     }
                   },
                   data: [
-                    {value: getdata[0].data[3].y, name: '本月份'},
-                    {value: getdata[0].sum_data[11].y - getdata[0].data[3].y, name: '剩余月份'}
+                    {value: getdata[0].data[3].y, name: '本月份', itemStyle: {normal: {color: 'rgb(255, 158, 68)'}}},
+                    {value: getdata[0].sum_data[11].y - getdata[0].data[3].y, name: '剩余月份', itemStyle: {normal: {color: 'rgb(255, 70, 131)'}}}
                   ]
                 },
                 {
@@ -498,8 +580,8 @@
                     }
                   },
                   data: [
-                    {value: getdata[0].data[4].y, name: '本月份'},
-                    {value: getdata[0].sum_data[11].y - getdata[0].data[4].y, name: '剩余月份'}
+                    {value: getdata[0].data[4].y, name: '本月份', itemStyle: {normal: {color: 'rgb(255, 158, 68)'}}},
+                    {value: getdata[0].sum_data[11].y - getdata[0].data[4].y, name: '剩余月份', itemStyle: {normal: {color: 'rgb(255, 70, 131)'}}}
                   ]
                 },
                 {
@@ -527,8 +609,8 @@
                     }
                   },
                   data: [
-                    {value: getdata[0].data[5].y, name: '本月份'},
-                    {value: getdata[0].sum_data[11].y - getdata[0].data[5].y, name: '剩余月份'}
+                    {value: getdata[0].data[5].y, name: '本月份', itemStyle: {normal: {color: 'rgb(255, 158, 68)'}}},
+                    {value: getdata[0].sum_data[11].y - getdata[0].data[5].y, name: '剩余月份', itemStyle: {normal: {color: 'rgb(255, 70, 131)'}}}
                   ]
                 }, {
                   name: '访问来源',
@@ -555,8 +637,8 @@
                     }
                   },
                   data: [
-                    {value: getdata[0].data[6].y, name: '本月份'},
-                    {value: getdata[0].sum_data[11].y - getdata[0].data[6].y, name: '剩余月份'}
+                    {value: getdata[0].data[6].y, name: '本月份', itemStyle: {normal: {color: 'rgb(255, 158, 68)'}}},
+                    {value: getdata[0].sum_data[11].y - getdata[0].data[6].y, name: '剩余月份', itemStyle: {normal: {color: 'rgb(255, 70, 131)'}}}
                   ]
                 },
                 {
@@ -584,8 +666,8 @@
                     }
                   },
                   data: [
-                    {value: getdata[0].data[7].y, name: '本月份'},
-                    {value: getdata[0].sum_data[11].y - getdata[0].data[7].y, name: '剩余月份'}
+                    {value: getdata[0].data[7].y, name: '本月份', itemStyle: {normal: {color: 'rgb(255, 158, 68)'}}},
+                    {value: getdata[0].sum_data[11].y - getdata[0].data[7].y, name: '剩余月份', itemStyle: {normal: {color: 'rgb(255, 70, 131)'}}}
                   ]
                 },
                 {
@@ -613,8 +695,8 @@
                     }
                   },
                   data: [
-                    {value: getdata[0].data[8].y, name: '本月份'},
-                    {value: getdata[0].sum_data[11].y - getdata[0].data[8].y, name: '剩余月份'}
+                    {value: getdata[0].data[8].y, name: '本月份', itemStyle: {normal: {color: 'rgb(255, 158, 68)'}}},
+                    {value: getdata[0].sum_data[11].y - getdata[0].data[8].y, name: '剩余月份', itemStyle: {normal: {color: 'rgb(255, 70, 131)'}}}
                   ]
                 },
                 {
@@ -642,8 +724,8 @@
                     }
                   },
                   data: [
-                    {value: getdata[0].data[9].y, name: '本月份'},
-                    {value: getdata[0].sum_data[11].y - getdata[0].data[9].y, name: '剩余月份'}
+                    {value: getdata[0].data[9].y, name: '本月份', itemStyle: {normal: {color: 'rgb(255, 158, 68)'}}},
+                    {value: getdata[0].sum_data[11].y - getdata[0].data[9].y, name: '剩余月份', itemStyle: {normal: {color: 'rgb(255, 70, 131)'}}}
                   ]
                 },
                 {
@@ -671,8 +753,8 @@
                     }
                   },
                   data: [
-                    {value: getdata[0].data[10].y, name: '本月份'},
-                    {value: getdata[0].sum_data[11].y - getdata[0].data[10].y, name: '剩余月份'}
+                    {value: getdata[0].data[10].y, name: '本月份', itemStyle: {normal: {color: 'rgb(255, 158, 68)'}}},
+                    {value: getdata[0].sum_data[11].y - getdata[0].data[10].y, name: '剩余月份', itemStyle: {normal: {color: 'rgb(255, 70, 131)'}}}
                   ]
                 },
                 {
@@ -700,14 +782,15 @@
                     }
                   },
                   data: [
-                    {value: getdata[0].data[11].y, name: '本月份'},
-                    {value: getdata[0].sum_data[11].y - getdata[0].data[11].y, name: '剩余月份'}
+                    {value: getdata[0].data[11].y, name: '本月份', itemStyle: {normal: {color: 'rgb(255, 158, 68)'}}},
+                    {value: getdata[0].sum_data[11].y - getdata[0].data[11].y, name: '剩余月份', itemStyle: {normal: {color: 'rgb(255, 70, 131)'}}}
                   ]
                 }
               ]
             }
             console.log('data', getdata[0].data)
             this.pieMeta = piemeta
+            this.loading = false
           })
         },
         getIndex: function () {
@@ -727,7 +810,7 @@
               indexes = indexes.concat(resp.data.data[catI].index)
             }
             console.log('j', indexes)
-            this.indexesOptions = indexes.slice(0, 5)
+            this.indexesOptions = indexes.slice(0, 12)
 
             console.log('idnex', resp)
           }).catch((e) => {
@@ -751,30 +834,42 @@
         getIndexes: function () {
           this.loading = true
           let mapmeta = {
-            tooltip: {},
+            tooltip: {
+              trigger: 'item',
+              formatter: '{b}'
+            },
+            toolbox: {
+              show: true,
+              orient: 'vertical',
+              left: 'right',
+              top: 'center',
+              feature: {
+                dataView: {readOnly: false},
+                restore: {},
+                saveAsImage: {}
+              }
+            },
+            backgroundColor: 'rgba(51,51,51,1)',
             geo: {
-              map: 'china',
-              mapType: 'china',
+              map: 'beijing',
+              mapType: 'beijing',
+              layoutSize: 300,
+              layoutCenter: ['50%', '50%'],
               roam: true,
               label: {
                 normal: {
-                  show: true,
-                  textStyle: {
-                    color: 'F06C00'
-                  }
+                  areaColor: '#111',
+
+                  borderColor: 'rgba(100,149,237,1)'
                 }
               },
               itemStyle: {
                 normal: {
-                  borderColor: 'rgba(0, 0, 0, 0.2)'
+                  areaColor: 'rgba(14, 241, 242, 0.8)',
+                  borderColor: '#111'
                 },
                 emphasis: {
-                  areaColor: 'e0ffff',
-                  shadowOffsetX: 0,
-                  shadowOffsetY: 0,
-                  shadowBlur: 20,
-                  borderWidth: 0,
-                  shadowColor: 'e0ffff'
+                  areaColor: '#ff9a3c'
                 }
               }
             }
@@ -790,6 +885,32 @@
 <style scoped>
 #mapChart {
  float: left;
+  height: 300px;
+}
+
+#main-container {
+  background-color: rgba(51,51,51,1);
+  height: 1067px;
+}
+
+#index_list_card {
+  margin-top: 50px;
+}
+
+body {
+  display: block;
+}
+
+#headchart {
+  height: 600px
+}
+
+#downchart {
+  height: 467px;
+}
+
+#main {
+  min-height: 100%;
 }
 
 </style>

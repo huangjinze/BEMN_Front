@@ -1,9 +1,5 @@
 <template>
   <BasePage>
-    <div slot="header">header</div>
-    <div slot="aside">
-      <navi></navi>
-    </div>
     <div slot="main">
       <dataManager :navs="navs" @Click="dataExport" @changePage="dataSource">
       </dataManager>

@@ -1,8 +1,6 @@
 
 <template>
   <BasePage>
-    <div slot="header">header</div>
-    <div slot="aside"><navi></navi></div>
     <div slot="main" v-loading="loading">
       <el-row :span="24">
         <singleSelect v-model="station"></singleSelect>
@@ -144,11 +142,13 @@
             },
             animation: false,
             dataZoom: [
+              {show: true, type: 'inside'},
               {
                 show: true,
-                realtime: true
-              },
-              {show: true, type: 'inside'}
+                realtime: true,
+                xAxisIndex: [0],
+                type: 'slider'
+              }
             ],
             tooltip: {
               trigger: 'axis'
@@ -242,6 +242,5 @@
   #chart{
     text-align: center;
      margin-top: 20px;
-     z-index: -1;
    }
 </style>

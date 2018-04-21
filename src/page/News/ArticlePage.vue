@@ -1,8 +1,5 @@
 <template>
   <BasePage>
-    <div slot="aside">
-      <navi></navi>
-    </div>
     <div slot="main">
       <articles :options="options" :leftItems="leftItems" :rightBnts="rightBnts" :news="news" :totalSize="totalSize"
       @Submit="onSubmitW" @changeCategory="dataSource" @delete="dltNews" @edit="EditNews" :newContents="newContents"></articles>
@@ -67,12 +64,14 @@
         if (!content[0].id) {
           addNews({'newsTitle': content[0].title, 'newsContent': content[0].content, 'category': content[0].category}).then(resp => {
             this.$alert('成功发布新闻内容', '提示', {confirmButtonText: 'ok'})
+            this.dataSource()
           }).catch(resp => {
             this.$alert('网络差', '失败', {confirmButtonText: 'ok'})
           })
         } else {
           editNews({'getId': content[0].id, 'newsTitle': content[0].title, 'newsContent': content[0].content, 'category': content[0].category}).then(resp => {
             this.$alert('成功修改新闻内容', '提示', {confirmButtonText: 'ok'})
+            this.dataSource()
           }).catch(resp => {
             this.$alert('网络差', '失败', {confirmButtonText: 'ok'})
           })
