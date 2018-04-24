@@ -94,7 +94,7 @@
           }
 //          console.log(this.stations)
           this.form.station = resp.data.data[0]
-          this.getIndexes()
+          return this.getIndexes()
         }
       }).catch(resp => {
         this.$alert('获取失败', '失败', {confirmButtonText: 'ok'})
