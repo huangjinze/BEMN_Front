@@ -55,13 +55,12 @@
       ElInputNumber},
     name: 'rangeCheck',
     props: {
-      indexes: {type: Array},
-      input: {type: Array}
+      indexes: {type: Array}
     },
     data () {
       return {
         selectedIndexes: [],
-        showIndexes: this.input
+        showIndexes: []
       }
     },
     watch: {
