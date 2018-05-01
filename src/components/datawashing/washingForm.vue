@@ -70,9 +70,9 @@
           station: '盐池_1'
         },
         rules: {
-          year: [
-            { type: 'string', required: true, message: '请选择时间', trigger: 'blur' }
-          ]
+          // year: [
+          //   { type: 'string', required: true, message: '请选择时间', trigger: 'blur' }
+          // ]
         }
       }
     },

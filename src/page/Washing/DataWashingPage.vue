@@ -94,7 +94,7 @@
           }
 //          console.log(this.stations)
           this.form.station = resp.data.data[0]
-          this.getIndexes()
+          return this.getIndexes()
         }
       }).catch(resp => {
         this.$alert('获取失败', '失败', {confirmButtonText: 'ok'})
@@ -111,6 +111,7 @@
               station: this.form.station,
               classification: '通量'}).then(resp => {
                 this.loading = true
+                this.indexes.splice(0, this.indexes.length)
                 resp.data.data.map(item => {
                   let index = {
                     name: item.name,

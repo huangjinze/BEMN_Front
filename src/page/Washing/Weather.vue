@@ -1,6 +1,6 @@
 <template>
   <div  v-loading.fullscreen.lock="loading">
-    <el-steps :active="step" finish-status="success" simple>
+    <el-steps :active="step" finish-status="success" simple style="width: 82%!important;">
       <el-step title="1 范围检查"></el-step>
       <el-step title="2 去除峰值"></el-step>
       <el-step title="3 插补缺失"></el-step>
@@ -29,12 +29,12 @@
     </div>
 
     <div v-show="step === 2" id="methodSelect">
-        <el-col class="select">
+        <el-row class="select">
           请选择因变量自变量
           <el-button type="primary" size="small" @click="onAddVarClick" icon="el-icon-plus" id="plus">增加</el-button>
           <el-button type="danger" size="small" @click="onDeleteVarClick"  icon="el-icon-delete">删除</el-button>
-        </el-col>
-          <el-row :span="24" v-for="(item,index) in form.variables" :key="index+'varfor'">
+        </el-row>
+          <el-row :span="24" v-for="(item,index) in form.variables" :key="index+'varfor'"  style="margin-bottom: 15px;">
             <el-col :span="8">
               因变量:
               <el-select v-model="item.independent_var">
@@ -97,13 +97,16 @@
   import navi from '../../components/layout/navi'
   import washingForm from '../../components/datawashing/washingForm'
   import {mapGetters} from 'vuex'
+  import echart from 'vue-echarts'
 
   export default {
     components: {
       rangeCheck,
       BasePage,
       navi,
-      washingForm},
+      washingForm,
+      echart
+    },
     name: 'Weather',
     props: {
       washing_form: {type: Object},

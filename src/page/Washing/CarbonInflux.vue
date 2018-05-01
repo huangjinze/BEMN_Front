@@ -1,7 +1,7 @@
 <template>
   <div  v-loading.fullscreen.lock="loading" id="dataWashing">
     <el-col :span="24">
-      <el-steps :active="step" finish-status="success" simple>
+      <el-steps :active="step" finish-status="success" simple style="width: 82%!important;">
         <el-step title="1 范围检查"></el-step>
         <el-step title="2 去除峰值"></el-step>
         <el-step title="3 存储通量"></el-step>
@@ -11,6 +11,7 @@
     </el-col>
 
     <div v-show="step === 0">
+      <!--范围检查-->
       <el-col id="rangeCheck">
           <rangeCheck
                   :indexes="indexes"
@@ -20,6 +21,7 @@
     </div>
 
     <el-col :span="24" v-if="step === 1" id="zValue">
+      <!--峰值去除-->
       z值：
       <el-input-number v-model="form.z">
 
@@ -49,6 +51,7 @@
     </el-col>
 
     <el-col :span="24" v-if="step === 3">
+      <!--U*-->
 
       <echart :options="chartUMetaData"></echart>
       <span><el-input-number v-model="form.u"></el-input-number></span>
@@ -171,8 +174,8 @@
           yAxis: {},
           series: []
         },
-        chartIndexesMetaList: [],
-        adjustChartShow: false
+        chartIndexesMetaList: [], // 逐个指标的图标
+        adjustChartShow: false  //
       }
     },
     watch: {
@@ -194,7 +197,6 @@
             'type': '碳通量',
             'ustarc': this.form.u
           }).then((resp) => {
-            this.loading = false
             console.log('net', resp)
             if (resp.data.status !== 'success') {
               this.$alert(resp.data.reason, '失败', {confirmButtonText: 'ok'})
@@ -270,6 +272,7 @@
         this.step = this.step + 1
       },
       onNextClick () {
+        // 此处理解成 step 页面下一步点击的时候干什么
         this.loading = true
 
         if (this.step === 0) {
@@ -319,7 +322,6 @@
 
                 return meta
               })
-              this.loading = false
             })
         }
 
@@ -595,7 +597,6 @@
             this.chartMetaDataUAdjust = Object.assign(this.chartMetaDataUAdjust, data)
           }
         }).catch(() => {
-          this.loading = false
           this.step = this.step - 1
           alert('网络差')
         })
@@ -621,7 +622,6 @@
               alert(resp.data.reason)
             }
           }).catch(() => {
-            this.loading = false
             this.step = this.step - 1
             alert('网络差')
           })
