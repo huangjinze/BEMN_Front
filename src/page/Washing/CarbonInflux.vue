@@ -1,7 +1,7 @@
 <template>
   <div  v-loading.fullscreen.lock="loading" id="dataWashing">
     <el-col :span="24">
-      <el-steps :active="step" finish-status="success" simple>
+      <el-steps :active="step" finish-status="success" simple style="width: 82%!important;">
         <el-step title="1 范围检查"></el-step>
         <el-step title="2 去除峰值"></el-step>
         <el-step title="3 存储通量"></el-step>
@@ -390,8 +390,6 @@
             this.step = this.step - 1
             this.loading = false
             alert('网络差')
-          }).finally(() => {
-            this.loading = false
           })
         }
 
@@ -621,13 +619,11 @@
               return resp
             } else {
               this.step = this.step - 1
-              alert(resp.reason)
+              alert(resp.data.reason)
             }
           }).catch(() => {
             this.step = this.step - 1
             alert('网络差')
-          }).finally(() => {
-            this.loading = false
           })
       }
     }
