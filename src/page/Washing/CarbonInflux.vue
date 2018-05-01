@@ -322,6 +322,11 @@
 
                 return meta
               })
+              this.loading = false
+            }).catch(() => {
+              this.step = this.step - 1
+              this.loading = false
+              alert('网络差')
             })
         }
 
