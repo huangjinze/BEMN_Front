@@ -539,7 +539,7 @@
             'station': this.washing_form.station,
             'user_mail': this.msg[0][0].email,
             'type': '碳通量',
-            'method': this.method
+            'variables': this.form.variables
           }).then((resp) => {
             this.loading = false
             if (resp.data.status === 'success') {
