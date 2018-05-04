@@ -149,6 +149,7 @@
         if (this.step === 0) {
           this.postIndexes().then(
             (resp) => {
+              this.loading = false
               this.chartIndexesMetaList.splice(0, this.chartIndexesMetaList.length)
               this.chartIndexesMetaList = resp.data.data.map((perIndex) => {
                 let meta = {
@@ -317,6 +318,7 @@
             'station': this.washing_form.station,
             'user_mail': this.msg[0][0].email
           }).then((resp) => {
+            this.loading = false
             if (resp.data.status === 'success') {
               console.log(resp)
               return resp

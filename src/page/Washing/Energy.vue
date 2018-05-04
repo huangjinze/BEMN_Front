@@ -304,6 +304,7 @@
               this.step = this.step - 1
               this.$alert(resp.data.reason, '失败', {confirmButtonText: 'ok'})
             } else {
+              this.loading = false
               if (resp.data.data.length !== 0) {
                 data.xAxis.data = resp.data.data[0].data.map((item) => {
                   return item.x
@@ -363,6 +364,7 @@
                 return meta
               })
             }
+            this.loading = false
           }).catch(() => {
             this.step = this.step - 1
             this.loading = false
@@ -429,6 +431,7 @@
             'user_mail': this.msg[0][0].email
           }).then((resp) => {
             if (resp.data.status === 'success') {
+              this.loading = false
               console.log(resp)
               return resp
             } else {
