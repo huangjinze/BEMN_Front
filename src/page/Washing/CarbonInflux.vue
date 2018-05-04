@@ -201,6 +201,7 @@
             if (resp.data.status !== 'success') {
               this.$alert(resp.data.reason, '失败', {confirmButtonText: 'ok'})
             } else {
+              this.loading = false
               if (resp.data.data.length !== 0) {
                 data.xAxis.data = resp.data.data[0].data.map((item) => {
                   return item.x
@@ -342,6 +343,7 @@
             'type': '碳通量'
           }).then((resp) => {
             if (resp.data.status === 'success') {
+              this.loading = false
               console.log(resp)
               this.chartIndexesMetaList.splice(0, this.chartIndexesMetaList.length)
               this.chartIndexesMetaList = resp.data.data.map((perIndex) => {
@@ -409,6 +411,7 @@
           }).then((resp) => {
             this.loading = false
             if (resp.data.status === 'success') {
+              this.loading = false
               console.log(resp)
               this.chartIndexesMetaList.splice(0, this.chartIndexesMetaList.length)
               this.chartIndexesMetaList = resp.data.data.map((perIndex) => {
@@ -474,6 +477,7 @@
             this.loading = false
             if (resp.data.status === 'success') {
               console.log(resp)
+              this.loading = false
               this.chartIndexesMetaList.splice(0, this.chartIndexesMetaList.length)
               this.chartIndexesMetaList = resp.data.data.map((perIndex) => {
                 let meta = {
@@ -539,6 +543,7 @@
           }).then((resp) => {
             this.loading = false
             if (resp.data.status === 'success') {
+              this.loading = false
               console.log(resp)
               alert(resp.data.data[0])
             } else {
@@ -585,6 +590,7 @@
             this.step = this.step - 1
             this.$alert(resp.data.reason, '失败', {confirmButtonText: 'ok'})
           } else {
+            this.loading = false
             if (resp.data.data.length !== 0) {
               data.xAxis.data = resp.data.data[0].data.map((item) => {
                 return item.x
@@ -620,6 +626,7 @@
             'user_mail': this.msg[0][0].email
           }).then((resp) => {
             if (resp.data.status === 'success') {
+              this.loading = false
               console.log(resp)
               return resp
             } else {
