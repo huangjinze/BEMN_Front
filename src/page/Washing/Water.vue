@@ -274,8 +274,7 @@
             'year': this.washing_form.year,
             'station': this.washing_form.station,
             'user_mail': this.msg[0][0].email,
-            'type': '水',
-            'variables': this.form.variables
+            'type': '水'
           }).then((resp) => {
             this.loading = false
             if (resp.data.status === 'success') {
