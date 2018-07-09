@@ -13,7 +13,7 @@
           <el-button @click="onDrawClick" type="primary" icon="el-icon-edit">绘制</el-button>
         </el-col>
         <el-row v-if="showChart" id="chart">
-          <el-col :span="20" >
+          <el-col :span="24" >
             <echart :options="chartMeta" style="width: 100%"></echart>
           </el-col>
           <!--<el-col >-->
@@ -116,9 +116,10 @@
             this.loading = false
             return
           }
+          console.log('first', resp)
           let data = resp.data.data
 
-          console.log('first', data)
+          console.log('second', data)
 
           let meta = {
             title: {
@@ -165,10 +166,10 @@
               }],
             series: []
           }
+          console.log(data)
           meta.xAxis[0].data = data[0].data.map((item) => {
             return item.x
           })
-          console.log(data)
           meta.series = data.map((perData) => {
             this.gridData.push(perData.stats_data)
             if (this.formValue.type === 'scatter') {

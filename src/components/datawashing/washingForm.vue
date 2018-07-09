@@ -42,17 +42,17 @@
     </el-form-item>
   </el-col>
 
-  <el-col :xs="24" :sm="12" :md="6" :lg="6">
-    <el-form-item>
-      <el-upload
-              class="upload-demo"
-              action=""
-              :file-list="filelist"
-              @on-change="onFileChange">
-        <el-button size="medium" type="primary">点击上传</el-button>
-      </el-upload>
-    </el-form-item>
-  </el-col>
+  <!--<el-col :xs="24" :sm="12" :md="6" :lg="6">-->
+    <!--<el-form-item>-->
+      <!--<el-upload-->
+              <!--class="upload-demo"-->
+              <!--action=""-->
+              <!--:file-list="filelist"-->
+              <!--@on-change="onFileChange">-->
+        <!--<el-button size="medium" type="primary">点击上传</el-button>-->
+      <!--</el-upload>-->
+    <!--</el-form-item>-->
+  <!--</el-col>-->
 
 </el-form>
 </template>
@@ -87,9 +87,8 @@
       classifications: {type: Array,
         default: () => {
           return [{label: '碳通量', value: 'co2'},
-          {label: '水', value: 'water'},
-          {label: '气象', value: 'weather'},
-          {label: '能量', value: 'energy'}]
+          {label: '气象与其他通量', value: 'weather'},
+          {label: '能量与水', value: 'energy'}]
         }
       },
       input: {type: Object},

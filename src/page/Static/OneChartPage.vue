@@ -2,17 +2,17 @@
 <div v-loading.fullscreen.lock="loading">
 <div v-if="showChart">
   <el-row v-for="(item, index) in chartMetaList" :key="'chart_key'+index">
-    <el-col :span="18" :offset="3">
-      <echart :options="item"></echart>
+    <el-col>
+      <echart :options="item"  style="width: 100%"></echart>
     </el-col>
   </el-row>
 
   <el-row>
     <el-col :span="1" :offset="10">
-      <el-button type="primary">确认</el-button>
+      <el-button type="primary" v-on:click="onConfirmClick">确认</el-button>
     </el-col>
     <el-col :span="1" :offset="1">
-      <el-button type="danger">放弃</el-button>
+      <el-button type="danger" v-on:click="onCancleClick">放弃</el-button>
     </el-col>
   </el-row>
 </div>
@@ -136,10 +136,10 @@
     },
     methods: {
       onConfirmClick: function () {
-
+        this.$router.push({path: '/'})
       },
       onCancleClick: function () {
-
+        this.$router.push({path: '/washing'})
       }
     }
   }

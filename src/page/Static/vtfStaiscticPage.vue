@@ -125,7 +125,7 @@ export default {
           return
         }
         let data = resp.data.data
-
+        console.log(resp.data)
         let meta = {
           title: {
             text: data[0].name + '数据'

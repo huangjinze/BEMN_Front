@@ -7,7 +7,7 @@
     </el-steps>
 
     <div v-show="step === 0">
-      <el-col id="rangeCheck">
+      <el-col id="rangeCheck" ref="Graph">
         <rangeCheck
           :indexes="indexes"
           v-model="form.range">
@@ -20,62 +20,64 @@
       <el-input-number v-model="form.z">
 
       </el-input-number>
+      <el-button @click="drawDespiking">绘图</el-button>
 
       <el-row v-for="(item, index) in chartIndexesMetaList" :key="'chart_key'+index">
-        <el-col :span="18" :offset="3">
-          <echart :options="item"></echart>
+        <el-col>
+          <echart :options="item" style="width:100%"></echart>
         </el-col>
       </el-row>
     </div>
 
-    <div v-show="step === 2" id="methodSelect">
-        <el-row class="select">
-          请选择因变量自变量
-          <el-button type="primary" size="small" @click="onAddVarClick" icon="el-icon-plus" id="plus">增加</el-button>
-          <el-button type="danger" size="small" @click="onDeleteVarClick"  icon="el-icon-delete">删除</el-button>
-        </el-row>
-          <el-row :span="24" v-for="(item,index) in form.variables" :key="index+'varfor'"  style="margin-bottom: 15px;">
-            <el-col :span="8">
-              因变量:
-              <el-select v-model="item.independent_var">
-                <el-option
-                        v-for="item in form.range"
-                        :key="item.name+'independent'"
-                        :label="item.name"
-                        :value="item.name">
-                </el-option>
-              </el-select>
-            </el-col>
-            <el-col :span="8">
-              自变量:
-              <el-select v-model="item.dependent_var">
-                <el-option
-                        v-for="item in form.range"
-                        :key="item.name+'ubd'"
-                        :label="item.name"
-                        :value="item.name">
-                </el-option>
-              </el-select>
-            </el-col>
-            <el-col :span="8">
-              插补方法选择 ：
-              <el-select v-model="item.method">
-                <el-option
-                        v-for="item in interpolationOptions"
-                        :key="item.label"
-                        :label="item.label"
-                        :value="item.value">
-                </el-option>
-              </el-select>
-            </el-col>
-          </el-row>
-
-      <el-row v-for="(item, index) in chartIndexesMetaList" :key="'chart_key'+index">
-        <el-col :span="18" :offset="3">
-          <echart :options="item"></echart>
+    <el-col :span="24" v-show="step === 2" id="methodSelect">
+      <el-row class="select">
+        请选择因变量自变量
+        <el-button type="primary" size="small" @click="onAddVarClick" icon="el-icon-plus" id="plus">增加</el-button>
+        <el-button type="danger" size="small" @click="onDeleteVarClick"  icon="el-icon-delete">删除</el-button>
+      </el-row>
+      <br /> <br />
+      <el-row v-for="(item,index) in form.variables" :key="index+'varfor'"  style="margin-bottom: 15px;">
+        <el-col :span="8">
+          因变量:
+          <el-select v-model="item.independent_var">
+            <el-option
+                    v-for="item in form.range"
+                    :key="item.name+'independent'"
+                    :label="item.name"
+                    :value="item.name">
+            </el-option>
+          </el-select>
+        </el-col>
+        <el-col :span="8">
+          自变量:
+          <el-select v-model="item.dependent_var">
+            <el-option
+                    v-for="item in form.range"
+                    :key="item.name+'ubd'"
+                    :label="item.name"
+                    :value="item.name">
+            </el-option>
+          </el-select>
+        </el-col>
+        <el-col :span="8">
+          插补方法选择 ：
+          <el-select v-model="item.method">
+            <el-option
+                    v-for="item in interpolationOptions"
+                    :key="item.label"
+                    :label="item.label"
+                    :value="item.value">
+            </el-option>
+          </el-select>
         </el-col>
       </el-row>
-    </div>
+
+      <el-row v-for="(item, index) in chartIndexesMetaList" :key="'chart_key'+index">
+        <el-col :span="24">
+          <echart :options="item" :style="{width: GraphWidth + 'px'}"></echart>
+        </el-col>
+      </el-row>
+    </el-col>
 
     <div v-if="step === 3">
       <i class="el-icon-success">数据QAQC完成</i>
@@ -131,7 +133,8 @@
         },
         m_indexes: this.indexes,
         chartIndexesMetaList: [],
-        interpolationOptions: [{label: '内插', value: '内插'}, {label: '外插', value: '外插'}]
+        GraphWidth: 800,
+        interpolationOptions: [{label: '内插', value: '内插'}]
       }
     },
     watch: {
@@ -141,6 +144,11 @@
           this.form.range.splice(0, this.form.range.length)
         }
       }
+    },
+    mounted () {
+      this.$nextTick(() => {
+        this.GraphWidth = this.$refs.Graph.$el.clientWidth
+      })
     },
     methods: {
       onNextClick () {
@@ -337,6 +345,73 @@
       },
       onDeleteVarClick () {
         this.form.variables.pop()
+      },
+      drawDespiking () {
+        this.loading = true
+        despiking({
+          'data': this.form.range,
+          'domain': '通量数据',
+          'year': this.washing_form.year,
+          'station': this.washing_form.station,
+          'user_mail': this.msg[0][0].email,
+          'z': this.form.z,
+          'type': '气象'
+        }).then((resp) => {
+          this.loading = false
+          if (resp.data.status === 'success') {
+            console.log(resp)
+            this.chartIndexesMetaList.splice(0, this.chartIndexesMetaList.length)
+            this.chartIndexesMetaList = resp.data.data.map((perIndex) => {
+              let meta = {
+                title: {
+                  text: perIndex.index + '数据'
+                },
+                grid: {
+                  left: '3%',
+                  right: '4%',
+                  bottom: '3%',
+                  containLabel: true
+                },
+                legend: {
+                  data: []
+                },
+                animation: false,
+                dataZoom: [
+                  {show: true, type: 'inside'}
+                ],
+                tooltip: {
+                  trigger: 'axis'
+                },
+                xAxis: [{
+                  boundaryGap: false
+                }],
+                yAxis: [{ type: 'value' }],
+                series: []
+              }
+              meta.xAxis[0].data = perIndex.data.map((perData) => { return perData.x })
+
+              meta.series.push({
+                name: '原始数据',
+                symbolSize: 3,
+                large: true,
+                type: 'scatter',
+                data: perIndex.data.map((dataItem) => { return dataItem.y })
+              })
+              meta.legend.data.push('原始数据')
+
+              console.log('填充', meta.xAxis)
+
+              return meta
+            })
+          } else {
+            this.step = this.step - 1
+            alert(resp.data.reason)
+          }
+        }).catch(() => {
+          this.loading = false
+          this.step = this.step - 1
+          alert('网络差')
+        })
       }
     }
   }

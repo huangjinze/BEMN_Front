@@ -22,8 +22,8 @@
       </el-input-number>
 
       <el-row v-for="(item, index) in chartIndexesMetaList" :key="'chart_key'+index">
-        <el-col :span="18" :offset="3">
-          <echart :options="item"></echart>
+        <el-col :span="24">
+          <echart :options="item"  style="width: 100%"></echart>
         </el-col>
       </el-row>
     </el-col>
@@ -74,7 +74,7 @@
 
         <el-row v-for="(item, index) in chartIndexesMetaList" :key="'chart_key'+index">
           <el-col :span="18" :offset="3">
-            <echart :options="item"></echart>
+            <echart :options="item" style="width: 100%"></echart>
           </el-col>
         </el-row>
       </div>
