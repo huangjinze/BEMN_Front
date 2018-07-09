@@ -1,6 +1,5 @@
 import axios from 'axios'
 
-
 export const host = 'http://211.31.175.157:10080'
 // export const host = 'http://bemnwork'
 export const getVFTIndex = params => { return axios.get(host + '/station/vft/getIndexes', {'params': params}) }
