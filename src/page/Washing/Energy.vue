@@ -21,6 +21,10 @@
       <el-input-number v-model="form.z">
       </el-input-number>
 
+      <el-row>
+        <el-button @click="drawDespiking">绘图</el-button>
+      </el-row>
+
       <el-row v-for="(item, index) in chartIndexesMetaList" :key="'chart_key'+index">
         <el-col :span="18" :offset="3">
           <echart :options="item"></echart>
@@ -222,71 +226,7 @@
         }
 
         if (this.step === 1) {
-          despiking({
-            'data': this.form.range,
-            'domain': '通量数据',
-            'year': this.washing_form.year,
-            'station': this.washing_form.station,
-            'user_mail': this.msg[0][0].email,
-            'z': this.form.z,
-            'type': '能量'
-          }).then((resp) => {
-            this.loading = false
-            if (resp.data.status === 'success') {
-              console.log(resp)
-              this.chartIndexesMetaList.splice(0, this.chartIndexesMetaList.length)
-              this.chartIndexesMetaList = resp.data.data.map((perIndex) => {
-                let meta = {
-                  title: {
-                    text: perIndex.index + '数据'
-                  },
-                  grid: {
-                    left: '3%',
-                    right: '4%',
-                    bottom: '3%',
-                    containLabel: true
-                  },
-                  legend: {
-                    data: []
-                  },
-                  animation: false,
-                  dataZoom: [
-                    {show: true, type: 'inside'}
-                  ],
-                  tooltip: {
-                    trigger: 'axis'
-                  },
-                  xAxis: [{
-                    boundaryGap: false
-                  }],
-                  yAxis: [{ type: 'value' }],
-                  series: []
-                }
-                meta.xAxis[0].data = perIndex.data.map((perData) => { return perData.x })
-
-                meta.series.push({
-                  name: '原始数据',
-                  symbolSize: 3,
-                  large: true,
-                  type: 'scatter',
-                  data: perIndex.data.map((dataItem) => { return dataItem.y })
-                })
-                meta.legend.data.push('原始数据')
-
-                console.log('填充', meta.xAxis)
-
-                return meta
-              })
-            } else {
-              this.step = this.step - 1
-              alert(resp.data.reason)
-            }
-            this.loading = false
-          }).catch(() => {
-            this.step = this.step - 1
-            this.loading = false
-            alert('网络差')
-          })
+          this.drawDespiking()
         }
 
         if (this.step === 2) {
@@ -450,6 +390,73 @@
       },
       onDeleteVarClick () {
         this.form.variables.pop()
+      },
+      drawDespiking () {
+        despiking({
+          'data': this.form.range,
+          'domain': '通量数据',
+          'year': this.washing_form.year,
+          'station': this.washing_form.station,
+          'user_mail': this.msg[0][0].email,
+          'z': this.form.z,
+          'type': '能量'
+        }).then((resp) => {
+          this.loading = false
+          if (resp.data.status === 'success') {
+            console.log(resp)
+            this.chartIndexesMetaList.splice(0, this.chartIndexesMetaList.length)
+            this.chartIndexesMetaList = resp.data.data.map((perIndex) => {
+              let meta = {
+                title: {
+                  text: perIndex.index + '数据'
+                },
+                grid: {
+                  left: '3%',
+                  right: '4%',
+                  bottom: '3%',
+                  containLabel: true
+                },
+                legend: {
+                  data: []
+                },
+                animation: false,
+                dataZoom: [
+                  {show: true, type: 'inside'}
+                ],
+                tooltip: {
+                  trigger: 'axis'
+                },
+                xAxis: [{
+                  boundaryGap: false
+                }],
+                yAxis: [{ type: 'value' }],
+                series: []
+              }
+              meta.xAxis[0].data = perIndex.data.map((perData) => { return perData.x })
+
+              meta.series.push({
+                name: '原始数据',
+                symbolSize: 3,
+                large: true,
+                type: 'scatter',
+                data: perIndex.data.map((dataItem) => { return dataItem.y })
+              })
+              meta.legend.data.push('原始数据')
+
+              console.log('填充', meta.xAxis)
+
+              return meta
+            })
+          } else {
+            this.step = this.step - 1
+            alert(resp.data.reason)
+          }
+          this.loading = false
+        }).catch(() => {
+          this.step = this.step - 1
+          this.loading = false
+          alert('网络差')
+        })
       }
     }
   }
