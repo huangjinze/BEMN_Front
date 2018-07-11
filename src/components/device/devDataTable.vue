@@ -5,6 +5,7 @@
         <el-table
                 :data="tableData"
                 height="500"
+                size="medium"
                 style="width: 100%"
                 :cell-style="cellStyle"
                 @cell-click="cellClick">
@@ -46,12 +47,12 @@
             <el-table-column
                     prop="device"
                     label="设备名"
-                    width="300">
+                    width="400">
             </el-table-column>
             <el-table-column
                     prop="className"
                     label="类别名"
-                    width="300">
+                    width="400">
                 <template slot-scope="scope">
                     <el-tag
                             :key="item"
@@ -63,11 +64,12 @@
             <el-table-column
                     prop="status"
                     label="设备状态"
-                    width="300">
+                    width="400">
             </el-table-column>
-            <el-table-column label="操作" width="250">
+            <el-table-column label="操作" width="300">
                 <template slot-scope="scope">
                     <el-button size="medium" @click="handleEdit(scope.row)" plain>修改</el-button>
+                  <el-button type="warning" @click="handleDelete(scope.row)" plain>删除</el-button>
                 </template>
             </el-table-column>
         </el-table>
@@ -121,6 +123,9 @@
         },
         addDevice () {
           this.$emit('addInfoDialog')
+        },
+        handleDelete (row) {
+          this.$emit('deleteClick', row.device_id)
         }
       },
       name: 'devDataTable'

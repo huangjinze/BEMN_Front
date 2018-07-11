@@ -6,6 +6,20 @@
       <!--<indexSelect :indices="index" :indexTags="indexTags" @ClickIndexClass="parentIndexClassListen" @ClickIndex="parentIndexListen"></indexSelect>-->
       <topIndexSelect :initTopPartTags="stationName" :initTopSiteTags="className" ref="profile" :indices="index" :indexTags="indexTags" @ClickIndexClass="parentIndexClassListen" @ClickTower="parentStationListen" @ClickClass="parentClassListen" @ClickIndex="parentIndexListen" @CloseStation="CloseStationListen" @CloseClass="CloseClassListen"></topIndexSelect>
       <dataImport :stationList="stations" :classList="dataImport_classList" @twoSelect="twoSelect" @selectStation="select_station"  @ClicktableData="onClickDataTable" @ClicktableMonth="onClickMonthTable" @ClickvalueData="onClickDataValue" @ClickvalueMonth="onClickMonthValue" :upLoadUrl="upLoadUrl" ></dataImport>
+      <el-card class="box-card" shadow="hover" style="width:20%;position: absolute;top: 37%;right: 1%">
+        <div slot="header" class="clearfix">
+          <span>批量导入导出——指标列表</span>
+
+        </div>
+        <div  class="text item" style="width: 100%">
+          <el-tag closable
+                  v-for="tag in factorTags"
+                  :key="tag.text"
+                  :type="tag.type"
+                  @close="handleFactorTagClose(tag)"
+          style="margin: 5px">{{tag.text}}</el-tag>
+        </div>
+      </el-card>
     </div>
   </BasePage>
 </template>
@@ -41,7 +55,8 @@
         index: [],
         allIndexTags: new Map(),
         indexTags: [],
-        dataImport_classList: []
+        dataImport_classList: [],
+        factorTags: []
       }
     },
     mounted: function () {
@@ -116,6 +131,9 @@
       parentIndexListen (id) {
         let temp = this.indexTags.find(function (value, index, classes) { return value.id === id })
         this.indexName[0] = temp.text
+        if (!this.factorTags.find(function (value, index, classes) { return value.text === temp.text })) {
+          this.factorTags.push({ text: temp.text, type: 'success', class: this.className[0] })
+        }
       },
       CloseStationListen () {
         this.index.splice(0, this.index.length)
@@ -136,11 +154,15 @@
           let dataType = DataTable[2]
           let domain = '通量数据'
           let stationName = this.stationName[0]
-          let className = this.className[0]
-          let indexName = this.indexName[0]
+          let className = []
+          var factorList = []
+          for (var factor of this.factorTags) {
+            factorList.push(factor['text'])
+            className.push(factor['class'])
+          }
           showExport({domain: domain,
             station_name: stationName,
-            clickIndex: indexName,
+            clickIndex: factorList,
             startTime: startDate,
             endTime: endDate,
             dataType: dataType,
@@ -170,11 +192,15 @@
           let dataType = MonthTable[2]
           let domain = '通量数据'
           let stationName = this.stationName[0]
-          let className = this.className[0]
-          let indexName = this.indexName[0]
+          let className = []
+          var factorList = []
+          for (var factor of this.factorTags) {
+            factorList.push(factor['text'])
+            className.push(factor['class'])
+          }
           compareExport({domain: domain,
             station_name: stationName,
-            clickIndex: indexName,
+            clickIndex: factorList,
             startTime: startDate,
             endTime: endDate,
             dataType: dataType,
@@ -204,11 +230,15 @@
           let dataType = DataValue[2]
           let domain = '通量数据'
           let stationName = this.stationName[0]
-          let className = this.className[0]
-          let indexName = this.indexName[0]
+          var factorList = []
+          let className = []
+          for (var factor of this.factorTags) {
+            factorList.push(factor['text'])
+            className.push(factor['class'])
+          }
           showStatistics({domain: domain,
             station_name: stationName,
-            clickIndex: indexName,
+            clickIndex: factorList,
             startTime: startDate,
             endTime: endDate,
             dataType: dataType,
@@ -238,11 +268,15 @@
           let dataType = MonthValue[2]
           let domain = '通量数据'
           let stationName = this.stationName[0]
-          let className = this.className[0]
-          let indexName = this.indexName[0]
+          var factorList = []
+          let className = []
+          for (var factor of this.factorTags) {
+            factorList.push(factor['text'])
+            className.push(factor['class'])
+          }
           compareStatistics({domain: domain,
             station_name: stationName,
-            clickIndex: indexName,
+            clickIndex: factorList,
             startTime: startDate,
             endTime: endDate,
             dataType: dataType,
@@ -288,6 +322,10 @@
         }).catch(resp => {
           this.$alert('上传失败', '失败', {confirmButtonText: 'ok'})
         })
+      },
+      handleFactorTagClose (tag) {
+        console.log(this.factorTags.indexOf(tag))
+        this.factorTags.splice(this.factorTags.indexOf(tag), 1)
       }
     }
   }

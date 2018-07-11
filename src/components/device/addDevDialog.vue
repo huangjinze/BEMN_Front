@@ -71,57 +71,59 @@
                     <el-button @click="formReset('form')">重置</el-button>
                 </el-form-item>
             </el-form>
-            <el-dialog
-                    width="30%"
-                    :title="tagInfoDialogTitle"
-                    :visible.sync="innerVisible"
-                    append-to-body>
-                <el-form :model="innerForm" ref="innerForm" label-width="80px" size="small">
-                    <el-form-item prop="academic_name" label="指标学名">
-                        <el-input v-model="innerForm.academic_name" placeholder="指标学名"></el-input>
-                    </el-form-item>
-                    <el-form-item prop="expression" label="表达式">
-                        <el-input v-model="innerForm.expression" placeholder="表达式"></el-input>
-                    </el-form-item>
-                    <el-form-item prop="phoneticize" label="音标">
-                        <el-input v-model="innerForm.phoneticize" placeholder="音标"></el-input>
-                    </el-form-item>
-                    <el-form-item prop="category" label="类目">
-                        <el-input v-model="innerForm.category" placeholder="类目"></el-input>
-                    </el-form-item>
-                    <el-form-item prop="unit" label="数据单位">
-                        <el-input v-model="innerForm.unit" placeholder="数据单位"></el-input>
-                    </el-form-item>
-                    <el-form-item prop="data_type" label="数据类型">
-                        <el-radio-group v-model="innerForm.data_type">
-                            <el-radio label="0"></el-radio>
-                            <el-radio label="1"></el-radio>
-                            <el-radio label="2"></el-radio>
-                            <el-radio label="3"></el-radio>
-                        </el-radio-group>
-                    </el-form-item>
-                    <el-form-item label="默认范围">
-                        <el-col :span="11">
-                            <el-form-item prop="min_default_value">
-                                <el-input v-model="innerForm.min_default_value" placeholder="最小值"></el-input>
-                            </el-form-item>
-
-                        </el-col>
-                        <el-col :span="2">-</el-col>
-                        <el-col :span="11">
-                            <el-form-item prop="max_default_value">
-                                <el-input v-model="innerForm.max_default_value" placeholder="最大值"></el-input>
-                            </el-form-item>
-
-                        </el-col>
-                    </el-form-item>
-                    <el-form-item style="text-align: center;width:100%" size="medium">
-                        <el-button type="primary" @click="onInnerSubmit('innerForm')">确定</el-button>
-                        <el-button @click="formReset('innerForm')">重置</el-button>
-                    </el-form-item>
-                </el-form>
-            </el-dialog>
         </el-dialog>
+
+      <el-dialog
+        width="30%"
+        :title="tagInfoDialogTitle"
+        :visible.sync="innerVisible"
+        :close-on-click-modal=false
+        append-to-body>
+        <el-form :model="innerForm" ref="innerForm" label-width="80px" size="small">
+          <el-form-item prop="academic_name" label="指标学名">
+            <el-input v-model="innerForm.academic_name" placeholder="指标学名"></el-input>
+          </el-form-item>
+          <el-form-item prop="expression" label="表达式">
+            <el-input v-model="innerForm.expression" placeholder="表达式"></el-input>
+          </el-form-item>
+          <el-form-item prop="phoneticize" label="音标">
+            <el-input v-model="innerForm.phoneticize" placeholder="音标"></el-input>
+          </el-form-item>
+          <el-form-item prop="category" label="类目">
+            <el-input v-model="innerForm.category" placeholder="类目"></el-input>
+          </el-form-item>
+          <el-form-item prop="unit" label="数据单位">
+            <el-input v-model="innerForm.unit" placeholder="数据单位"></el-input>
+          </el-form-item>
+          <el-form-item prop="data_type" label="数据类型">
+            <el-radio-group v-model="innerForm.data_type">
+              <el-radio label="0"></el-radio>
+              <el-radio label="1"></el-radio>
+              <el-radio label="2"></el-radio>
+              <el-radio label="3"></el-radio>
+            </el-radio-group>
+          </el-form-item>
+          <el-form-item label="默认范围">
+            <el-col :span="11">
+              <el-form-item prop="min_default_value">
+                <el-input v-model="innerForm.min_default_value" placeholder="最小值"></el-input>
+              </el-form-item>
+
+            </el-col>
+            <el-col :span="2">-</el-col>
+            <el-col :span="11">
+              <el-form-item prop="max_default_value">
+                <el-input v-model="innerForm.max_default_value" placeholder="最大值"></el-input>
+              </el-form-item>
+
+            </el-col>
+          </el-form-item>
+          <el-form-item style="text-align: center;width:100%" size="medium">
+            <el-button type="primary" @click="onInnerSubmit('innerForm')">确定</el-button>
+            <el-button @click="formReset('innerForm')">重置</el-button>
+          </el-form-item>
+        </el-form>
+      </el-dialog>
     </div>
 </template>
 <script>
@@ -174,6 +176,10 @@
             number: [{
               pattern: /^\d+$/,
               message: '数量必须为数字值'
+            }],
+            telephone: [{
+              pattern: /^((0\d{2,3}-\d{7,8})|(1[3584]\d{9}))$/,
+              message: '电话号码格式有误'
             }]
           },
           tagInfoDialogTitle: '',
@@ -186,6 +192,10 @@
         },
         dialogVisible (val) {
           this.$emit('dialogClose', val)
+          if (val === false) {
+            this.tagsArray.splice(0, this.tagsArray.length)
+            this.form.factorTags = {}
+          }
         }
       },
       methods: {

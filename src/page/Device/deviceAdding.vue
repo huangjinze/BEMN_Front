@@ -64,6 +64,7 @@ export default {
             message: '添加成功！',
             type: 'success'
           })
+          this.$emit('onUploadAdding')
         }
       }).catch(resp => {
         this.$alert('添加失败', '失败', {confirmButtonText: 'ok'})

@@ -45,3 +45,5 @@ export const updateDeviceInfo = params => { return axios.post(host + '/device/up
 export const deleteFactor = params => { return axios.get(host + '/device/deleteFactor', {'params': params}) }
 // 根据站点名获取设备数量，即表格条目数
 export const getDeviceConts = params => { return axios.get(host + '/device/getDeviceCounts', {'params': params}) }
+// 删除设备
+export const deleteDevice = params => { return axios.get(host + '/device/deleteDevice', {'params': params}) }

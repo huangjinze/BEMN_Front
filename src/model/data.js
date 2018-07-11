@@ -1,7 +1,8 @@
 import axios from 'axios'
 
 // export const host = 'http://172.19.32.116'
-export const host = 'http://127.0.0.1'
+// export const host = 'http://127.0.0.1'
+export const host = 'http://172.23.7.49'
 // export const host = 'http://bemnwork'
 export const getVFTIndex = params => { return axios.get(host + '/station/vft/getIndexes', {'params': params}) }
 export const getVTFData = params => { return axios.get(host + '/fluxdata/statsdata/show', {'params': params}) }

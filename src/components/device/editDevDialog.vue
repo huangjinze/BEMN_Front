@@ -1,7 +1,7 @@
 //  设备管理部分设备故障信息的对话模拟框
 <template >
     <div :class="className" :id="id">
-        <el-dialog  :title="dialogName" :visible.sync="dialogVisible">
+        <el-dialog  :title="dialogName" :visible.sync="dialogVisible" >
             <el-form id="editDevDialogForm" :model="form" ref="form" :inline="true" label-width="80px" v-bind:rules="Rules">
 
                 <el-form-item prop="stationSelect" label="站点" >
@@ -81,134 +81,137 @@
                 </el-form-item>
                 <el-form-item style="text-align: center;width:100%" size="large">
                     <el-button type="primary" @click="onSubmit('form')">提交</el-button>
-                    <el-button @click="formReset('form')">重置</el-button>
+                    <el-button @click="dialogVisible = false">取消</el-button>
                 </el-form-item>
             </el-form>
-            <el-dialog
-                    width="30%"
-                    :title="tagInfoDialogTitle"
-                    :visible.sync="innerVisible"
-                    append-to-body>
-                <el-form :model="innerForm" ref="innerForm" label-width="80px" size="small">
 
-                    <el-form-item prop="classification" label="所属类别">
-                        <el-select style="width: 100%" v-model="innerForm.classification" placeholder="所属类别" >
-                            <el-option
-                                    v-for="item in valueClassList"
-                                    :key="item"
-                                    :label="item"
-                                    :value="item">
-                            </el-option>
-                        </el-select>
-                    </el-form-item>
-                    <el-form-item prop="academic_name" label="指标学名">
-                        <el-input v-model="innerForm.academic_name" placeholder="指标学名"></el-input>
-                    </el-form-item>
-                    <el-form-item prop="expression" label="表达式">
-                        <el-input v-model="innerForm.expression" placeholder="表达式"></el-input>
-                    </el-form-item>
-                    <el-form-item prop="phoneticize" label="音标">
-                        <el-input v-model="innerForm.phoneticize" placeholder="音标"></el-input>
-                    </el-form-item>
-                    <el-form-item prop="category" label="类目">
-                        <el-input v-model="innerForm.category" placeholder="类目"></el-input>
-                    </el-form-item>
-
-                    <el-form-item prop="unit" label="数据单位">
-                        <el-input v-model="innerForm.unit" placeholder="数据单位"></el-input>
-                    </el-form-item>
-                    <el-form-item prop="data_type" label="数据类型">
-                        <el-radio-group v-model="innerForm.data_type">
-                            <el-radio label="0"></el-radio>
-                            <el-radio label="1"></el-radio>
-                            <el-radio label="2"></el-radio>
-                            <el-radio label="3"></el-radio>
-                        </el-radio-group>
-                    </el-form-item>
-                    <el-form-item label="默认范围">
-                        <el-col :span="11">
-                            <el-form-item prop="min_default_value">
-                                <el-input v-model="innerForm.min_default_value" placeholder="最小值"></el-input>
-                            </el-form-item>
-
-                        </el-col>
-                        <el-col :span="2">-</el-col>
-                        <el-col :span="11">
-                            <el-form-item prop="max_default_value">
-                                <el-input v-model="innerForm.max_default_value" placeholder="最大值"></el-input>
-                            </el-form-item>
-
-                        </el-col>
-                    </el-form-item>
-                    <el-form-item style="text-align: center;width:100%" size="medium">
-                        <el-button type="primary" @click="onInnerSubmit('innerForm')">确定</el-button>
-                        <el-button @click="formReset('innerForm')">重置</el-button>
-                    </el-form-item>
-                </el-form>
-            </el-dialog>
-            <el-dialog
-                    width="30%"
-                    :title="tagInfoDialogTitle"
-                    :visible.sync="editInnerVisible"
-                    append-to-body>
-                <el-form :model="editInnerForm" ref="editInnerForm" label-width="80px" size="small">
-
-                    <el-form-item prop="classification" label="所属类别">
-                        <el-select style="width: 100%" v-model="editInnerForm.classification" placeholder="所属类别" >
-                            <el-option
-                                    v-for="item in valueClassList"
-                                    :key="item"
-                                    :label="item"
-                                    :value="item">
-                            </el-option>
-                        </el-select>
-                    </el-form-item>
-                    <el-form-item prop="academic_name" label="指标学名">
-                        <el-input v-model="editInnerForm.academic_name" placeholder="指标学名"></el-input>
-                    </el-form-item>
-                    <el-form-item prop="expression" label="表达式">
-                        <el-input v-model="editInnerForm.expression" placeholder="表达式"></el-input>
-                    </el-form-item>
-                    <el-form-item prop="phoneticize" label="音标">
-                        <el-input v-model="editInnerForm.phoneticize" placeholder="音标"></el-input>
-                    </el-form-item>
-                    <el-form-item prop="category" label="类目">
-                        <el-input v-model="editInnerForm.category" placeholder="类目"></el-input>
-                    </el-form-item>
-
-                    <el-form-item prop="unit" label="数据单位">
-                        <el-input v-model="editInnerForm.unit" placeholder="数据单位"></el-input>
-                    </el-form-item>
-                    <el-form-item prop="data_type" label="数据类型">
-                        <el-radio-group v-model="editInnerForm.data_type">
-                            <el-radio label="0"></el-radio>
-                            <el-radio label="1"></el-radio>
-                            <el-radio label="2"></el-radio>
-                            <el-radio label="3"></el-radio>
-                        </el-radio-group>
-                    </el-form-item>
-                    <el-form-item label="默认范围">
-                        <el-col :span="11">
-                            <el-form-item prop="min_default_value">
-                                <el-input v-model="editInnerForm.min_default_value" placeholder="最小值"></el-input>
-                            </el-form-item>
-
-                        </el-col>
-                        <el-col :span="2">-</el-col>
-                        <el-col :span="11">
-                            <el-form-item prop="max_default_value">
-                                <el-input v-model="editInnerForm.max_default_value" placeholder="最大值"></el-input>
-                            </el-form-item>
-
-                        </el-col>
-                    </el-form-item>
-                    <el-form-item style="text-align: center;width:100%" size="medium">
-                        <el-button type="primary" @click="onEditInnerSubmit('editInnerForm')">确定</el-button>
-                        <el-button type="warning" @click="deleteFactor" plain>删除指标</el-button>
-                    </el-form-item>
-                </el-form>
-            </el-dialog>
         </el-dialog>
+      <el-dialog
+        width="30%"
+        :title="tagInfoDialogTitle"
+        :visible.sync="innerVisible"
+        :close-on-click-modal=false
+      >
+        <el-form :model="innerForm" ref="innerForm" label-width="80px" size="small">
+
+          <el-form-item prop="classification" label="所属类别">
+            <el-select style="width: 100%" v-model="innerForm.classification" placeholder="所属类别" >
+              <el-option
+                v-for="item in valueClassList"
+                :key="item"
+                :label="item"
+                :value="item">
+              </el-option>
+            </el-select>
+          </el-form-item>
+          <el-form-item prop="academic_name" label="指标学名">
+            <el-input v-model="innerForm.academic_name" placeholder="指标学名"></el-input>
+          </el-form-item>
+          <el-form-item prop="expression" label="表达式">
+            <el-input v-model="innerForm.expression" placeholder="表达式"></el-input>
+          </el-form-item>
+          <el-form-item prop="phoneticize" label="音标">
+            <el-input v-model="innerForm.phoneticize" placeholder="音标"></el-input>
+          </el-form-item>
+          <el-form-item prop="category" label="类目">
+            <el-input v-model="innerForm.category" placeholder="类目"></el-input>
+          </el-form-item>
+
+          <el-form-item prop="unit" label="数据单位">
+            <el-input v-model="innerForm.unit" placeholder="数据单位"></el-input>
+          </el-form-item>
+          <el-form-item prop="data_type" label="数据类型">
+            <el-radio-group v-model="innerForm.data_type">
+              <el-radio label="0"></el-radio>
+              <el-radio label="1"></el-radio>
+              <el-radio label="2"></el-radio>
+              <el-radio label="3"></el-radio>
+            </el-radio-group>
+          </el-form-item>
+          <el-form-item label="默认范围">
+            <el-col :span="11">
+              <el-form-item prop="min_default_value">
+                <el-input v-model="innerForm.min_default_value" placeholder="最小值"></el-input>
+              </el-form-item>
+
+            </el-col>
+            <el-col :span="2">-</el-col>
+            <el-col :span="11">
+              <el-form-item prop="max_default_value">
+                <el-input v-model="innerForm.max_default_value" placeholder="最大值"></el-input>
+              </el-form-item>
+
+            </el-col>
+          </el-form-item>
+          <el-form-item style="text-align: center;width:100%" size="medium">
+            <el-button type="primary" @click="onInnerSubmit('innerForm')">确定</el-button>
+            <el-button @click="formReset('innerForm')">重置</el-button>
+          </el-form-item>
+        </el-form>
+      </el-dialog>
+      <el-dialog
+        width="30%"
+        :title="tagInfoDialogTitle"
+        :visible.sync="editInnerVisible"
+        :close-on-click-modal=false
+      >
+        <el-form :model="editInnerForm" ref="editInnerForm" label-width="80px" size="small">
+
+          <el-form-item prop="classification" label="所属类别">
+            <el-select style="width: 100%" v-model="editInnerForm.classification" placeholder="所属类别" >
+              <el-option
+                v-for="item in valueClassList"
+                :key="item"
+                :label="item"
+                :value="item">
+              </el-option>
+            </el-select>
+          </el-form-item>
+          <el-form-item prop="academic_name" label="指标学名">
+            <el-input v-model="editInnerForm.academic_name" placeholder="指标学名"></el-input>
+          </el-form-item>
+          <el-form-item prop="expression" label="表达式">
+            <el-input v-model="editInnerForm.expression" placeholder="表达式"></el-input>
+          </el-form-item>
+          <el-form-item prop="phoneticize" label="音标">
+            <el-input v-model="editInnerForm.phoneticize" placeholder="音标"></el-input>
+          </el-form-item>
+          <el-form-item prop="category" label="类目">
+            <el-input v-model="editInnerForm.category" placeholder="类目"></el-input>
+          </el-form-item>
+
+          <el-form-item prop="unit" label="数据单位">
+            <el-input v-model="editInnerForm.unit" placeholder="数据单位"></el-input>
+          </el-form-item>
+          <el-form-item prop="data_type" label="数据类型">
+            <el-radio-group v-model="editInnerForm.data_type">
+              <el-radio label="0"></el-radio>
+              <el-radio label="1"></el-radio>
+              <el-radio label="2"></el-radio>
+              <el-radio label="3"></el-radio>
+            </el-radio-group>
+          </el-form-item>
+          <el-form-item label="默认范围">
+            <el-col :span="11">
+              <el-form-item prop="min_default_value">
+                <el-input v-model="editInnerForm.min_default_value" placeholder="最小值"></el-input>
+              </el-form-item>
+
+            </el-col>
+            <el-col :span="2">-</el-col>
+            <el-col :span="11">
+              <el-form-item prop="max_default_value">
+                <el-input v-model="editInnerForm.max_default_value" placeholder="最大值"></el-input>
+              </el-form-item>
+
+            </el-col>
+          </el-form-item>
+          <el-form-item style="text-align: center;width:100%" size="medium">
+            <el-button type="primary" @click="onEditInnerSubmit('editInnerForm')">确定</el-button>
+            <el-button type="warning" @click="deleteFactor" plain>删除指标</el-button>
+          </el-form-item>
+        </el-form>
+      </el-dialog>
     </div>
 </template>
 <script>
@@ -263,7 +266,8 @@
           tagInfoDialogTitle: '',
           tagsArray: this.tags,
           valueClassList: this.valueClass,
-          tagsAdd: []
+          tagsAdd: [],
+          deleteFactorIdList: []
         }
       },
       watch: {
@@ -281,6 +285,10 @@
         },
         dialogVisible (val) {
           this.$emit('dialogClose', val)
+          if (val === false) {
+            this.tagsAdd.splice(0, this.tagsAdd.length)
+            this.deleteFactorIdList.splice(0, this.deleteFactorIdList.length)
+          }
         }
       },
       methods: {
@@ -303,15 +311,15 @@
         deleteFactor () {
           var id = this.form.factorTags[this.tagInfoDialogTitle]['id']
           delete this.form.factorTags[this.tagInfoDialogTitle]
-          this.tagsArray.splice(this.tagsAdd.indexOf(this.tagInfoDialogTitle), 1)
+          console.log(this.tagsArray)
+          this.tagsArray.splice(this.tagsArray.indexOf(this.tagInfoDialogTitle), 1)
           this.editInnerVisible = false
+          this.deleteFactorIdList.push(id)
+        },
+        deleteFactorReally (id) {
           console.log(id)
           deleteFactor({factorId: id}).then(resp => {
             if (resp.data.status === 'success') {
-              this.$message({
-                message: '删除成功！',
-                type: 'success'
-              })
             }
           }).catch(resp => {
             this.$alert('删除失败', '失败', {confirmButtonText: 'ok'})
@@ -338,6 +346,9 @@
         onSubmit (formName) {
           this.$refs[formName].validate((valid) => {
             if (valid) {
+              for (var id of this.deleteFactorIdList) {
+                this.deleteFactorReally(id)
+              }
               this.$emit('devEditUpload', this.form)
             } else {
               this.$message({

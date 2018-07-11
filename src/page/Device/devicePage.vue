@@ -3,9 +3,9 @@
     <BasePage>
         <div slot="main">
             <topIndexSelect :initTopPartTags="stationName" :initTopSiteTags="className" ref="profile" :indices="index" :indexTags="indexTags" @ClickIndexClass="parentIndexClassListen" @ClickTower="parentStationListen" @ClickClass="parentClassListen" @ClickIndex="parentIndexListen" @CloseStation="CloseStationListen" @CloseClass="CloseClassListen"></topIndexSelect>
-            <devDataTable :totalSize="totalSize" :tableData="tableData" :tableName="tableName" :statusControl="faultyList" @errorDialog="errorDialog" @addInfoDialog="addInfoDialog" @addDevice="onAddDevice" @editClick="onEditClick" @changePage="onChangePage"></devDataTable>
+            <devDataTable :totalSize="totalSize" :tableData="tableData" :tableName="tableName" :statusControl="faultyList" @errorDialog="errorDialog" @addInfoDialog="addInfoDialog" @addDevice="onAddDevice" @editClick="onEditClick" @deleteClick="onDeleteClick" @changePage="onChangePage"></devDataTable>
             <devDialog :faultyDeviceName="faultyDeviceName" :dialogErrorVisible="dialogErrorVisible" :dialogAddVisible="dialogAddVisible" :errorData="errorData" @selectErrorInfoByTime="onSelectErrorByTime" @dialogClose="onErrorInfoDialogClose"></devDialog>
-            <deviceAdding :dialogAddingVisible="dialogAddVisible" @dialogClose="onAddingDialogClose"></deviceAdding>
+            <deviceAdding :dialogAddingVisible="dialogAddVisible" @dialogClose="onAddingDialogClose" @onUploadAdding="onUploadAdding"></deviceAdding>
           <editDevDialog :dialogEditingVisible="dialogEditVisible" :editInfo="editInfo" :tags="tagsArray" :stationList="stations" :classList="selectClassList" :valueClass="valueClassList" @dialogClose="onEditDialogClose" @selectStation="onSelectStation" @devEditUpload="onDevEditUpload"></editDevDialog>
         </div>
     </BasePage>
@@ -18,14 +18,12 @@ import editDevDialog from '../../components/device/editDevDialog'
 import devDialog from '../../components/device/devDialog'
 import topIndexSelect from '../../components/multiSelect/topIndexSelect'
 import deviceAdding from './deviceAdding'
-import {getStation, getDevice, getClass, getDeviceErrorInfo, getDeviceErrorInfoByTime, getIndexByDevice, updateDeviceInfo, getDeviceConts} from '../../model/vftData'
+import {getStation, getDevice, getClass, getDeviceErrorInfo, getDeviceErrorInfoByTime, getIndexByDevice, updateDeviceInfo, getDeviceConts, deleteDevice} from '../../model/vftData'
 export default {
   components: {navi, BasePage, devDataTable, topIndexSelect, devDialog, deviceAdding, editDevDialog},
   data () {
     return {
-      stationName: [
-        '奥林匹克'
-      ],
+      stationName: [],
       className: [],
       indexName: [],
       stations: [],
@@ -82,7 +80,9 @@ export default {
       this.$alert('获取失败', '失败', {confirmButtonText: 'ok'})
     })
     getDeviceConts({stationName: this.stationName[0], domain: '通量数据'}).then(resp => {
-      this.totalSize = resp.data.data
+      if (resp.data.status === 'success') {
+        this.totalSize = resp.data.data
+      }
     }).catch(resp => {
       this.$alert('表格行数获取失败', '失败', {confirmButtonText: 'ok'})
     })
@@ -171,6 +171,7 @@ export default {
       this.editInfo['telephone'] = item.telephone
       this.editInfo['place_introduction'] = item.placeIntroduction
       this.editInfo['introduction'] = item.remarks
+      this.editInfo['currentTags'] = Array.from(this.tagsArray)
       this.dialogEditVisible = true
     },
     onEditDialogClose (val) {
@@ -189,8 +190,9 @@ export default {
             type: 'success'
           })
           var towerName = this.$refs.profile.topPartTags[0].text
+          console.log(towerName)
         }
-        getDevice(towerName, '通量数据')
+        this.getDevice(towerName, '通量数据', 1)
       }).catch(resp => {
         this.$alert('修改失败', '失败', {confirmButtonText: 'ok'})
       })
@@ -212,8 +214,11 @@ export default {
       this.getDevice(currentStation, '通量数据', page)
     },
     getDevice (stationName, domainName, page) {
+      console.log(stationName, domainName, page)
       getDevice({station: stationName, domain: domainName, page: page}).then(resp => {
-        this.tableData = Array.from(resp.data.data)
+        if (resp.data.status === 'success') {
+          this.tableData = Array.from(resp.data.data)
+        }
       }).catch(resp => {
         this.$alert('获取失败', '失败', {confirmButtonText: 'ok'})
       })
@@ -225,9 +230,38 @@ export default {
         for (let item of data) {
           obj[item.factor_name] = item
         }
-        console.log('kk', obj)
       }).catch(resp => {
         this.$alert('获取失败', '失败', {confirmButtonText: 'ok'})
+      })
+    },
+    onUploadAdding () {
+      var towerName = this.$refs.profile.topPartTags[0].text
+      this.getDevice(towerName, '通量数据', 1)
+    },
+    onDeleteClick (devId) {
+      this.$confirm('此操作将删除该设备记录, 是否继续?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning',
+        center: true
+      }).then(() => {
+        deleteDevice({devId: devId}).then(resp => {
+          if (resp.data.status === 'success') {
+            this.$message({
+              type: 'success',
+              message: '删除成功!'
+            })
+            var towerName = this.$refs.profile.topPartTags[0].text
+            this.getDevice(towerName, '通量数据', 1)
+          }
+        }).catch(resp => {
+          this.$alert('删除失败', '失败', {confirmButtonText: 'ok'})
+        })
+      }).catch(() => {
+        this.$message({
+          type: 'info',
+          message: '已取消删除'
+        })
       })
     }
   }
